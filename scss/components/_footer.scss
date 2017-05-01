@@ -1,0 +1,15 @@
+footer {
+  background: $footer_bg;
+  color: $footer_color;
+  padding-top: 20px;
+
+  .footer-bottom {
+    background: $footer_bg_bttm;
+    color: $footer_color_bttm;
+    .menu li a {
+      text-decoration: none;
+      color: $footer_color_bttm
+    }
+  }
+
+}
