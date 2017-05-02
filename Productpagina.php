@@ -1,7 +1,7 @@
 <?php
 require 'php/include/DBControl.php';
 require 'php/include/DBConnection.php';
-require 'php/include/Validator.php';
+require 'php/include/formValidator.php';
 
 if(true){
     $productId = stripInput($_POST["productId"]);
