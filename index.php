@@ -2,7 +2,9 @@
 //page variables
 $pagename = "home";
 
-include("php/include/header.php") ?>
+include("php/core.php");
+include("php/layout/header.php")
+?>
 
     <div class="row">
       <div class="large-12 columns">
@@ -152,4 +154,4 @@ include("php/include/header.php") ?>
       </div>
     </div>
 
-<?php include("php/include/footer.php") ?>
+<?php include("php/layout/footer.php") ?>
