@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eenmaal-Andermaal : <?php $_SERVER['PHP_SELF']; ?></title>
+    <title>Eenmaal-Andermaal : <?php echo $pagename; ?></title>
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>

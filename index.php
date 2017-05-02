@@ -1,4 +1,8 @@
-<?php include("php/include/header.php") ?>
+<?php 
+//page variables
+$pagename = "home";
+
+include("php/include/header.php") ?>
 
     <div class="row">
       <div class="large-12 columns">
