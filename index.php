@@ -137,6 +137,8 @@
         <p><a href="#" class="button">Simple Button</a><br/>       
         <a href="#" class="success button">Success Btn</a><br/>
         <a href="#" class="alert button">Alert Btn</a><br/>
+        <a href="#" class="warning button">Alert Btn</a><br/>
+        <a href="#" class="secondary-light button">Alert Btn</a><br/>
         <a href="#" class="secondary button">Secondary Btn</a></p>           
         <div class="callout">
           <h5>So many components, girl!</h5>

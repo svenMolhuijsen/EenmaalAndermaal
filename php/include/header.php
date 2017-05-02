@@ -20,8 +20,8 @@
             </div>
             <div class="top-bar-right">
                 <ul class="menu">
-                    <li><button type="button" class="button">Log In</button></li>
-                    <li><button type="button" class="button">Sign Up</button></li>
+                    <li><button type="button" class="button hollow">Log In</button></li>
+                    <li><button type="button" class="button hollow">Sign Up</button></li>
                     <li><input type="search" placeholder="Search"></li>
                     <li><button type="button" class="button">Search</button></li>
                 </ul>
