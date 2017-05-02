@@ -10,22 +10,24 @@
 </head>
 <body>
 
-<div class="top-bar-container navbar" data-sticky-container>
-    <div class="sticky sticky-topbar" data-sticky data-options="anchor: page; marginTop: 0; stickyOn: small;">
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <ul class="menu">
-                    <li class="menu-text"><a href="index.php">Eenmaal-Andermaal</a></li>
-                </ul>
-            </div>
-            <div class="top-bar-right">
-                <ul class="menu">
-                    <li><button type="button" class="button hollow">Log In</button></li>
-                    <li><button type="button" class="button hollow">Sign Up</button></li>
-                    <li><input type="search" placeholder="Search"></li>
-                    <li><button type="button" class="button">Search</button></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
+  <button class="menu-icon" type="button" data-toggle></button>
+  <div class="title-bar-title">Eenmaal-Andermaal</div>
+</div>
+
+<div class="top-bar" id="navigatie-menu">
+  <div class="top-bar-left">
+    <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
+      <li class="menu-text hide-for-small-only">Eenmaal-Andermaal</li>
+      <li><a href="#">Categoriën</a></li>
+      <li><a href="#">FAQ</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+  <div class="top-bar-right">
+    <ul class="menu">
+      <li><a href="#" class="login_button">Log in</a></li>
+      <li><a href="#" class="signup_button">Sign Up</a></li>
+    </ul>
+  </div>
 </div>
