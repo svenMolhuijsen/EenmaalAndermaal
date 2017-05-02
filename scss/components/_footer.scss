@@ -1,15 +1,37 @@
 footer {
-  background: $footer_bg;
-  color: $footer_color;
-  padding-top: 20px;
-
-  .footer-bottom {
-    background: $footer_bg_bttm;
-    color: $footer_color_bttm;
-    .menu li a {
-      text-decoration: none;
-      color: $footer_color
-    }
+  background-color: #074e68;
+  padding: 40px 0;
+  
+  .inner-div {
+    border-left: 1px solid rgba(255,255,255,0.2);
+    padding: 10px;
   }
-
+  h2 {
+    font-weight: bold;
+    font-size: 23px;
+    color: white;
+  }
+  h4 {
+    font-size: 1.25em;
+    font-weight: 200;
+    color: white;
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 12px;
+    line-height: 21px;
+    color: white;
+  }
+  ul {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 1.25em;
+    margin-left: 0;
+    list-style: none;
+  }
+  a {color: white;}
+  @media screen and (max-width: 39.9375em) {
+    .inner-div {border: none; overflow: hidden;}
+    .left-div {border-bottom: 1px solid rgba(255,255,255,0.2);}
+  }
 }

@@ -1,70 +1,37 @@
-<footer class="marketing-site-footer">
-    <div class="row medium-unstack">
-        <div class="medium-4 columns">
-            <h4 class="marketing-site-footer-name">Yeti Snowcone</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita dolorem accusantium architecto id quidem, itaque nesciunt quam ducimus atque.</p>
-            <ul class="menu marketing-site-footer-menu-social simple">
-                <li><a href="#"><i class="fa fa-youtube-square" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></li>
-            </ul>
-        </div>
-        <div class="medium-4 columns">
-            <h4 class="marketing-site-footer-title">Contact Info</h4>
-            <div class="marketing-site-footer-block">
-                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                <p>100 W Rincon<br>San Francisco, CA 94015</p>
-            </div>
-            <div class="marketing-site-footer-block">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-                <p>1 (800) 555-5555</p>
-            </div>
-            <div class="marketing-site-footer-block">
-                <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                <p>yetirules@fakeemail.com</p>
-            </div>
-        </div>
-        <div class="medium-4 columns">
-            <h4 class="marketing-site-footer-title">Instagram</h4>
-            <div class="row small-up-3">
-                <div class="column column-block">
-                    <img src="http://placehold.it/75" alt="" />
-                </div>
-                <div class="column column-block">
-                    <img src="http://placehold.it/75" alt="" />
-                </div>
-                <div class="column column-block">
-                    <img src="http://placehold.it/75" alt="" />
-                </div>
-                <div class="column column-block">
-                    <img src="http://placehold.it/75" alt="" />
-                </div>
-                <div class="column column-block">
-                    <img src="http://placehold.it/75" alt="" />
-                </div>
-                <div class="column column-block">
-                    <img src="http://placehold.it/75" alt="" />
-                </div>
-            </div>
-        </div>
+<footer class="row expanded text-center">
+  <div class="medium-4 columns left-div">
+    <h2>Foundation</h2>
+    <p>Foundation is made by ZURB, a product design company in Campbell, California. We've put more than 15 years of experience building web products, services and websites into this framework.</p>
+  </div>
+  <div class="medium-8 columns">
+    <div class="row collapse">
+      <div class="small-4 columns">
+        <div class="inner-div">
+          <h4>Want More?</h4>
+          <ul>
+          <li><a href="http://foundation.zurb.com/business/services.html">Foundation Business</a></li>
+          <li><a href="http://zurb.com/responsive">Responsive</a></li>
+          <li><a href="http://zurb.com/notable">Notable</a></li>
+          <li><a href="http://foundation.zurb.com/learn/training.html">Foundation Training</a></li>
+          </ul>
+          </div>
+      </div>
+      <div class="small-4 columns">
+        <div class="inner-div">
+          <h4>Talk to us</h4>
+          <p>Tweet us at <a href="https://twitter.com/zurbfoundation">@zurbfoundation</a></p>
+          <p>Not a big talker? Email us at <a href="mailto:foundation@zurb.com">foundation@zurb.com</a> or check our <a href="http://foundation5.zurb.com/support/support.html">support page</a></p>
+          </div>
+      </div>
+      <div class="small-4 columns">
+        <div class="inner-div">
+          <h4>Stay in touch</h4>
+          <p>Keep up with the latest on Foundation. Find us on <a href="https://github.com/zurb/foundation">Github</a>.</p>
+          <a href="http://foundation.zurb.com/learn/foundation-insider.html" class="small button">Stay Connected</a>
+          </div>
+      </div>
     </div>
-    <div class="footer-bottom">
-        <div class="row large-unstack align-middle">
-            <div class="column">
-                <p>&copy; 2017 No rights reserved</p>
-            </div>
-            <div class="column">
-                <ul class="menu">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Works</a></li>
-                    <li><a href="#">News</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+  </div>
 </footer>
 
 <script src="bower_components/jquery/dist/jquery.js"></script>
