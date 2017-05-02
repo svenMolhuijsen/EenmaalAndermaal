@@ -1,6 +1,6 @@
 <?php
 require 'php/include/DBControl.php';
-require 'php/include/DBConnector.php';
+require 'php/include/DBConnection.php';
 require 'php/include/Validator.php';
 
 if(true){
