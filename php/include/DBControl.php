@@ -1,5 +1,4 @@
 <?php
-require 'DBConnector.php';
 
 function voegRecordToe($query, $data){
     global $pdo;
