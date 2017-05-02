@@ -10,12 +10,12 @@
 </head>
 <body>
 
-<div class="title-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
+<div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
   <button class="menu-icon" type="button" data-toggle></button>
   <div class="title-bar-title">Eenmaal-Andermaal</div>
 </div>
 
-<div class="top-bar" id="example-menu">
+<div class="top-bar" id="navigatie-menu">
   <div class="top-bar-left">
     <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
       <li class="menu-text hide-for-small-only">Eenmaal-Andermaal</li>
