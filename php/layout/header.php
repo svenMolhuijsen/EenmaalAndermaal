@@ -13,13 +13,13 @@
 
 <div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
   <button class="menu-icon" type="button" data-toggle></button>
-  <div class="title-bar-title">Eenmaal-Andermaal</div>
+  <span class="title-bar-title"><a href="index.php"><img src="/img/logo-sm.svg" alt="" class="brand-logo"></a></span>
 </div>
 
 <div class="top-bar" id="navigatie-menu">
   <div class="top-bar-left">
     <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-      <li class="menu-text hide-for-small-only">Eenmaal-Andermaal</li>
+      <li class="hide-for-small-only"><a href="index.php"><img src="/img/logo.svg" alt="" class="brand-logo"></a></li>
       <li><a href="#">Categoriën</a></li>
       <li><a href="#">FAQ</a></li>
       <li><a href="#">Contact</a></li>
