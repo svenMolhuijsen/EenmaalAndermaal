@@ -1,7 +1,6 @@
 <?php
-include("include/DBConnection.php");
-include("include/DBControl.php");
-include("include/formValidator.php");
+include("DBCon.php");
+include("functions/database.php");
+include("functions/forms.php");
 
-include("api/api.php");
-
+include("session.php");

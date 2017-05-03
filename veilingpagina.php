@@ -1,24 +1,4 @@
-<head>
-    <style>
-        .centercrumbs {
-            float: right;
-            position: relative;
-            left:-50%;
-            text-align: left;
-        }
-        .centercrumbs ul {
-            position: relative;
-            left: 50%;
-        }
-        .centercrumbs ul li {
-            float: left; position: relative
-        }
 
-        .titel {
-            margin-top: 5%;
-        }
-    </style>
-</head>
 <?php
 $pagename = "veiling";
 
@@ -36,7 +16,6 @@ if(true){
     }
 }
 ?>
-<body>
 <div class="row show-for-medium">
     <div class="centercrumbs">
         <ul class="breadcrumbs">
@@ -91,5 +70,3 @@ if(true){
 </div>
 
 <?php include("php/layout/footer.php") ?>
-</>
-</html>

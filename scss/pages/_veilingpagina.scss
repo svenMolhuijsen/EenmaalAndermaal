@@ -1,0 +1,21 @@
+.veillingpagina {
+  .centercrumbs {
+    float: right;
+    position: relative;
+    left: -50%;
+    text-align: left;
+
+    ul {
+      position: relative;
+      left: 50%;
+
+      li {
+        float: left;
+        position: relative
+      }
+    }
+  }
+  .titel {
+    margin-top: 5%;
+  }
+}
