@@ -1,36 +1,51 @@
-<footer class="row expanded text-center">
-  <div class="medium-4 columns left-div">
-    <h2>Foundation</h2>
-    <p>Foundation is made by ZURB, a product design company in Campbell, California. We've put more than 15 years of experience building web products, services and websites into this framework.</p>
-  </div>
-  <div class="medium-8 columns">
-    <div class="row collapse">
-      <div class="small-4 columns">
-        <div class="inner-div">
-          <h4>Want More?</h4>
-          <ul>
-          <li><a href="http://foundation.zurb.com/business/services.html">Foundation Business</a></li>
-          <li><a href="http://zurb.com/responsive">Responsive</a></li>
-          <li><a href="http://zurb.com/notable">Notable</a></li>
-          <li><a href="http://foundation.zurb.com/learn/training.html">Foundation Training</a></li>
-          </ul>
-          </div>
-      </div>
-      <div class="small-4 columns">
-        <div class="inner-div">
-          <h4>Talk to us</h4>
-          <p>Tweet us at <a href="https://twitter.com/zurbfoundation">@zurbfoundation</a></p>
-          <p>Not a big talker? Email us at <a href="mailto:foundation@zurb.com">foundation@zurb.com</a> or check our <a href="http://foundation5.zurb.com/support/support.html">support page</a></p>
-          </div>
-      </div>
-      <div class="small-4 columns">
-        <div class="inner-div">
-          <h4>Stay in touch</h4>
-          <p>Keep up with the latest on Foundation. Find us on <a href="https://github.com/zurb/foundation">Github</a>.</p>
-          <a href="http://foundation.zurb.com/learn/foundation-insider.html" class="small button">Stay Connected</a>
-          </div>
-      </div>
-    </div>
+<footer class="row expanded">
+  <div class="small-up-1 large-up-3 columns-12 clearfix">
+      <div class="column column-block text-center">
+          <h2>Eenmaal-Andermaal</h2>
+          <p>Technovium</p>
+      </div><!--column-block-->
+      <div class="column column-block">
+          <h4>Sitemap</h4>
+          <div class="row collapse">
+              <div class="small-6 columns">
+                <ul>
+                    <li><a href="#">Homepage</a></li>
+                    <li><a href="#">Categoriën</a></li>
+                    <li><a href="#">Aanbiedingen</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+              </div><!--small-6-->
+              <div class="small-6 columns less_important">
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+              </div><!--small-6-->
+          </div><!--row-->
+      </div><!--column-block-->
+      <div class="column column-block">
+          <div class="row collapse">
+              <div class="small-6 columns">
+                <h4>Follow us</h4>
+                <ul>
+                    <li><a href="#"><i class="fi-social-facebook"></i>Facebook</a></li>
+                    <li><a href="#"><i class="fi-social-twitter"></i>Twitter</a></li>
+                    <li><a href="#"><i class="fi-social-instagram"></i>Instagram</a></li>
+                    <li><a href="#"><i class="fi-social-github"></i>Github</a></li>
+                </ul>
+              </div><!--small-6-->
+              <div class="small-6 columns">
+                <h4>Subscribe to our newsletter!</h4>
+                <div class="input-group">
+                    <input type="text" class="input-group-field small" name="email">
+                    <div class="input-group-button">
+                        <input type="submit" class="small button" value="Subscribe">
+                    </div><!--input-group-button-->
+                </div><!--input-group-->
+              </div><!--small-6-->
+      </div><!--column-block-->
   </div>
 </footer>
 

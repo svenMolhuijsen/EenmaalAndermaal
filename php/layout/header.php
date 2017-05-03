@@ -6,6 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eenmaal-Andermaal : <?php echo $pagename; ?></title>
+    <link rel="stylesheet" crossorigin="anonymous" integrity="sha256-RYMme8QITYCPWDLzOXswkTsPu1tjeAE2Myb7Kid/JBY=" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
