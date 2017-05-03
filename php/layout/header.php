@@ -26,8 +26,17 @@
   </div>
   <div class="top-bar-right">
     <ul class="menu">
-      <li><a href="#" class="login_button">Log in</a></li>
-      <li><a href="#" class="signup_button">Sign Up</a></li>
+      <li><a href="#" class="login_button button hollow">Log in</a></li>
+      <li><a href="#" class="signup_button button">Sign Up</a></li>
+      <li>
+        <div class="input-group">
+          <span class="input-group-label">$</span>
+          <input type="text" class="input-group-field">
+          <div class="input-group-button">
+            <input type="submit" class="button" value="submit">
+          </div>
+        </div>
+      </li>
     </ul>
   </div>
 </div>
