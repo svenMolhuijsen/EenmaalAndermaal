@@ -15,7 +15,7 @@
                     <li><a href="#">Blog</a></li>
                 </ul>
               </div><!--small-6-->
-              <div class="small-6 columns less_important">
+              <div class="small-6 columns dark-link">
                 <ul>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
