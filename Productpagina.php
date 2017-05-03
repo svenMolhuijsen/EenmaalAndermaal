@@ -1,6 +1,4 @@
-<html>
 <head>
-    <meta charset="utf-8">
     <style>
         .centercrumbs {
             float: right;
@@ -21,13 +19,12 @@
         }
     </style>
 </head>
-<body>
 <?php
+$pagename = "veiling";
+
 include("php/core.php");
 include("php/layout/header.php");
 
-//Page variables
-$pagename = "veiling";
 
 if(true){
     $productId = stripInput($_GET["productId"]);
@@ -39,7 +36,7 @@ if(true){
     }
 }
 ?>
-
+<body>
 <div class="row show-for-medium">
     <div class="centercrumbs">
         <ul class="breadcrumbs">
@@ -94,5 +91,5 @@ if(true){
 </div>
 
 <?php include("php/layout/footer.php") ?>
-</body>
+</>
 </html>
