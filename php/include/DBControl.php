@@ -13,13 +13,14 @@ function voegRecordToe($query, $data){
     }
 }
 
-function selectRecords($query){
+function selectRecords($query, $data){
     global $pdo;
-    try {
-        $data = $pdo->query("$query");
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        return $data;
+    try{
+        $stmt = $pdo->prepare("$query");
+        $stmt->execute($data);
+        return $stmt;
+
     }
     catch (PDOException $e) {
         echo "Could not execute query: ".$query.$e->getMessage();
