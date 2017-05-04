@@ -27,7 +27,7 @@
   </div>
   <div class="top-bar-right">
     <ul class="menu">
-      <li><a href="#" class="login_button button hollow">Log in</a></li>
+      <li><a data-open="login-popover" class="login_button button hollow">Log in</a></li>
       <li><a href="#" class="signup_button button">Sign Up</a></li>
       <li>
         <div class="input-group">
@@ -40,4 +40,27 @@
       </li>
     </ul>
   </div>
+</div>
+
+<div class="reveal" id="login-popover" data-reveal>
+  <div class="row">
+    <div class="text-center">
+      <img src="/img/logo-sm.svg" class="brand-logo">
+      <h3>Log In</h3>
+    </div>
+    <hr>
+    <div class="form">
+      <label>Email
+        <input type="text" placeholder="email">
+      </label>
+      <label>Password<input type="password" placeholder="password"></label>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <p>Not yet made an account? Sign up <a href="#">here</a>!</p>
+  </div>
+  <button class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
