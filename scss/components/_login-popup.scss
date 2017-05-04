@@ -1,0 +1,47 @@
+.signin-register-modal {
+  z-index: 1000;
+  background: rgba($secondary, 0.9);
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  display: none;
+  cursor: pointer;
+  .container {
+    cursor: default;
+    margin-top: 50px;
+    background: darken($secondary-light, 5%);
+    padding: 0;
+    border-radius: $border-radius;
+    overflow: hidden;
+    .switcher {
+      div {
+        text-align: center;
+        a {
+          display: block;
+          height: 70px;
+          line-height: 70px;
+          width: 100%;
+        }
+      }
+      .active {
+        background: $secondary-light;
+      }
+    }
+    #login, #register, #reset {
+      display: none;
+      width: 100%;
+      form {
+        background: $secondary-light;
+      }
+      .column .row .column {
+        padding: 1px !important;
+      }
+      input:not([type="submit"]), select {
+        border: hidden;
+        box-shadow: none;
+        background: lighten($secondary-light, 5%);
+      }
+    }
+
+  }
+}
