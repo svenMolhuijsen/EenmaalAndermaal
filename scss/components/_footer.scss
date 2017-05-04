@@ -1,7 +1,8 @@
 footer {
   background-color: #212121;
   padding: 40px 0;
-  
+  position: absolute;
+  bottom: 0;
   .inner-div {
     border-left: 1px solid rgba(255,255,255,0.2);
     padding: 10px;
