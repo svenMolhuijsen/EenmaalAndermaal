@@ -29,6 +29,8 @@
     }
     #login, #register, #reset {
       display: none;
+      max-height: 75vh;
+      overflow-y: auto;
       width: 100%;
       form {
         background: $secondary-light;

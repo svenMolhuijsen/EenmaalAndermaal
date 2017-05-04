@@ -1,8 +1,8 @@
 <div class="signin-register-modal row-expanded"> <!-- this is the entire modal form, including the background -->
     <div class="container small-10 medium-5 small-centered column"> <!-- this is the container wrapper -->
         <div class="switcher row">
-            <div class="small-6 column signin active"><a onclick="showSignIn()" href="#">Inloggen</a></div>
-            <div class="small-6 column register"><a onclick="showRegister()" href="#">Nieuw account</a></div>
+            <div class="small-6 column signin active"><a href="#">Inloggen</a></div>
+            <div class="small-6 column register"><a href="#">Nieuw account</a></div>
         </div>
 
         <div id="login"> <!-- log in form -->
@@ -14,7 +14,7 @@
                 <input class="full-width has-padding has-border" id="signin-password" type="text"
                        placeholder="*******">
                 <br>
-                <button onclick="showReset()" class="button hollow float-left">Wachtwoord vergeten?</button>
+                <button class="button hollow float-left">Wachtwoord vergeten?</button>
                 <input class="button float-right" type="submit" value="Login">
             </form>
         </div> <!-- login -->

@@ -27,8 +27,8 @@
   </div>
   <div class="top-bar-right">
     <ul class="menu">
-        <li><a href="#" onclick="showSignIn()" class="login_button button hollow">Log in</a></li>
-        <li><a href="#" onclick="showRegister()" class="signup_button button">Sign Up</a></li>
+        <li><a href="#" class="login_button button hollow">Log in</a></li>
+        <li><a href="#" class="signup_button button">Sign Up</a></li>
       <li>
         <div class="input-group">
           <span class="input-group-label">$</span>
