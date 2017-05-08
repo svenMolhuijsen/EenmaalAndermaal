@@ -26,6 +26,19 @@
     </ul>
   </div>
   <div class="top-bar-right">
+  <?php if($page == 'account'){ ?>
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li><a href="#">Profile</a>
+        <ul class="menu">
+          <li><a href="#">Informatie</a></li>
+          <li><a href="#">Nieuwe verkoop</a></li>
+          <li><a href="#">Aankopen</a></li>
+          <li><a href="#">logout</a></li>
+        </ul>
+      </li>
+    </ul>
+
+  <?php }else{ ?>
     <ul class="menu">
         <li><a href="#" class="login_button button hollow">Log in</a></li>
         <li><a href="#" class="signup_button button">Sign Up</a></li>
@@ -39,5 +52,11 @@
         </div>
       </li>
     </ul>
+
+  <?php } ?>
+    
+
+
+
   </div>
 </div>
