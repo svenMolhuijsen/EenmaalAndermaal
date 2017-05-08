@@ -2,9 +2,9 @@
 $pagename = "veiling";
 
 include("php/core.php");
+include("php/layout/login-popup.php");
 include("php/layout/header.php");
-include("php/classes/Veiling.php");
-include("php/classes/Gebruiker.php");
+
 
 if(true){
     $veilingId = stripInput($_GET["veilingId"]);

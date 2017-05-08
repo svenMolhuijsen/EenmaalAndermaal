@@ -3,6 +3,7 @@
 $pagename = "home";
 
 include("php/core.php");
+include("php/layout/login-popup.php");
 include("php/layout/header.php")
 ?>
 

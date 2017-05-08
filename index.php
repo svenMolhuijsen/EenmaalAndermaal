@@ -8,7 +8,32 @@ include("php/layout/header.php");
 ?>
 
 <div class="row">
-  <blockquote style="border: none; text-align:center;">Those people who think they know everything are a great annoyance to those of us who do.<cite>Isaac Asimov</cite></blockquote>
+  <blockquote class="text-center" style="border:none;">
+  Eenmaal-Andermaal, De beste veiling site ter wereld!<cite>The Verge</cite>
+  </blockquote>
+</div>
+
+
+<div class="row">
+  <div class="small-up-1 medium-up-3 columns-12">
+    <div class="column column-block">
+      <input type="text" placeholder="zoek">
+    </div>
+    <div class="column column-block">
+      <select>
+        <option value="Voertuigen">Voertuigen</option>
+        <option value="Kleding">Kleding</option>
+        <option value="Vakanties">Vakanties</option>
+        <option value="Sport">Sport</option>
+      </select>
+    </div>
+    <div class="column column-block">
+      <input type="submit" class="button" value="submit">
+    </div>
+  </div>
+</div>
+
+<div class="row">
   <div class="clearfix">
     <h4 class="float-left">Trending</h4>
     <a href="#" class="button hollow float-right">view more ></a>
