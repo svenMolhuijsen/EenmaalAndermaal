@@ -11,8 +11,12 @@
     div.side-nav-block {
       text-align: center;
       border-right: 1px solid black;
+      float: bottom;
     }
 
+  div.categorien {
+    border-left: 1px solid black;
+  }
     li:hover {
       background-color: #FFA500;
     }

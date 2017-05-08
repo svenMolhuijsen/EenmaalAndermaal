@@ -1,3 +1,5 @@
+$logo-size: 36px;
+
 html, body{
   height: 100%;}
 
@@ -5,7 +7,11 @@ main{
   min-height: 100%;}
 
 .brand-logo{
-  height: 40px;}
+  height: $logo-size}
 
 .top-bar{
-  padding: 0;}
+  padding: 0;
+  
+  .button{
+    line-height: $logo-size;
+  }}
