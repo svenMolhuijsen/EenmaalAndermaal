@@ -100,4 +100,4 @@ order by $sortBy*/
             </div>
 </div>
 
-<?php /* include("php/layout/footer.php") */?>
+<?php include("php/layout/footer.php") ?>
