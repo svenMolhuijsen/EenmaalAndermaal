@@ -74,3 +74,5 @@ include("php/layout/header.php");
         <div class="column column-block"><img src="http://placehold.it/150x300" alt="">Product naam<br>Test</div>
     </div>
 </div>
+
+<?php include("php/layout/footer.php") ?>
