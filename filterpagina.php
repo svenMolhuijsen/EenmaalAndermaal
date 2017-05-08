@@ -1,5 +1,4 @@
 <?php
-session_start();
 $pagename = "filterpagina";
 
 include("php/core.php");
@@ -32,6 +31,7 @@ order by $sortBy*/
             <option value="Date ACS">Datum Aflopend: </option>
             <option value = "Date DCS">Meest Recente: </option>
             </select>
+        </form>
     <hr>
     <div class="small-up-2 medium-up-3 large-up-5 columns-12 clearfix float-right"><?php/*Hieronder komt de querry om de afbeelding
         op te halen. met een querry. daarbij komt dat als bijvoorbeeld de 'sorteren op' wordt aangepast ook de selectie van de
@@ -57,7 +57,7 @@ order by $sortBy*/
             <div class = filters>
                 <h3>Filter op: </h3>
 
-            <form method="get" action="Getfilters.php">
+            <form method="get" action="">
                 <select class = "float-left" name="selecteerCat" style="width:20%">
                     <option value="Merk">Merk: </option>
                     <option value="prijs oplopend">BMW: </option>
@@ -65,9 +65,9 @@ order by $sortBy*/
                     <option value="tijd">Mercedes: </option>
                     <option value = "recente">Aston Martin: </option>
                 </select>
+            </form>
 
-
-                <form method="get" action="Getfilters.php">
+                <form method="get" action="">
                     <select class = "float-left" name="selecteerCat" style="width:20%">
                         <option value="SORT BY">Type: </option>
                         <option value="prijs oplopend">SUV: </option>
@@ -75,9 +75,9 @@ order by $sortBy*/
                         <option value="tijd">Station Wagon: </option>
                         <option value = "recente">Pick Up: </option>
                     </select>
+                </form>
 
-
-                    <form method="get" action="Getfilters.php">
+                <form method="get" action="">
                         <select class = "float-left" name="selecteerCat" style="width:20%">
                             <option value="SORT BY">Jaar: </option>
                             <option value="prijs oplopend">1980 of eerder: </option>
@@ -86,17 +86,17 @@ order by $sortBy*/
                             <option value = "recente">2000-2010: </option>
                             <option value = "recente">2010-Heden: </option>
                         </select>
+                </form>
 
-
-                        <form method="get" action="Getfilters.php">
+                <form method="get" action="">
                             <select class = "float-left" name="selecteerCat" style="width:20%">
                                 <option value="SORT BY">Uitvoering: </option>
                                 <option value="prijs oplopend">Sport: </option>
                                 <option value="prijs aflopend">Luxury: </option>
                                 <option value="tijd">GTI: </option>
                             </select>
-
-                            <button type="button" style= "width: 20%; height: 40px; background-color:#E25822; color: white; border: solid 3px #E25822">Zoekresultaten Ophalen!</button>
+                </form>
+                <button type="button" style= "width: 20%; height: 40px; background-color:#E25822; color: white; border: solid 3px #E25822">Zoekresultaten Ophalen!</button>
             </div>
 </div>
 
