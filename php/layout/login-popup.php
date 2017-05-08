@@ -14,7 +14,7 @@
                 <input class="full-width has-padding has-border" id="signin-password" type="text"
                        placeholder="*******">
                 <br>
-                <button class="button hollow float-left">Wachtwoord vergeten?</button>
+                <button class="button hollow float-left reset">Wachtwoord vergeten?</button>
                 <input class="button float-right" type="submit" value="Login">
             </form>
         </div> <!-- login -->
