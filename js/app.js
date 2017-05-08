@@ -60,6 +60,10 @@ function showReset() {
 //  Image gallery
 /////////////////////////////////////////////
 
+//Grote image van het product
+$bigImage = $('.veilingImage .columns img');
+
+//Wisselt de grote image met een alt image via fades
 $('.altImages .column img').on('click', function(){
     var imageToShow = $(this).attr('src');
     var fadeLength = 300;
