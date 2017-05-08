@@ -26,7 +26,7 @@
     </ul>
   </div>
   <div class="top-bar-right">
-  <?php if($page == 'account'){ ?>
+  <?php $page = false; if($page == 'account'){ ?>
     <ul class="dropdown menu" data-dropdown-menu>
       <li><a href="#">Profile</a>
         <ul class="menu">
