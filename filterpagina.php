@@ -2,7 +2,6 @@
 $pagename = "filterpagina";
 
 include("php/core.php");
-include("php/layout/login-popup.php");
 include("php/layout/header.php");
 
 $sortBy = (isset($_GET['sorterenOp']) ? $_GET['sorterenOp'] : null);

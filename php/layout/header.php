@@ -65,3 +65,7 @@
 
   </div>
 </div>
+
+<?php
+include("php/layout/login-popup.php");
+?>

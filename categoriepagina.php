@@ -1,7 +1,9 @@
 <?php
 
-include("php/layout/header.php");
+$pagename = "categorie";
 
+include("php/core.php");
+include("php/layout/header.php");
 ?>
 
 <hr>
