@@ -1,0 +1,28 @@
+.categoriepagina{
+  border: 1px solid black;
+  text-align: center;
+
+    ul.side-nav {
+      list-style-type: none;
+      text-align: center;
+      margin:auto;
+    }
+
+    div.side-nav-block {
+      text-align: center;
+      border-right: 1px solid black;
+    }
+
+    li:hover {
+      background-color: #FFA500;
+    }
+
+    li:after {
+      content: ">";
+      float: right;
+    }
+
+    img {
+      margin-top: 10px;
+    }
+}
