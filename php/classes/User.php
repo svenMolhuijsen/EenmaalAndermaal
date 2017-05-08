@@ -19,302 +19,308 @@ class User
 
     function __construct($emailAdres)
     {
-        $gebruiker = selectRecords("SELECT * FROM gebruikers WHERE gebruikerId = ?", [$emailAdres])->fetch();
+        $gebruiker = executeQuery("SELECT * FROM gebruikers WHERE gebruikerId = ?", [$emailAdres]);
+        if ($gebruiker['code'] == 0) {
 
-        if (count($gebruiker) > 0) {
-            $this->emailAdres = $gebruiker["emailAdres"];
-            $this->wachtwoord = $gebruiker["wachtwoord"];
-            $this->voornaam = $gebruiker["voornaam"];
-            $this->achternaam = $gebruiker["achternaam"];
-            $this->geboortedatum = $gebruiker["geboortedatum"];
-            $this->telefoonnmr = $gebruiker["telefoonnmr"];
-            $this->verkoper = $gebruiker["verkoper"];
-            $this->land = $gebruiker["land"];
-            $this->provincie = $gebruiker["provincie"];
-            $this->postcode = $gebruiker["postcode"];
-            $this->plaatsnaam = $gebruiker["plaatsnaam"];
-            $this->straatnaam = $gebruiker["straatnaam"];
-            $this->huisnummer = $gebruiker["huisnummer"];
+            $this->emailAdres = $gebruiker['data']["emailAdres"];
+            $this->wachtwoord = $gebruiker['data']["wachtwoord"];
+            $this->voornaam = $gebruiker['data']["voornaam"];
+            $this->achternaam = $gebruiker['data']["achternaam"];
+            $this->geboortedatum = $gebruiker['data']["geboortedatum"];
+            $this->telefoonnmr = $gebruiker['data']["telefoonnmr"];
+            $this->verkoper = $gebruiker['data']["verkoper"];
+            $this->land = $gebruiker['data']["land"];
+            $this->provincie = $gebruiker['data']["provincie"];
+            $this->postcode = $gebruiker['data']["postcode"];
+            $this->plaatsnaam = $gebruiker['data']["plaatsnaam"];
+            $this->straatnaam = $gebruiker['data']["straatnaam"];
+            $this->huisnummer = $gebruiker['data']["huisnummer"];
         }
     }
 
+    public static function newGebruiker($email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
+    {
+        voegRecordToe("INSERT INTO Gebruikers (email, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
+                                               ?      ?           ?         ?           ?               ?          ?          ?     ?         ?         ?           ?           ?",
+            [$email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
+    }
 
     /**
- * @return mixed
- */
-public
-function getGebruikerId()
-{
-    return $this->gebruikerId;
-}
+     * @return mixed
+     */
+    public
+    function getGebruikerId()
+    {
+        return $this->gebruikerId;
+    }
 
-/**
- * @param mixed $gebruikerId
- */
-public
-function setGebruikerId($gebruikerId)
-{
-    update("gebruikerId", $this->gebruikerId, $gebruikerId);
-    $this->gebruikerId = $gebruikerId;
-}
+    /**
+     * @param mixed $gebruikerId
+     */
+    public
+    function setGebruikerId($gebruikerId)
+    {
+        update("gebruikerId", $this->gebruikerId, $gebruikerId);
+        $this->gebruikerId = $gebruikerId;
+    }
 
-/**
- * @return mixed
- */
-public
-function getWachtwoord()
-{
-    return $this->wachtwoord;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getWachtwoord()
+    {
+        return $this->wachtwoord;
+    }
 
-/**
- * @param mixed $wachtwoord
- */
-public
-function setWachtwoord($wachtwoord)
-{
-    update("wachtwoord", $this->wachtwoord, $wachtwoord);
-    $this->wachtwoord = $wachtwoord;
-}
+    /**
+     * @param mixed $wachtwoord
+     */
+    public
+    function setWachtwoord($wachtwoord)
+    {
+        update("wachtwoord", $this->wachtwoord, $wachtwoord);
+        $this->wachtwoord = $wachtwoord;
+    }
 
-/**
- * @return mixed
- */
-public
-function getVoornaam()
-{
-    return $this->voornaam;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getVoornaam()
+    {
+        return $this->voornaam;
+    }
 
-/**
- * @param mixed $voornaam
- */
-public
-function setVoornaam($voornaam)
-{
-    update("voornaam", $this->voornaam, $voornaam);
-    $this->voornaam = $voornaam;
-}
+    /**
+     * @param mixed $voornaam
+     */
+    public
+    function setVoornaam($voornaam)
+    {
+        update("voornaam", $this->voornaam, $voornaam);
+        $this->voornaam = $voornaam;
+    }
 
-/**
- * @return mixed
- */
-public
-function getAchternaam()
-{
-    return $this->achternaam;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getAchternaam()
+    {
+        return $this->achternaam;
+    }
 
-/**
- * @param mixed $achternaam
- */
-public
-function setAchternaam($achternaam)
-{
-    update("achternaam", $this->achternaam, $achternaam);
-    $this->achternaam = $achternaam;
-}
+    /**
+     * @param mixed $achternaam
+     */
+    public
+    function setAchternaam($achternaam)
+    {
+        update("achternaam", $this->achternaam, $achternaam);
+        $this->achternaam = $achternaam;
+    }
 
-/**
- * @return mixed
- */
-public
-function getGeboortedatum()
-{
-    return $this->geboortedatum;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getGeboortedatum()
+    {
+        return $this->geboortedatum;
+    }
 
-/**
- * @param mixed $geboortedatum
- */
-public
-function setGeboortedatum($geboortedatum)
-{
-    update("geboortedatum", $this->geboortedatum, $geboortedatum);
-    $this->geboortedatum = $geboortedatum;
-}
+    /**
+     * @param mixed $geboortedatum
+     */
+    public
+    function setGeboortedatum($geboortedatum)
+    {
+        update("geboortedatum", $this->geboortedatum, $geboortedatum);
+        $this->geboortedatum = $geboortedatum;
+    }
 
-/**
- * @return mixed
- */
-public
-function getEmailAdres()
-{
-    return $this->emailAdres;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getEmailAdres()
+    {
+        return $this->emailAdres;
+    }
 
-/**
- * @param mixed $emailAdres
- */
-public
-function setEmailAdres($emailAdres)
-{
-    update("emailAdres", $this->emailAdres, $emailAdres);
-    $this->emailAdres = $emailAdres;
-}
+    /**
+     * @param mixed $emailAdres
+     */
+    public
+    function setEmailAdres($emailAdres)
+    {
+        update("emailAdres", $this->emailAdres, $emailAdres);
+        $this->emailAdres = $emailAdres;
+    }
 
-/**
- * @return mixed
- */
-public
-function getTelefoonnmr()
-{
-    return $this->telefoonnmr;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getTelefoonnmr()
+    {
+        return $this->telefoonnmr;
+    }
 
-/**
- * @param mixed $telefoonnmr
- */
-public
-function setTelefoonnmr($telefoonnmr)
-{
-    update("telefoonnmr", $this->telefoonnmr, $telefoonnmr);
-    $this->telefoonnmr = $telefoonnmr;
-}
+    /**
+     * @param mixed $telefoonnmr
+     */
+    public
+    function setTelefoonnmr($telefoonnmr)
+    {
+        update("telefoonnmr", $this->telefoonnmr, $telefoonnmr);
+        $this->telefoonnmr = $telefoonnmr;
+    }
 
-/**
- * @return mixed
- */
-public
-function getVerkoper()
-{
-    return $this->verkoper;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getVerkoper()
+    {
+        return $this->verkoper;
+    }
 
-/**
- * @param mixed $verkoper
- */
-public
-function setVerkoper($verkoper)
-{
-    update("verkoper", $this->verkoper, $verkoper);
-    $this->verkoper = $verkoper;
-}
+    /**
+     * @param mixed $verkoper
+     */
+    public
+    function setVerkoper($verkoper)
+    {
+        update("verkoper", $this->verkoper, $verkoper);
+        $this->verkoper = $verkoper;
+    }
 
-/**
- * @return mixed
- */
-public
-function getLand()
-{
-    return $this->land;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getLand()
+    {
+        return $this->land;
+    }
 
-/**
- * @param mixed $land
- */
-public
-function setLand($land)
-{
-    update("land", $this->land, $land);
-    $this->land = $land;
-}
+    /**
+     * @param mixed $land
+     */
+    public
+    function setLand($land)
+    {
+        update("land", $this->land, $land);
+        $this->land = $land;
+    }
 
-/**
- * @return mixed
- */
-public
-function getProvincie()
-{
-    return $this->provincie;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getProvincie()
+    {
+        return $this->provincie;
+    }
 
-/**
- * @param mixed $provincie
- */
-public
-function setProvincie($provincie)
-{
-    update("provincie", $this->provincie, $provincie);
-    $this->provincie = $provincie;
-}
+    /**
+     * @param mixed $provincie
+     */
+    public
+    function setProvincie($provincie)
+    {
+        update("provincie", $this->provincie, $provincie);
+        $this->provincie = $provincie;
+    }
 
-/**
- * @return mixed
- */
-public
-function getPostcode()
-{
-    return $this->postcode;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getPostcode()
+    {
+        return $this->postcode;
+    }
 
-/**
- * @param mixed $postcode
- */
-public
-function setPostcode($postcode)
-{
-    update("postcode", $this->postcode, $postcode);
-    $this->postcode = $postcode;
-}
+    /**
+     * @param mixed $postcode
+     */
+    public
+    function setPostcode($postcode)
+    {
+        update("postcode", $this->postcode, $postcode);
+        $this->postcode = $postcode;
+    }
 
-/**
- * @return mixed
- */
-public
-function getPlaatsnaam()
-{
-    return $this->plaatsnaam;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getPlaatsnaam()
+    {
+        return $this->plaatsnaam;
+    }
 
-/**
- * @param mixed $plaatsnaam
- */
-public
-function setPlaatsnaam($plaatsnaam)
-{
-    update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
-    $this->plaatsnaam = $plaatsnaam;
-}
+    /**
+     * @param mixed $plaatsnaam
+     */
+    public
+    function setPlaatsnaam($plaatsnaam)
+    {
+        update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
+        $this->plaatsnaam = $plaatsnaam;
+    }
 
-/**
- * @return mixed
- */
-public
-function getStraatnaam()
-{
-    return $this->straatnaam;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getStraatnaam()
+    {
+        return $this->straatnaam;
+    }
 
-/**
- * @param mixed $straatnaam
- */
-public
-function setStraatnaam($straatnaam)
-{
-    update("straatnaam", $this->straatnaam, $straatnaam);
-    $this->straatnaam = $straatnaam;
-}
+    /**
+     * @param mixed $straatnaam
+     */
+    public
+    function setStraatnaam($straatnaam)
+    {
+        update("straatnaam", $this->straatnaam, $straatnaam);
+        $this->straatnaam = $straatnaam;
+    }
 
-/**
- * @return mixed
- */
-public
-function getHuisnummer()
-{
-    return $this->huisnummer;
-}
+    /**
+     * @return mixed
+     */
+    public
+    function getHuisnummer()
+    {
+        return $this->huisnummer;
+    }
 
-/**
- * @param mixed $huisnummer
- */
-public
-function setHuisnummer($huisnummer)
-{
-    update("huisnummer", $this->huisnummer, $huisnummer);
-    $this->huisnummer = $huisnummer;
-}
+    /**
+     * @param mixed $huisnummer
+     */
+    public
+    function setHuisnummer($huisnummer)
+    {
+        update("huisnummer", $this->huisnummer, $huisnummer);
+        $this->huisnummer = $huisnummer;
+    }
 
-/**
- * @param $column Kolomnaam
- * @param $oldVal Oud val
- * @param $newVal Nieuw val
- */
-private
-function update($column, $oldVal, $newVal)
-{
-    voegRecordToe("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
-}
+    /**
+     * @param $column Kolomnaam
+     * @param $oldVal Oud val
+     * @param $newVal Nieuw val
+     */
+    private
+    function update($column, $oldVal, $newVal)
+    {
+        voegRecordToe("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
+    }
 }
 
 ?>

@@ -9,7 +9,6 @@ include("php/layout/header.php");
 if(true){
     $veilingId = stripInput($_GET["veilingId"]);
     if(checkForEmpty($veilingId)){
-        connectToDatabase();
 
         $veiling = new veiling($veilingId);
         $gebruiker = new User($veiling->getverkoperId());
