@@ -1,5 +1,10 @@
 $(document).foundation();
 
+
+//////////////////////////////////////////////
+//    login Modal
+/////////////////////////////////////////////
+
 //Modal afsluiten
 $(".signin-register-modal").click(function () {
     $('.signin-register-modal').fadeOut(300);
@@ -51,7 +56,9 @@ function showReset() {
     $('#reset').show();
 }
 
-var $bigImage = $('.veilingImage .columns img');
+//////////////////////////////////////////////
+//  Image gallery
+/////////////////////////////////////////////
 
 $('.altImages .column img').on('click', function(){
     var imageToShow = $(this).attr('src');
