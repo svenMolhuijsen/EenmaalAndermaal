@@ -40,8 +40,8 @@
 
   <?php }else{ ?>
     <ul class="menu">
-        <li><a href="#" class="login_button button hollow">Log in</a></li>
-        <li><a href="#" class="signup_button button">Sign Up</a></li>
+        <li><a href="#" class="login_button">Log in</a></li>
+        <li style="background:pink;"><a href="#" class="signup_button">Sign Up</a></li>
       <li>
         <div class="input-group">
           <span class="input-group-label">$</span>
