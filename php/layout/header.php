@@ -13,13 +13,13 @@
 
 <div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
   <button class="menu-icon" type="button" data-toggle></button>
-  <span class="title-bar-title"><a href="index.php"><img src="/img/logo-sm.svg" alt="" class="brand-logo"></a></span>
+  <span class="title-bar-title"><a href="/"><img src="/img/logo-sm.svg" alt="" class="brand-logo"></a></span>
 </div>
 
 <div class="top-bar" id="navigatie-menu">
   <div class="top-bar-left">
     <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-      <li class="hide-for-small-only"><a href="index.php"><img src="/img/logo.svg" alt="" class="brand-logo"></a></li>
+      <li class="hide-for-small-only"><a href="/"><img src="/img/logo.svg" alt="" class="brand-logo"></a></li>
       <li><a href="#">Categoriën</a></li>
       <li><a href="#">FAQ</a></li>
       <li><a href="#">Contact</a></li>
@@ -27,7 +27,7 @@
   </div>
   <div class="top-bar-right">
   <?php $page = false; if($page == 'account'){ ?>
-    <ul class="dropdown menu" data-dropdown-menu>
+    <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
       <li><a href="#">Profile</a>
         <ul class="menu">
           <li><a href="#">Informatie</a></li>
@@ -40,9 +40,17 @@
 
   <?php }else{ ?>
     <ul class="menu">
-        <li><a href="#" class="login_button">Log in</a></li>
-        <li style="background:pink;"><a href="#" class="signup_button">Sign Up</a></li>
-      <li>
+        <li><a href="#" class="login_button button hollow">Log in</a></li>
+        <li><a href="#" class="signup_button button">Sign Up</a></li>
+        <li>
+          <!--<input type="text">-->
+          <a href="#" class="button">
+            <span class="fi-magnifying-glass"></span>
+          </a>
+
+        </li>
+
+      <!--<li>
         <div class="input-group">
           <span class="input-group-label">$</span>
           <input type="text" class="input-group-field">
@@ -50,13 +58,10 @@
             <input type="submit" class="button" value="submit">
           </div>
         </div>
-      </li>
+      </li>-->
     </ul>
 
   <?php } ?>
-    
-
-
 
   </div>
 </div>
