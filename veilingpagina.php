@@ -38,21 +38,23 @@ if(true){
             <h5><?php echo($veiling->getBeschrijving()); ?></h5>
     </div>
     <div class="large-6 columns">
-        <div class="row">
-            <img class="thumbnail" src="http://placehold.it/300x300" height="450" width="450" style="display: block; margin: 5% auto 5% auto;">
+        <div class="veilingImage row">
+            <div class="columns">
+                <img id="image" class="thumbnail" src="http://placehold.it/300x300" height="450" width="450" alt="Image">
+            </div>
         </div>
-        <div class="row large-up-4 small-up-4">
+        <div class="altImages row large-up-4 small-up-4">
             <div class="column">
-                <img class="thumbnail" src="http://placehold.it/600x600">
+                <img id="image1" rel="image" class="thumbnail" src="http://placehold.it/300x300">
             </div>
             <div class="column">
-                <img class="thumbnail" src="http://placehold.it/600x600">
+                <img id="image2" rel="image" class="thumbnail" src="http://placehold.it/400x400">
             </div>
             <div class="column">
-                <img class="thumbnail" src="http://placehold.it/600x600">
+                <img id="image3" rel="image" class="thumbnail" src="http://placehold.it/500x500">
             </div>
             <div class="column">
-                <img class="thumbnail" src="http://placehold.it/600x600">
+                <img id="image4" rel="image" class="thumbnail" src="http://placehold.it/600x600">
             </div>
         </div>
         <div class="row">

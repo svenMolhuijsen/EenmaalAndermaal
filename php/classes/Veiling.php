@@ -47,8 +47,8 @@ class Veiling{
 
     /**
      * @param $column Kolomnaam
-     * @param $oldVal Oud val
-     * @param $newVal Nieuw val
+     * @param $oldVal Doelwaarde om te veranderen
+     * @param $newVal Nieuwe waarde
      */
     private function update($column, $oldVal, $newVal){
         voegRecordToe("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));

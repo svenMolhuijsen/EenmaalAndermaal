@@ -50,3 +50,20 @@ function showReset() {
     $('.switcher').children().removeClass("active");
     $('#reset').show();
 }
+
+var $bigImage = $('.veilingImage .columns img');
+
+$('.altImages .column img').on('click', function(){
+    var imageToShow = $(this).attr('src');
+    var fadeLength = 300;
+
+    $(this).fadeOut(fadeLength, function(){
+        $(this).attr('src', $bigImage.attr('src'));
+        $bigImage.attr('src', imageToShow);
+        $(this).fadeIn(fadeLength);
+    });
+
+    $bigImage.fadeOut(fadeLength, function(){
+        $(this).fadeIn(fadeLength);
+    });
+});
