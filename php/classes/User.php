@@ -17,13 +17,12 @@ class User
     private $straatnaam;
     private $huisnummer;
 
-    function User($emailAdres)
+    function __construct($emailAdres)
     {
-        if ($emailAdres = !null) {
-            $gebruiker = selectRecords("SELECT * FROM gebruikers WHERE gebruikerId = ?", [$emailAdres])->fetch();
+        $gebruiker = selectRecords("SELECT * FROM gebruikers WHERE gebruikerId = ?", [$emailAdres])->fetch();
 
-            if (count($gebruiker))
-                $this->emailAdres = $gebruiker["emailAdres"];
+        if (count($gebruiker) > 0) {
+            $this->emailAdres = $gebruiker["emailAdres"];
             $this->wachtwoord = $gebruiker["wachtwoord"];
             $this->voornaam = $gebruiker["voornaam"];
             $this->achternaam = $gebruiker["achternaam"];
@@ -38,9 +37,9 @@ class User
             $this->huisnummer = $gebruiker["huisnummer"];
         }
     }
-}
 
-/**
+
+    /**
  * @return mixed
  */
 public

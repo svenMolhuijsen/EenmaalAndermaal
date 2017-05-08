@@ -21,7 +21,8 @@ class Veiling{
     private $huisnummer;
     private $categorie;
 
-    public function Veiling($veilingId){
+    public function __construct($veilingId)
+    {
         $veiling = selectRecords("SELECT * FROM veiling WHERE veilingId = ?", array($veilingId))->fetch();
 
         $this->veilingId = $veiling["veilingId"];

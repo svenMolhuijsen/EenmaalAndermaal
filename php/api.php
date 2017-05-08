@@ -65,4 +65,10 @@ function login($params)
 function logout()
 {
     session_destroy();
+    if ($_SESSION != null) {
+        $a_result = ['status' => 'unsuccessful'];
+    } else {
+        $a_result = ['status' => 'success'];
+    }
+    echo json_encode($a_result);
 }

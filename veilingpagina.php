@@ -12,7 +12,7 @@ if(true){
         connectToDatabase();
 
         $veiling = new veiling($veilingId);
-        $gebruiker = new gebruiker($veiling->getverkoperId());
+        $gebruiker = new User($veiling->getverkoperId());
     }
 }
 ?>
