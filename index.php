@@ -2,7 +2,7 @@
 //page variables
 $pagename = "home";
 
-include("php/core.php");
+//include("php/core.php");
 include("php/layout/header.php");
 ?>
 <main>
@@ -50,4 +50,4 @@ include("php/layout/header.php");
 </main>
 
 
-<?php include("php/layout/footer.php") ?>
+<?php include("php/layout/footer.php"); ?>
