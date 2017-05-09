@@ -11,7 +11,19 @@ if(true){
         connectToDatabase();
 
         $veiling = new veiling($veilingId);
-        $gebruiker = new User($veiling->getverkoperId());
+        $gebruiker = new User($veiling->getVerkoperId());
+
+        $projectdir = 'C:\Users\henri\Documents\Git\EenmaalAndermaal';
+        $imgdir = 'img\placeholder';
+        $imagesRough = scandir($projectdir.'\\'.$imgdir);
+
+        for($i = 0; $i < count($imagesRough); $i++){
+            if($imagesRough[$i] == '.' || $imagesRough[$i] == '..'){
+                unset($imagesRough[$i]);
+            }
+        }
+
+        $images = array_values($imagesRough);
     }
 }
 ?>
@@ -39,22 +51,26 @@ if(true){
     <div class="large-6 columns">
         <div class="veilingImage row">
             <div class="columns">
-                <img id="image" class="thumbnail" src="http://placehold.it/300x300" height="450" width="450" alt="Image">
+                <?php
+                echo('<img id="image" class="thumbnail" src="');
+                if(!is_null($images[0])){
+                    echo($imgdir.'\\'.$images[0]);
+                }
+                else{
+                    echo('http://placehold.it/450x450');
+                }
+                echo('" height="450" width="450" alt="Image">');
+                ?>
             </div>
         </div>
         <div class="altImages row large-up-4 small-up-4">
-            <div class="column">
-                <img id="image1" rel="image" class="thumbnail" src="http://placehold.it/300x300">
-            </div>
-            <div class="column">
-                <img id="image2" rel="image" class="thumbnail" src="http://placehold.it/400x400">
-            </div>
-            <div class="column">
-                <img id="image3" rel="image" class="thumbnail" src="http://placehold.it/500x500">
-            </div>
-            <div class="column">
-                <img id="image4" rel="image" class="thumbnail" src="http://placehold.it/600x600">
-            </div>
+            <?php
+            for($i = 1; $i < count($images); $i++){
+                echo('<div class="column">');
+                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$imgdir.'\\'.$images[$i].'">');
+                echo('</div>');
+            }
+            ?>
         </div>
         <div class="row">
             <div class="large-6 columns">
