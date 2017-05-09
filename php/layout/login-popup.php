@@ -6,7 +6,7 @@
         </div>
 
         <div id="login"> <!-- log in form -->
-            <form class="form small-12 column">
+            <form id="loginForm" class="form small-12 column">
                 <label class="email" for="signin-email">E-mail</label>
                 <input class="full-width has-padding has-border" id="signin-email" type="email" placeholder="a@b.com">
 
@@ -20,7 +20,7 @@
         </div> <!-- login -->
 
         <div id="register"> <!-- sign up form -->
-            <form class="form small-12 column">
+            <form id="registerForm" class="form small-12 column">
                 <div class="row">
                     <div class="small-6 column">
                         <!--                voornaam-->
@@ -91,7 +91,7 @@
         </div>
 
         <div id="reset"> <!-- reset password form -->
-            <form class="form small-12 column">
+            <form id="resetForm" class="form small-12 column">
                 <br>
                 <p>Voer je mail in en we zullen een herstellink toesturen</p>
                 <!--                email-->

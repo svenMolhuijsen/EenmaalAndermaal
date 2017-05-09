@@ -78,3 +78,19 @@ $('.altImages .column img').on('click', function(){
         $(this).fadeIn(fadeLength);
     });
 });
+
+//////////////////////////////////////////////
+//  Validation
+/////////////////////////////////////////////
+
+$('#registerForm').validate({
+    errorClass: 'validationError'
+});
+
+$('#loginForm').validate({
+    errorClass: 'validationError'
+});
+
+$('#resetForm').validate({
+    errorClass: 'validationError'
+});

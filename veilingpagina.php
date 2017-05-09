@@ -63,7 +63,7 @@ if(true){
         </div>
         <div class="altImages row large-up-4 small-up-4">
             <?php
-            for($i = 1; $i < count($images); $i++){
+            for($i = 1; $i < count($images) && $i < 5; $i++){
                 echo('<div class="column">');
                 echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$imgdir.'\\'.$images[$i].'">');
                 echo('</div>');
@@ -85,5 +85,4 @@ if(true){
     </div>
 </div>
 </div>
-
 <?php include("php/layout/footer.php") ?>
