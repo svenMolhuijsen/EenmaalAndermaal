@@ -8,9 +8,8 @@ if(true){
         $veiling = new veiling($veilingId);
         $gebruiker = new User($veiling->getVerkoperEmail());
 
-        $projectdir = '';
         $imgdir = 'img/placeholder';
-        $imagesRough = scandir(''.$imgdir);
+        $imagesRough = scandir($imgdir);
 
         for($i = 0; $i < count($imagesRough); $i++){
             if($imagesRough[$i] == '.' || $imagesRough[$i] == '..'){
