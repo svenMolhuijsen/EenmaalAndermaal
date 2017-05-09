@@ -1,9 +1,6 @@
 <?php
-$pagename = "veiling";
 
 include("php/core.php");
-include("php/layout/header.php");
-
 if(true){
     $veilingId = stripInput($_GET["veilingId"]);
     if(checkForEmpty($veilingId)){
@@ -13,7 +10,7 @@ if(true){
 
         $projectdir = '';
         $imgdir = 'img/placeholder';
-        $imagesRough = scandir(.$imgdir);
+        $imagesRough = scandir(''.$imgdir);
 
         for($i = 0; $i < count($imagesRough); $i++){
             if($imagesRough[$i] == '.' || $imagesRough[$i] == '..'){
@@ -23,8 +20,13 @@ if(true){
 
         $images = array_values($imagesRough);
     }
-}
+};
+
+$pagename = $veiling->getTitel();
+
+include("php/layout/header.php");
 ?>
+
 <div class="veilingpagina">
 <div class="row show-for-medium">
     <div class="column">
@@ -85,4 +87,5 @@ if(true){
     </div>
 </div>
 </div>
+
 <?php include("php/layout/footer.php") ?>
