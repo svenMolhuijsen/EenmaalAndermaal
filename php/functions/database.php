@@ -1,7 +1,6 @@
 <?php
 
-function executeQuery($query, $data = [])
-{
+function executeQuery($query, $data = []){
     global $pdo;
     try {
         $stmt = $pdo->prepare("$query");
@@ -16,8 +15,5 @@ function executeQuery($query, $data = [])
         return ['status' => 'error', 'code' => 2, 'message' => "Could not execute query: " . $query . $e->getMessage()];
     }
 }
-
-
-var_dump(executeQuery("select * FROM landen where land = 'Nederland'"));
 ?>
 

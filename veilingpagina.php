@@ -4,13 +4,12 @@ $pagename = "veiling";
 include("php/core.php");
 include("php/layout/header.php");
 
-
 if(true){
     $veilingId = stripInput($_GET["veilingId"]);
     if(checkForEmpty($veilingId)){
 
         $veiling = new veiling($veilingId);
-        $gebruiker = new User($veiling->getVerkoperId());
+        $gebruiker = new User($veiling->getVerkoperEmail());
 
         $projectdir = 'C:\Users\henri\Documents\Git\EenmaalAndermaal';
         $imgdir = 'img\placeholder';

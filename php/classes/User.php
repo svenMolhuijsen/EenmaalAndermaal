@@ -1,7 +1,6 @@
 <?php
 
-class User
-{
+class User {
 
     private $wachtwoord;
     private $voornaam;
@@ -17,56 +16,45 @@ class User
     private $straatnaam;
     private $huisnummer;
 
-    function __construct($emailAdres)
-    {
-        $gebruiker = executeQuery("SELECT * FROM gebruikers WHERE gebruikerId = ?", [$emailAdres]);
-        if ($gebruiker['code'] == 0) {
+    function __construct($email) {
+        $gebruikers = executeQuery("SELECT * FROM gebruikers WHERE email = ?", [$email]);
+        if ($gebruikers['code'] == 0) {
+            $gebruiker = $gebruikers['data']['0'];
 
-            $this->emailAdres = $gebruiker['data']["emailAdres"];
-            $this->wachtwoord = $gebruiker['data']["wachtwoord"];
-            $this->voornaam = $gebruiker['data']["voornaam"];
-            $this->achternaam = $gebruiker['data']["achternaam"];
-            $this->geboortedatum = $gebruiker['data']["geboortedatum"];
-            $this->telefoonnmr = $gebruiker['data']["telefoonnmr"];
-            $this->verkoper = $gebruiker['data']["verkoper"];
-            $this->land = $gebruiker['data']["land"];
-            $this->provincie = $gebruiker['data']["provincie"];
-            $this->postcode = $gebruiker['data']["postcode"];
-            $this->plaatsnaam = $gebruiker['data']["plaatsnaam"];
-            $this->straatnaam = $gebruiker['data']["straatnaam"];
-            $this->huisnummer = $gebruiker['data']["huisnummer"];
+            $this->email = $gebruiker["email"];
+            $this->wachtwoord = $gebruiker["wachtwoord"];
+            $this->voornaam = $gebruiker["voornaam"];
+            $this->achternaam = $gebruiker["achternaam"];
+            $this->geboortedatum = $gebruiker["geboortedatum"];
+            $this->telefoonnmr = $gebruiker["telefoonnmr"];
+            $this->verkoper = $gebruiker["verkoper"];
+            $this->land = $gebruiker["land"];
+            $this->provincie = $gebruiker["provincie"];
+            $this->postcode = $gebruiker["postcode"];
+            $this->plaatsnaam = $gebruiker["plaatsnaam"];
+            $this->straatnaam = $gebruiker["straatnaam"];
+            $this->huisnummer = $gebruiker["huisnummmer"];
         }
     }
 
     public static function newGebruiker($email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
     {
-        voegRecordToe("INSERT INTO Gebruikers (email, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
-                                               ?      ?           ?         ?           ?               ?          ?          ?     ?         ?         ?           ?           ?",
+        executeQuery("INSERT INTO Gebruikers (email, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
+                      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [$email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
     }
 
     /**
-     * @return mixed
+     * @param $column Kolomnaam
+     * @param $oldVal Oud val
+     * @param $newVal Nieuw val
      */
-    public
-    function getGebruikerId()
+    private
+    function update($column, $oldVal, $newVal)
     {
-        return $this->gebruikerId;
+        executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
     }
 
-    /**
-     * @param mixed $gebruikerId
-     */
-    public
-    function setGebruikerId($gebruikerId)
-    {
-        update("gebruikerId", $this->gebruikerId, $gebruikerId);
-        $this->gebruikerId = $gebruikerId;
-    }
-
-    /**
-     * @return mixed
-     */
     public
     function getWachtwoord()
     {
@@ -79,7 +67,7 @@ class User
     public
     function setWachtwoord($wachtwoord)
     {
-        update("wachtwoord", $this->wachtwoord, $wachtwoord);
+        $this::update("wachtwoord", $this->wachtwoord, $wachtwoord);
         $this->wachtwoord = $wachtwoord;
     }
 
@@ -98,7 +86,7 @@ class User
     public
     function setVoornaam($voornaam)
     {
-        update("voornaam", $this->voornaam, $voornaam);
+        $this::update("voornaam", $this->voornaam, $voornaam);
         $this->voornaam = $voornaam;
     }
 
@@ -117,7 +105,7 @@ class User
     public
     function setAchternaam($achternaam)
     {
-        update("achternaam", $this->achternaam, $achternaam);
+        $this::update("achternaam", $this->achternaam, $achternaam);
         $this->achternaam = $achternaam;
     }
 
@@ -136,7 +124,7 @@ class User
     public
     function setGeboortedatum($geboortedatum)
     {
-        update("geboortedatum", $this->geboortedatum, $geboortedatum);
+        $this::update("geboortedatum", $this->geboortedatum, $geboortedatum);
         $this->geboortedatum = $geboortedatum;
     }
 
@@ -144,19 +132,19 @@ class User
      * @return mixed
      */
     public
-    function getEmailAdres()
+    function getEmail()
     {
-        return $this->emailAdres;
+        return $this->email;
     }
 
     /**
      * @param mixed $emailAdres
      */
     public
-    function setEmailAdres($emailAdres)
+    function setEmail($email)
     {
-        update("emailAdres", $this->emailAdres, $emailAdres);
-        $this->emailAdres = $emailAdres;
+        $this::update("email", $this->email, $email);
+        $this->email = $email;
     }
 
     /**
@@ -174,7 +162,7 @@ class User
     public
     function setTelefoonnmr($telefoonnmr)
     {
-        update("telefoonnmr", $this->telefoonnmr, $telefoonnmr);
+        $this::update("telefoonnmr", $this->telefoonnmr, $telefoonnmr);
         $this->telefoonnmr = $telefoonnmr;
     }
 
@@ -193,7 +181,7 @@ class User
     public
     function setVerkoper($verkoper)
     {
-        update("verkoper", $this->verkoper, $verkoper);
+        $this::update("verkoper", $this->verkoper, $verkoper);
         $this->verkoper = $verkoper;
     }
 
@@ -212,7 +200,7 @@ class User
     public
     function setLand($land)
     {
-        update("land", $this->land, $land);
+        $this::update("land", $this->land, $land);
         $this->land = $land;
     }
 
@@ -231,7 +219,7 @@ class User
     public
     function setProvincie($provincie)
     {
-        update("provincie", $this->provincie, $provincie);
+        $this::update("provincie", $this->provincie, $provincie);
         $this->provincie = $provincie;
     }
 
@@ -250,7 +238,7 @@ class User
     public
     function setPostcode($postcode)
     {
-        update("postcode", $this->postcode, $postcode);
+        $this::update("postcode", $this->postcode, $postcode);
         $this->postcode = $postcode;
     }
 
@@ -269,7 +257,7 @@ class User
     public
     function setPlaatsnaam($plaatsnaam)
     {
-        update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
+        $this::update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
         $this->plaatsnaam = $plaatsnaam;
     }
 
@@ -288,7 +276,7 @@ class User
     public
     function setStraatnaam($straatnaam)
     {
-        update("straatnaam", $this->straatnaam, $straatnaam);
+        $this::update("straatnaam", $this->straatnaam, $straatnaam);
         $this->straatnaam = $straatnaam;
     }
 
@@ -307,20 +295,8 @@ class User
     public
     function setHuisnummer($huisnummer)
     {
-        update("huisnummer", $this->huisnummer, $huisnummer);
+        $this::update("huisnummer", $this->huisnummer, $huisnummer);
         $this->huisnummer = $huisnummer;
     }
-
-    /**
-     * @param $column Kolomnaam
-     * @param $oldVal Oud val
-     * @param $newVal Nieuw val
-     */
-    private
-    function update($column, $oldVal, $newVal)
-    {
-        voegRecordToe("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
-    }
 }
-
 ?>

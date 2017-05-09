@@ -25,27 +25,28 @@ class Veiling
 
     public function __construct($veilingId)
     {
-        $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$veilingId]);
-        if ($veiling['code'] = 0) {
-            $this->veilingId = $veiling['data']["veilingId"];
-            $this->titel = $veiling['data']["titel"];
-            $this->beschrijving = $veiling['data']["beschrijving"];
-            $this->verkoperId = $veiling['data']["verkoperId"];
-            $this->koperId = $veiling['data']["koperId"];
-            $this->startPrijs = $veiling['data']["startPrijs"];
-            $this->verkoopPrijs = $veiling['data']["verkoopPrijs"];
-            $this->verzendKosten = $veiling['data']["verzendKosten"];
-            $this->betalingswijze = $veiling['data']["betalingswijze"];
-            $this->verzendwijze = $veiling['data']["verzendwijze"];
-            $this->beginDatum = $veiling['data']["beginDatum"];
-            $this->eindDatum = $veiling['data']["eindDatum"];
-            $this->land = $veiling['data']["land"];
-            $this->provincie = $veiling['data']["provincie"];
-            $this->postcode = $veiling['data']["postcode"];
-            $this->plaatsnaam = $veiling['data']["plaatsnaam"];
-            $this->straatnaam = $veiling['data']["straatnaam"];
-            $this->huisnummer = $veiling['data']["huisnummmer"];
-            $this->categorie = $veiling['data']['data']["categorie"];
+        $veilingen = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$veilingId]);
+        if ($veilingen['code'] == 0) {
+            $veiling = $veilingen['data'][0];
+            $this->veilingId = $veiling["veilingId"];
+            $this->titel = $veiling["titel"];
+            $this->beschrijving = $veiling["beschrijving"];
+            $this->verkoperEmail = $veiling["verkoperEmail"];
+            $this->koperEmail = $veiling["koperEmail"];
+            $this->startPrijs = $veiling["startPrijs"];
+            $this->verkoopPrijs = $veiling["verkoopPrijs"];
+            $this->verzendKosten = $veiling["verzendKosten"];
+            $this->betalingswijze = $veiling["betalingswijze"];
+            $this->verzendwijze = $veiling["verzendwijze"];
+            $this->beginDatum = $veiling["beginDatum"];
+            $this->eindDatum = $veiling["eindDatum"];
+            $this->land = $veiling["land"];
+            $this->provincie = $veiling["provincie"];
+            $this->postcode = $veiling["postcode"];
+            $this->plaatsnaam = $veiling["plaatsnaam"];
+            $this->straatnaam = $veiling["straatnaam"];
+            $this->huisnummer = $veiling["huisnummer"];
+            $this->categorieId = $veiling["categorieId"];
         }
     }
 
@@ -75,7 +76,7 @@ class Veiling
     public
     function setVeilingId($veilingId)
     {
-        update("veilingId", $this->veilingId, $veilingId);
+        $this::update("veilingId", $this->veilingId, $veilingId);
         $this->veilingId = $veilingId;
     }
 
@@ -94,7 +95,7 @@ class Veiling
     public
     function setTitel($titel)
     {
-        update("titel", $this->titel, $titel);
+        $this::update("titel", $this->titel, $titel);
         $this->titel = $titel;
     }
 
@@ -113,7 +114,7 @@ class Veiling
     public
     function setBeschrijving($beschrijving)
     {
-        update("beschrijving", $this->beschrijving, $beschrijving);
+        $this::update("beschrijving", $this->beschrijving, $beschrijving);
         $this->beschrijving = $beschrijving;
     }
 
@@ -121,38 +122,38 @@ class Veiling
      * @return mixed
      */
     public
-    function getVerkoperId()
+    function getVerkoperEmail()
     {
-        return $this->verkoperId;
+        return $this->verkoperEmail;
     }
 
     /**
      * @param mixed $verkoperId
      */
     public
-    function setVerkoperId($verkoperId)
+    function setVerkoperEmail($verkoperEmail)
     {
-        update("verkoperId", $this->verkoperId, $verkoperId);
-        $this->verkoperId = $verkoperId;
+        $this::update("verkoperEmail", $this->verkoperEmail, $verkoperEmail);
+        $this->verkoperEmail = $verkoperEmail;
     }
 
     /**
      * @return mixed
      */
     public
-    function getKoperId()
+    function getKoperEmail()
     {
-        return $this->koperId;
+        return $this->koperEmail;
     }
 
     /**
      * @param mixed $koperId
      */
     public
-    function setKoperId($koperId)
+    function setKoperEmail($koperEmail)
     {
-        update("koperId", $this->koperId, $koperId);
-        $this->koperId = $koperId;
+        $this::update("koperEmail", $this->koperEmail, $koperEmail);
+        $this->koperId = $koperEmail;
     }
 
     /**
@@ -170,7 +171,7 @@ class Veiling
     public
     function setStartPrijs($startPrijs)
     {
-        update("startPrijs", $this->startPrijs, $startPrijs);
+        $this::update("startPrijs", $this->startPrijs, $startPrijs);
         $this->startPrijs = $startPrijs;
     }
 
@@ -189,7 +190,7 @@ class Veiling
     public
     function setVerkoopPrijs($verkoopPrijs)
     {
-        update("verkoopPrijs", $this->verkoopPrijs, $verkoopPrijs);
+        $this::update("verkoopPrijs", $this->verkoopPrijs, $verkoopPrijs);
         $this->verkoopPrijs = $verkoopPrijs;
     }
 
@@ -208,7 +209,7 @@ class Veiling
     public
     function setVerzendKosten($verzendKosten)
     {
-        update("verzendKosten", $this->verzendKosten, $verzendKosten);
+        $this::update("verzendKosten", $this->verzendKosten, $verzendKosten);
         $this->verzendKosten = $verzendKosten;
     }
 
@@ -227,7 +228,7 @@ class Veiling
     public
     function setBetalingswijze($betalingswijze)
     {
-        update("betalingswijze", $this->betalingswijze, $betalingswijze);
+        $this::update("betalingswijze", $this->betalingswijze, $betalingswijze);
         $this->betalingswijze = $betalingswijze;
     }
 
@@ -246,7 +247,7 @@ class Veiling
     public
     function setVerzendwijze($verzendwijze)
     {
-        update("verzendwijze", $this->verzendwijze, $verzendwijze);
+        $this::update("verzendwijze", $this->verzendwijze, $verzendwijze);
         $this->verzendwijze = $verzendwijze;
     }
 
@@ -265,7 +266,7 @@ class Veiling
     public
     function setBeginDatum($beginDatum)
     {
-        update("beginDatum", $this->beginDatum, $beginDatum);
+        $this::update("beginDatum", $this->beginDatum, $beginDatum);
         $this->beginDatum = $beginDatum;
     }
 
@@ -284,7 +285,7 @@ class Veiling
     public
     function setEindDatum($eindDatum)
     {
-        update("eindDatum", $this->eindDatum, $eindDatum);
+        $this::update("eindDatum", $this->eindDatum, $eindDatum);
         $this->eindDatum = $eindDatum;
     }
 
@@ -303,7 +304,7 @@ class Veiling
     public
     function setLand($land)
     {
-        update("land", $this->land, $land);
+        $this::update("land", $this->land, $land);
         $this->land = $land;
     }
 
@@ -322,7 +323,7 @@ class Veiling
     public
     function setProvincie($provincie)
     {
-        update("provincie", $this->provincie, $provincie);
+        $this::update("provincie", $this->provincie, $provincie);
         $this->provincie = $provincie;
     }
 
@@ -341,7 +342,7 @@ class Veiling
     public
     function setPostcode($postcode)
     {
-        update("postcode", $this->postcode, $postcode);
+        $this::update("postcode", $this->postcode, $postcode);
         $this->postcode = $postcode;
     }
 
@@ -360,7 +361,7 @@ class Veiling
     public
     function setPlaatsnaam($plaatsnaam)
     {
-        update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
+        $this::update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
         $this->plaatsnaam = $plaatsnaam;
     }
 
@@ -379,7 +380,7 @@ class Veiling
     public
     function setStraatnaam($straatnaam)
     {
-        update("straatnaam", $this->straatnaam, $straatnaam);
+        $this::update("straatnaam", $this->straatnaam, $straatnaam);
         $this->straatnaam = $straatnaam;
     }
 
@@ -398,7 +399,7 @@ class Veiling
     public
     function setHuisnummer($huisnummer)
     {
-        update("huisnummer", $this->huisnummer, $huisnummer);
+        $this::update("huisnummer", $this->huisnummer, $huisnummer);
         $this->huisnummer = $huisnummer;
     }
 
@@ -406,19 +407,19 @@ class Veiling
      * @return mixed
      */
     public
-    function getCategorie()
+    function getCategorieId()
     {
-        return $this->categorie;
+        return $this->categorieId;
     }
 
     /**
      * @param mixed $categorie
      */
     public
-    function setCategorie($categorie)
+    function setCategorieId($categorieId)
     {
-        update("categorie", $this->categorie, $categorie);
-        $this->categorie = $categorie;
+        $this::update("categorieId", $this->categorieId, $categorieId);
+        $this->categorieId = $categorieId;
     }
 }
 ?>
