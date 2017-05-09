@@ -11,9 +11,9 @@ if(true){
         $veiling = new veiling($veilingId);
         $gebruiker = new User($veiling->getVerkoperEmail());
 
-        $projectdir = 'C:\Users\henri\Documents\Git\EenmaalAndermaal';
-        $imgdir = 'img\placeholder';
-        $imagesRough = scandir($projectdir.'\\'.$imgdir);
+        $projectdir = '';
+        $imgdir = 'img/placeholder';
+        $imagesRough = scandir(.$imgdir);
 
         for($i = 0; $i < count($imagesRough); $i++){
             if($imagesRough[$i] == '.' || $imagesRough[$i] == '..'){

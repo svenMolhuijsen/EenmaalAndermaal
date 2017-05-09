@@ -13,13 +13,13 @@
 
 <div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
   <button class="menu-icon" type="button" data-toggle></button>
-  <span class="title-bar-title"><a href="/"><img src="img/logo-sm.svg" alt="" class="brand-logo"></a></span>
+  <span class="title-bar-title"><a href="/"><img src="img/logo/logo-sm.svg" alt="" class="brand-logo"></a></span>
 </div>
 
 <div class="top-bar" id="navigatie-menu">
   <div class="top-bar-left">
     <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-      <li class="hide-for-small-only"><a href="/"><img src="img/logo.svg" alt="" class="brand-logo"></a></li>
+      <li class="hide-for-small-only"><a href="/"><img src="img/logo/logo.svg" alt="" class="brand-logo"></a></li>
       <li><a href="categoriepagina.php">Categoriën</a></li>
       <li><a href="#">FAQ</a></li>
       <li><a href="#">Contact</a></li>

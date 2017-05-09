@@ -33,7 +33,7 @@ class User {
             $this->postcode = $gebruiker["postcode"];
             $this->plaatsnaam = $gebruiker["plaatsnaam"];
             $this->straatnaam = $gebruiker["straatnaam"];
-            $this->huisnummer = $gebruiker["huisnummmer"];
+            $this->huisnummer = $gebruiker["huisnummer"];
         }
     }
 
