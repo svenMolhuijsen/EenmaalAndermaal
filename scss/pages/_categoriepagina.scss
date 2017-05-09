@@ -4,26 +4,18 @@
 
     ul.side-nav {
       list-style-type: none;
-      text-align: center;
+      text-align: left;
       margin:auto;
     }
 
     div.side-nav-block {
-      text-align: center;
+
       border-right: 1px solid black;
       float: bottom;
     }
 
-  div.categorien {
-    border-left: 1px solid black;
-  }
     li:hover {
       background-color: #FFA500;
-    }
-
-    li:after {
-      content: ">";
-      float: right;
     }
 
     img {
