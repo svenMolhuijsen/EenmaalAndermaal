@@ -74,3 +74,35 @@ function stuurTerug($data)
     echo json_encode($response);
 
 }
+
+//genereren categorie-accordion
+function categorieAccordion(){
+    echo('
+        <div class="side-nav-block medium-3 large-3 columns">
+        <ul class="side-nav accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
+    ');
+
+    $hoofdcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
+
+    if($hoofdcategorien['code'] == 0) {
+        for ($i = 0; $i < count($hoofdcategorien['data']); $i++) {
+            $hoofdcategorie = $hoofdcategorien['data'][$i];
+
+            echo('<li class="accordion-item" data-accordion-item>');
+            echo('<a href="#" rel="categorie-'.$hoofdcategorie['categorieId'].'" class="hoofdcategorie accordion-title">' . $hoofdcategorie['categorieNaam'] . '</a>');
+            echo('<div class="accordion-content show-for-small-only" data-tab-content>');
+
+            $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie['categorieId']]);
+
+            if ($subcategorien['code'] == 0) {
+                for ($j = 0; $j < count($subcategorien['data']); $j++) {
+                    $subcategorie = $subcategorien['data'][$j];
+
+                    echo('<a href="#" id="categorie-' . $subcategorie['categorieId'] . '">' . $subcategorie['categorieNaam'] . '</a>');
+                }
+            }
+        }
+
+        echo('</div></li></ul></div>');
+    }
+}
