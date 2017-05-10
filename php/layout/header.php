@@ -27,9 +27,7 @@
   <div class="top-bar-left">
     <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
       <li class="hide-for-small-only"><a href="/"><img src="img/logo/logo.svg" alt="" class="brand-logo"></a></li>
-      <li><a href="categoriepagina.php">Categoriën</a></li>
-      <li><a href="#">FAQ</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="categoriepagina.php">Categorieën</a></li>
     </ul>
   </div>
   <div class="top-bar-right">
@@ -51,7 +49,7 @@
         <li><a href="#" class="signup_button button">Sign Up</a></li>
         <li>
           <!--<input type="text">-->
-          <a href="#" class="button">
+          <a href="#" class="button hollow searchButton">
             <span class="fi-magnifying-glass"></span>
           </a>
 

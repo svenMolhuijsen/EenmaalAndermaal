@@ -9,15 +9,14 @@
           <div class="row collapse">
               <div class="small-6 columns">
                 <ul>
-                    <li><a href="#">Homepage</a></li>
-                    <li><a href="#">Categoriën</a></li>
-                    <li><a href="#">Aanbiedingen</a></li>
-                    <li><a href="#">Blog</a></li>
+                    <li><a href="/">Homepage</a></li>
+                    <li><a href="categoriepagina.php">Categorieën</a></li>
                 </ul>
               </div><!--small-6-->
               <div class="small-6 columns dark-link">
                 <ul>
                     <li><a href="#">About</a></li>
+                    <li><a href="#">FAQ</a></li>
                     <li><a href="#">Contact</a></li>
                     <li><a href="#">Terms of Service</a></li>
                     <li><a href="#">Privacy Policy</a></li>
