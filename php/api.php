@@ -72,3 +72,10 @@ function logout()
     }
     echo json_encode($a_result);
 }
+
+//opvragen categoriën
+function getMainCategories(){
+    $query = "SELECT c.categorieNaam FROM categorie c WHERE superId IS NULL";
+    $result = executeQuery($query);
+    var_dump($result);
+}
