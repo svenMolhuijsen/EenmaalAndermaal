@@ -2,6 +2,7 @@
 $pagename = "categorieToevoegen";
 include("php/core.php");
 include("php/layout/header.php");
+include("php/layout/breadcrumbs.php");
 ?>
 
 <main>

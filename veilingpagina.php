@@ -24,18 +24,9 @@ if(true){
 $pagename = $veiling->getTitel();
 
 include("php/layout/header.php");
+include("php/layout/breadcrumbs.php");
 ?>
 
-<div class="veilingpagina">
-<div class="row show-for-medium">
-    <div class="column">
-        <ul class="titel breadcrumbs">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Veilingen</a></li>
-            <li class="current"><a href="#"><?php echo($veiling->getTitel()); ?></a></li>
-        </ul>
-    </div>
-</div>
 <div class="row">
     <div class="large-6 columns">
             <h1><strong><?php echo($veiling->getTitel()); ?></strong></h1>
@@ -84,7 +75,6 @@ include("php/layout/header.php");
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <?php include("php/layout/footer.php") ?>
