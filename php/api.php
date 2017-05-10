@@ -6,26 +6,15 @@ if (!empty($_GET['action'])) {
     switch ($action) {
         // Inloggen
         case 'login':
-            $params = array($_POST['mail'], $_POST['password']);
+            $params = array(
+                'email' => $_POST['email'],
+                'password' => $_POST['password']);
             login($params);
             break;
         // Uitloggen
         case 'logout':
             logout();
             break;
-
-        // Wachtwoord vergeten
-        case 'forgotPassword':
-            $params = array($_POST['mail']);
-            forgotPassword($params);
-            break;
-
-        // Wachtwoord wijzigen
-        case 'changePassword':
-            $params = array($_POST['oldPassword'], $_POST['newPassword']);
-            changePassword($params);
-            break;
-
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -35,40 +24,52 @@ if (!empty($_GET['action'])) {
 // Inloggen
 function login($params)
 {
-    // JSON decoden
-    $params = json_decode($params);
-
     // Variabelen uit object halen
-    $mail = $params->mail;
-    $password = $params->password;
+    $mail = $params["email"];
+    $password = $params["password"];
+    global $user;
+    $response = null;
 
     if (empty($mail) || empty($password)) {
-        $a_result = array('status' => 'unsuccessful');
+        $response = ['status' => 'error', "message" => "Een van de velden is niet ingevuld"];
+    } else {
+        $result = executeQuery("SELECT email, wachtwoord FROM gebruikers WHERE email = ?", [$mail]);
+        if ($result['code'] == 0) {
+            if (password_verify($password, $result['data'][0]["wachtwoord"])) {
+                //gebruiker gevonden en wachtwoord klopt
+                $_SESSION['email'] = $mail;
+                $user = new User($_SESSION['email']);
+                $response = ['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd'];
+            } else {
+                //wanneer gebruiker gevonden is, maar het wachtwoord niet klopt
+                $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
+            }
+        } else {
+            $response = $result;
+        }
     }
+    stuurTerug($response);
 
-    //Selecteert dit email uit de database
-    $query = $pdo->prepare("SELECT * FROM Customer WHERE customer_mail_address=?");
-    $query->execute(["$userMail[1]"]);
-    $result = $query->fetch();
-
-    if (password_verify($password[1], $result["password"])) {
-        $_SESSION['email'] = $mail;
-
-        // Gelukt
-        $a_result = array('status' => 'success',);
-    }
-
-    // Resultaat terugsturen
-    echo json_encode($a_result);
 }
 
 function logout()
 {
-    session_destroy();
-    if ($_SESSION != null) {
-        $a_result = ['status' => 'unsuccessful'];
+//    session_destroy();
+//    if ($_SESSION != null) {
+//        $a_result = ['status' => 'unsuccessful'];
+//    } else {
+//        $a_result = ['status' => 'success'];
+//    }
+//    echo json_encode($a_result);
+}
+
+function stuurTerug($data)
+{
+    global $user;
+    if ($user == null) {
+        $response = array_merge(['login' => false], $data);
     } else {
-        $a_result = ['status' => 'success'];
+        $response = array_merge(['login' => true, 'user' => $user->toArray()], $data);
     }
     echo json_encode($a_result);
 }

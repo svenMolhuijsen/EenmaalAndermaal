@@ -6,6 +6,6 @@ include("classes/Veiling.php");
 include("functions/database.php");
 include("functions/forms.php");
 
-$user = null;
+$user;
 
 include("session.php");
