@@ -80,6 +80,37 @@ $('.altImages .column img').on('click', function(){
 });
 
 //////////////////////////////////////////////
+//  Forms versturen
+/////////////////////////////////////////////
+$('#login input[type="submit"]').on('click', function () {
+    var url = "/IProject/php/api.php?action=login"; // the script where you handle the form input.
+
+    var password = $('#login #signin-password').val();
+    var email = $('#login #signin-email').val();
+
+    $.post(url, {email: email, password: password}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+        console.log(res);
+        // Kijken of het result true is
+        if (res.code == 0) {
+            // Melding weergeven
+            $('#login form').append("<div data-alert class='callout success'>" + res.message + "</div>");
+            // Alle velden legen, behalve submit
+            $('#login input:not([type=\"submit\"])').val('');
+            $('.signin-register-modal,.signin-register-modal .callout').fadeOut(300);
+
+            //TODO: functie aanroepen die header doet veranderen
+        }
+        else {
+            //oude foutmeldingen verwijderen, en laatste foutmelding weergeven
+            $('.signin-register-modal .callout').remove();
+            $('#login form').append("<div data-alert class='callout alert'>" + res.message + "</div>");
+        }
+    });
+});
+
+//////////////////////////////////////////////
 //  Validation
 /////////////////////////////////////////////
 

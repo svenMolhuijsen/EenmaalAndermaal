@@ -11,7 +11,7 @@
                 <input class="full-width has-padding has-border" id="signin-email" type="email" placeholder="a@b.com">
 
                 <label class=" password" for="signin-password">Password</label>
-                <input class="full-width has-padding has-border" id="signin-password" type="text"
+                <input class="full-width has-padding has-border" id="signin-password" type="password"
                        placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$">
                 <br>
                 <button class="button hollow float-left reset">Wachtwoord vergeten?</button>
@@ -79,11 +79,11 @@
                 <input id="register-email" type="email" placeholder="a@b.com" required>
                 <!--                wachtwoord-->
                 <label class=" password" for="register-password">Wachtwoord</label>
-                <input id="register-password" type="text"
+                <input id="register-password" type="password"
                        placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <!--                wachtwoord herhalen-->
                 <label class=" password" for="register-repeat-password">Herhaal wachtwoord</label>
-                <input id="register-repeat-password" type="text"
+                <input id="register-repeat-password" type="password"
                        placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
                 <input class="button float-right" type="submit" value="Login">

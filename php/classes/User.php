@@ -1,6 +1,7 @@
 <?php
 
-class User {
+class User
+{
 
     private $wachtwoord;
     private $voornaam;
@@ -16,7 +17,8 @@ class User {
     private $straatnaam;
     private $huisnummer;
 
-    function __construct($email) {
+    function __construct($email)
+    {
         $gebruikers = executeQuery("SELECT * FROM gebruikers WHERE email = ?", [$email]);
         if ($gebruikers['code'] == 0) {
             $gebruiker = $gebruikers['data']['0'];
@@ -37,11 +39,28 @@ class User {
         }
     }
 
-    public static function newGebruiker($email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
+    public static function newUser($email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
     {
         executeQuery("INSERT INTO Gebruikers (email, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
                       VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [$email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
+    }
+
+    public function toArray()
+    {
+        return ['email' => $this->email,
+            'voornaam' => $this->voornaam,
+            'achternaam' => $this->achternaam,
+            'geboortedatum' => $this->geboortedatum,
+            'telefoonmr' => $this->telefoonnmr,
+            'verkoper' => $this->verkoper,
+            'land' => $this->land,
+            'provincie' => $this->provincie,
+            'postcode' => $this->postcode,
+            'plaatsnaam' => $this->plaatsnaam,
+            'straatnaam' => $this->straatnaam,
+            'huisnummer' => $this->huisnummer
+        ];
     }
 
     /**
@@ -299,4 +318,5 @@ class User {
         $this->huisnummer = $huisnummer;
     }
 }
+
 ?>
