@@ -2,23 +2,27 @@
   border: 1px solid black;
   text-align: center;
 
-    ul.side-nav {
-      list-style-type: none;
-      text-align: left;
-      margin:auto;
-    }
+  ul.side-nav {
+    list-style-type: none;
+    text-align: left;
+    margin:auto;
+  }
 
-    div.side-nav-block {
+  div.side-nav-block {
 
-      border-right: 1px solid black;
-      float: bottom;
-    }
+    border-right: 1px solid black;
+    float: bottom;
+  }
 
-    li:hover {
-      background-color: #FFA500;
-    }
+  li:hover {
+    background-color: #FFA500;
+  }
 
-    img {
-      margin-top: 10px;
-    }
+  img {
+    margin-top: 10px;
+  }
+
+  .categorieImage {
+    display: none;
+  }
 }

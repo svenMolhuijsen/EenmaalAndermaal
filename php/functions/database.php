@@ -5,7 +5,7 @@ function executeQuery($query, $data = []){
     try {
         $stmt = $pdo->prepare("$query");
         $stmt->execute($data);
-        $found = $stmt->fetchAll();
+        $found = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (count($found) == 0) {
             return ['status' => 'error', 'code' => 1, 'message' => "Geen records gevonden"];
         } else {

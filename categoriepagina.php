@@ -1,132 +1,25 @@
 <?php
 $pagename = "categorie";
-include("php/core.php");
+include("php/api.php");
 include("php/layout/header.php");
 ?>
 
 <hr>
     <div class="large-8 row categoriepagina">
-        <div class="side-nav-block medium-3 large-3 columns">
-
-            <ul class="side-nav accordion" data-accordion>
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Populaire categorien</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Computers</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Auto's</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Kleding</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Sport</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Tuin & Terras</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Watersport & boten</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Boeken</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Ticket & kaartjes</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Dieren & toebehoren</a>
-                    <div class="accordion-content show-for-small-only" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Fietsen & brommers</a>
-                    <div class="accordion-content" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-
-                <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title">Huis & inrichting</a>
-                    <div class="accordion-content" data-tab-content>
-                        <a href="#">Sub categorie 1</a>
-                    </div
-                </li>
-            </ul>
-        </div>
-
-        <div class="medium-9 large-9 columns categorien">
-            <div class="row small-up-2 medium-up-4 large-up-5 show-for-medium">
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-                <div class="column">
-                    <img class="thumbnail" src="http://placehold.it/600x600">
-                </div>
-
+        <?php categorieAccordion(); ?>
+        <div class="medium-9 large-9 columns">
+            <div class="row medium-up-4 large-up-5 show-for-medium">
+                <?php
+                $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NOT NULL");
+                if($subcategorien['code'] == 0){
+                    for($i = 0; $i < count($subcategorien['data']); $i++){
+                        $subcategorie = $subcategorien['data'][$i];
+                        echo('<div class="column">');
+                        echo('<img rel="categorie-'.$subcategorie['superId'].'" class="categorieImage thumbnail" src="http://placehold.it/600x600">');
+                        echo('</div>');
+                    }
+                }
+                ?>
             </div>
         </div>
     </div>

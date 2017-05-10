@@ -125,3 +125,16 @@ $('#loginForm').validate({
 $('#resetForm').validate({
     errorClass: 'validationError'
 });
+
+
+//////////////////////////////////////////////
+//  Categoriepagina
+/////////////////////////////////////////////
+$hoofdcategorie = $('.hoofdcategorie');
+
+$hoofdcategorie.on('click', function(){
+    var categorie = $(this).attr('rel');
+    $categorieImages = $('img[rel="' + categorie + '"].categorieImage');
+    $categorieImages.fadeToggle(300, function(){
+    });
+});

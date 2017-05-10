@@ -7,7 +7,7 @@ class User
     private $voornaam;
     private $achternaam;
     private $geboortedatum;
-    private $emailAdres;
+    private $email;
     private $telefoonnmr;
     private $verkoper;
     private $land;
