@@ -2,7 +2,7 @@
 //page variables
 $pagename = "home";
 
-//include("php/core.php");
+include("php/core.php");
 include("php/layout/header.php");
 ?>
 <main>

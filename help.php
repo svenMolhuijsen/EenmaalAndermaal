@@ -2,9 +2,15 @@
 //page variables
 $pagename = "home";
 
-include("php/core.php");
-include("php/layout/login-popup.php");
+include("php/api.php");
 include("php/layout/header.php")
+?>
+
+<?php
+
+$categorieArray = getMainCategories();
+echo serialize($categorieArray);
+
 ?>
 
     <div class="row">
