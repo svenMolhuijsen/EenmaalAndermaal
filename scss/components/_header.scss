@@ -1,17 +1,58 @@
 $logo-size: 36px;
 
-html, body{
-  height: 100%;}
+html, body {
+  height: 100%;
+}
 
-main{
-  min-height: 100%;}
+main {
+  min-height: 100%;
+}
 
-.brand-logo{
-  height: $logo-size}
+.brand-logo {
+  height: $logo-size
+}
 
-.top-bar{
+.top-bar {
   padding: 0;
-  
-  .button{
-    line-height: $logo-size;
-  }}
+  .top-bar-right .menu {
+    div {
+      display: inline-block;
+      float: left;
+    }
+    input, select, input::-webkit-input-placeholder {
+      color: darken($secondary-light, 20%);
+      height: $topbar-height !important;
+      background: lighten($secondary-light, 10%);
+      border: none;
+      margin: 0;
+      padding: 0 15px;
+      box-shadow: none;
+      &:focus {
+        box-shadow: none;
+        background-color: lighten($secondary-light, 15%) !important;
+        border-bottom: 3px solid $primary !important;
+      }
+    }
+    .button, a {
+      padding-top: 0;
+      padding-bottom: 0;
+      height: $topbar-height;
+      line-height: $topbar-height !important;
+      &.login_button {
+        border: none;
+      }
+    }
+    @include breakpoint(small down) {
+      div {
+        width: 50%;
+        &:nth-child(3) { //search button
+          width: 100%;
+        }
+        * {
+          min-width: 100% !important;
+        }
+      }
+
+    }
+  }
+}
