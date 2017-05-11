@@ -32,66 +32,63 @@
         </ul>
     </div>
     <div class="top-bar-right">
-        <?php $page = false;
-        if ($page == 'account') { ?>
-            <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-                <li><a href="#">Profile</a>
-                    <ul class="menu">
-                        <li><a href="#">Informatie</a></li>
-                        <li><a href="#">Nieuwe verkoop</a></li>
-                        <li><a href="#">Aankopen</a></li>
-                        <li><a href="#">logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-
-        <?php } else { ?>
-            <div class="menu">
-                <div>
-                    <select>
-                        <option value="Categorie">Kies categorie</option>
-                        <optgroup label="Swedish Cars">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                        </optgroup>
-                        <optgroup label="German Cars">
-                            <option value="mercedes">Mercedes</option>
-                            <option value="audi">Audi</option>
-                        </optgroup>
-                        <optgroup label="Swedish Cars">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                        </optgroup>
-                        <optgroup label="Swedish Cars">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                        </optgroup>
-                        <optgroup label="Swedish Cars">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div><input type="search" placeholder="Zoekterm"></div>
-                <div>
-                    <button type="button" class="button"><span class="fi-magnifying-glass"></span> Zoeken</button>
-                </div>
-                <div><a href="#" class="login_button button hollow">Log in</a></div>
-                <div><a href="#" class="signup_button button">Aanmelden</a></div>
-
-
-                <!--<li>
-                  <div class="input-group">
-                    <span class="input-group-label">$</span>
-                    <input type="text" class="input-group-field">
-                    <div class="input-group-button">
-                      <input type="submit" class="button" value="submit">
-                    </div>
-                  </div>
-                </li>-->
+        <div class="menu">
+            <div>
+                <select>
+                    <option value="Categorie">Kies categorie</option>
+                    <optgroup label="Swedish Cars">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                    </optgroup>
+                    <optgroup label="German Cars">
+                        <option value="mercedes">Mercedes</option>
+                        <option value="audi">Audi</option>
+                    </optgroup>
+                    <optgroup label="Swedish Cars">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                    </optgroup>
+                    <optgroup label="Swedish Cars">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                    </optgroup>
+                    <optgroup label="Swedish Cars">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                    </optgroup>
+                </select>
             </div>
+            <div><input type="search" placeholder="Zoekterm"></div>
+            <div>
+                <button type="button" class="button"><span class="fi-magnifying-glass"></span> Zoeken</button>
+            </div>
+            <?php $login = false;
+            if ($login) { ?>
+                <ul class="account dropdown vertical medium-horizontal menu" data-dropdown-menu>
+                    <li>
+                        <a href="#"><span class="fi-torso"></a>
+                        <ul class="menu">
+                            <li><a href="#">Informatie</a></li>
+                            <li><a href="#">Nieuwe verkoop</a></li>
+                            <li><a href="#">Aankopen</a></li>
+                            <li><a class="button" href="#">Uitloggen</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            <?php } else { ?>
+                <ul class=" account dropdown vertical medium-horizontal menu" data-dropdown-menu>
+                    <li>
+                        <a href="#"><span class="fi-torso"></a>
+                        <ul class="menu">
+                            <li><a href="#" class="login_button hollow">Log in</a></li>
+                            <li><a href="#" class="signup_button button">Aanmelden</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
         <?php } ?>
+        </div>
 
     </div>
 </div>

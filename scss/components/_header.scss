@@ -15,7 +15,7 @@ main {
 .top-bar {
   padding: 0;
   .top-bar-right .menu {
-    div {
+    div, > ul {
       display: inline-block;
       float: left;
     }
