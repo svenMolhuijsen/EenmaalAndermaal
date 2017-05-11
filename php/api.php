@@ -79,7 +79,7 @@ function stuurTerug($data)
 function categorieAccordion(){
     echo('
         <div class="side-nav-block medium-3 large-3 columns">
-        <ul class="side-nav accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
+        <ul class="side-nav accordion" data-accordion data-allow-all-closed="true" data-multi-expand="false">
     ');
 
     $hoofdcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
@@ -88,7 +88,7 @@ function categorieAccordion(){
         for ($i = 0; $i < count($hoofdcategorien['data']); $i++) {
             $hoofdcategorie = $hoofdcategorien['data'][$i];
 
-            echo('<li class="accordion-item" data-accordion-item>');
+            echo('<li onclick="updateSubCategorie()" class="accordion-item" data-accordion-item>');
             echo('<a href="#" rel="categorie-'.$hoofdcategorie['categorieId'].'" class="hoofdcategorie accordion-title">' . $hoofdcategorie['categorieNaam'] . '</a>');
             echo('<div class="accordion-content show-for-small-only" data-tab-content>');
 

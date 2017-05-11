@@ -9,8 +9,8 @@ include("php/layout/breadcrumbs.php");
     <div class="large-8 row categoriepagina">
         <?php categorieAccordion(); ?>
         <div class="medium-9 large-9 columns">
-            <div class="row medium-up-4 large-up-5 show-for-medium">
-                <?php
+            <div class="row medium-up-4 large-up-5 show-for-medium" id="subCategorie">
+                <!--<?php
                 $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NOT NULL");
                 if($subcategorien['code'] == 0){
                     for($i = 0; $i < count($subcategorien['data']); $i++){
@@ -20,10 +20,21 @@ include("php/layout/breadcrumbs.php");
                         echo('</div>');
                     }
                 }
-                ?>
+                ?>-->
             </div>
         </div>
     </div>
+
+<script>
+    function updateSubCategorie(){
+        var activeCategorie = $('.side-nav .active').attr('rel');
+        //ajax request subcategorieen
+
+        for(i = 0; i < subcategorieen.length; i++){
+            document.getElementById("subCategorie").innerHTML("test");
+        }
+    }
+</script>
 
     <hr>
 <div class="row">
