@@ -24,6 +24,8 @@ if(true){
 $pagename = $veiling->getTitel();
 
 include("php/layout/header.php");
+
+if($veiling->getCode() == 0){
 include("php/layout/breadcrumbs.php");
 ?>
 
@@ -116,5 +118,20 @@ var x = setInterval(function() {
     }
 }, 1000);
 </script>
+<?php
+}
+else{
+?>
+<div class="row">
+    <div class="small-12 columns">
+        <div class="callout alert">
+            <h5>Geen veiling gevonden</h5>
+            <p>Ga terug en probeer het opnieuw</p>
+        </div>
+    </div>
+</div>
+<?php
+}
+include("php/layout/footer.php")
+?>
 
-<?php include("php/layout/footer.php") ?>

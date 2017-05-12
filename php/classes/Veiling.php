@@ -2,11 +2,11 @@
 
 class Veiling
 {
-
+    private $code;
     private $veilingId;
     private $titel;
     private $beschrijving;
-    private $verkoperId;
+    private $verkoperEmail;
     private $koperId;
     private $startPrijs;
     private $verkoopPrijs;
@@ -21,11 +21,13 @@ class Veiling
     private $plaatsnaam;
     private $straatnaam;
     private $huisnummer;
-    private $categorie;
+    private $categorieId;
 
     public function __construct($veilingId)
     {
         $veilingen = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$veilingId]);
+        $this->code = $veilingen['code'];
+
         if ($veilingen['code'] == 0) {
             $veiling = $veilingen['data'][0];
             $this->veilingId = $veiling["veilingId"];
@@ -59,6 +61,11 @@ class Veiling
     function update($column, $oldVal, $newVal)
     {
         return $result = executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
+    }
+
+    public
+    function getCode(){
+        return $this->code;
     }
 
     /**
