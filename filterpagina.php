@@ -17,13 +17,25 @@ order by $sortBy*/
  ?>
 
 <div class="row">
-    <ul class="titel breadcrumbs">
-        <li><a href="index.php">Home</a></li>
-        <li><a href="#">Categorieën</a></li>
-        <li><a href="#">Auto</a></li>
-
-    </ul>
     <div class="clearfix">
+        <div class="small-up-1 medium-up-3 columns-12 float-center">
+            <div class="column column-block" id="blocks">
+                <input type="text" placeholder="zoek">
+            </div>
+            <div class="column column-block" id="blocks">
+                <select>
+                    <option value="Voertuigen">Voertuigen</option>
+                    <option value="Kleding">Kleding</option>
+                    <option value="Vakanties">Vakanties</option>
+                    <option value="Sport">Sport</option>
+                </select>
+            </div>
+            <div class="column column-block" id="blocks">
+                <input type="submit" class="button" value="submit">
+            </div>
+        </div>
+
+
         <h4 class="float-right">Jouw Zoekresultaten: </h4>
     </div>
         <form method="get" action="filterpagina.php">
