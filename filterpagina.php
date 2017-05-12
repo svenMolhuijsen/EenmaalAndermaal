@@ -36,10 +36,10 @@ order by $sortBy*/
         </div>
 
 
-        <h4 class="float-right">Jouw Zoekresultaten: </h4>
+        <h4 class="float-right hide-for-small-only">Jouw Zoekresultaten: </h4>
     </div>
         <form method="get" action="filterpagina.php">
-            <select class = "float-right" name="sorterenOp" style="width:20%">
+            <select class = "float-right hide-for-small-only" name="sorterenOp" style="width:20%">
             <option value="null">Sorteren op: </option>
             <option value="verkoopPrijs ASC">Prijs Oplopend: </option>
             <option value="verkoopPrijs DSC">Prijs Aflopend: </option>
@@ -111,26 +111,40 @@ order by $sortBy*/
 
     <?php/*---------------------------------------------------------------------------------------------------------------*/?>
     <hr>
+    <h4 class="show-for-small-only">Jouw Zoekresultaten: </h4>
+    <form method="get" action="filterpagina.php">
+    <select class = "show-for-small-only" style="width: 100%"" name="sorterenOp" style="width:20%">
+        <option value="null">Sorteren op: </option>
+        <option value="verkoopPrijs ASC">Prijs Oplopend: </option>
+        <option value="verkoopPrijs DSC">Prijs Aflopend: </option>
+        <option value="Date ACS">Datum Aflopend: </option>
+        <option value = "Date DCS">Meest Recente: </option>
+    </select>
+</form>
+
+
     <div class="small-up-3 medium-up-4 large-up-5 columns-12 float-right"<?php/*Hieronder komt de querry om de afbeelding
         op te halen. met een querry. daarbij komt dat als bijvoorbeeld de 'sorteren op' wordt aangepast ook de selectie van de
         veilingen veranderen */ ?>
 
         <?php/* selectRecords($query, $data) */?>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><div style="color: #E25822">titel Product<br>€100</div></a></div>
+
+
     </div>
 
             <div class = "show-for-large">
