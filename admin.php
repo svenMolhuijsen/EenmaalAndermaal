@@ -11,7 +11,7 @@ include("php/layout/breadcrumbs.php");
         <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
     </ul>
 
-    <div class="tabs-content" data-tabs-content="admintabs">
+    <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
         <div class="tabs-panel" id="overzicht">
             <div class="row expanded">
                 <h4><strong>Verkoop gegevens</strong></h4>
