@@ -115,7 +115,15 @@ $('#login input[type="submit"]').on('click', function () {
 /////////////////////////////////////////////
 
 $('#registerForm').validate({
-    errorClass: 'validationError'
+    errorClass: 'validationError',
+    rules: {
+        'repeat-password': { equalTo: "#register-password" }
+    },
+    messages: {
+        'repeat-password': { equalTo: "Vul hetzelfde wachtwoord in."},
+        'tel': { pattern: "Foutief patroon." },
+        'postcode': { pattern: "Foutief patroon." }
+    }
 });
 
 $('#loginForm').validate({
