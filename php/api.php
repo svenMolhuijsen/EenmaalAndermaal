@@ -15,6 +15,9 @@ if (!empty($_GET['action'])) {
         case 'logout':
             logout();
             break;
+        case 'categorie':
+            setSubcategorien($_GET["arguments"]);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -104,5 +107,19 @@ function categorieAccordion(){
         }
 
         echo('</div></li></ul></div>');
+    }
+}
+
+function setSubcategorien($hoofdcategorie){
+    $hoofdcategorie = substr($hoofdcategorie, 12);
+    $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie]);
+
+    if ($subcategorien['code'] == 0) {
+        for ($i = 0; $i < count($subcategorien['data']); $i++) {
+            $subcategorie = $subcategorien['data'][$i];
+            echo('<div class="column">');
+            echo('<img rel="categorie-' . $subcategorie['superId'] . '" class="categorieImage thumbnail" src="http://placehold.it/600x600">');
+            echo('</div>');
+        }
     }
 }
