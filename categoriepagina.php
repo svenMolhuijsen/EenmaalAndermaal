@@ -43,12 +43,12 @@ include("php/layout/breadcrumbs.php");
         <!--<a href="#" class="button hollow float-right">view more ></a>!-->
     </div>
     <div class="small-up-2 medium-up-3 large-up-6 columns-12 clearfix">
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><h3>Product naam</h3><br>Test</div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><h3>Product naam</h3><br>Test</div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><h3>Product naam</h3><br>Test</div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><h3>Product naam</h3><br>Test</div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><h3>Product naam</h3><br>Test</div>
-        <div class="column column-block"><img src="http://placehold.it/150x300" alt=""><h3>Product naam</h3><br>Test</div>
+        <div class="column column-block"><a href="#"><img src="http://placehold.it/150x300" alt=""><div>Apple Iphone 4S<br>€499</div></a></div>
+        <div class="column column-block"><a href="#"><img src="http://placehold.it/150x300" alt=""><div>Beats Solo 2<br>€299</div></a></div>
+        <div class="column column-block"><a href="#"><img src="http://placehold.it/150x300" alt=""><div>MBP late 2015 13"<br>€1299</div></a></div>
+        <div class="column column-block"><a href="#"><img src="http://placehold.it/150x300" alt=""><div>Dell XPS 15 2015<br>€1499</div></a></div>
+        <div class="column column-block"><a href="#"><img src="http://placehold.it/150x300" alt=""><div>Microsoft Office 2016<br>€3,99</div></a></div>
+        <div class="column column-block"><a href="#"><img src="http://placehold.it/150x300" alt=""><div>Kaarsen<br>€4,99</div></a></div>
     </div>
 </div>
 
