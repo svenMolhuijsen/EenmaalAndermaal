@@ -62,6 +62,7 @@
             <div>
                 <button type="button" class="button"><span class="fi-magnifying-glass"></span> Zoeken</button>
             </div>
+            <div>
             <?php $login = false;
             if ($login) { ?>
                 <ul class="account dropdown vertical medium-horizontal menu" data-dropdown-menu>
@@ -86,8 +87,8 @@
                         </ul>
                     </li>
                 </ul>
-
         <?php } ?>
+            </div>
         </div>
 
     </div>
