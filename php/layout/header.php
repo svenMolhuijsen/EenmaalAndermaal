@@ -69,7 +69,12 @@
                     <li>
                         <a href="#"><span class="fi-torso"></a>
                         <ul class="menu">
-                            <li><a href="#">Informatie</a></li>
+                        <?php $admin = false;
+                        if($admin){?>
+                            <li><a href="admin.php">admin</a></li>
+                        <?php } else{ ?>
+                            <li><a href="profile.php">Informatie</a></li>
+                        <?php } ?>
                             <li><a href="#">Nieuwe verkoop</a></li>
                             <li><a href="#">Aankopen</a></li>
                             <li><a class="button" href="#">Uitloggen</a></li>
