@@ -8,16 +8,39 @@ include("php/layout/breadcrumbs.php");
 <main>
     <div class="row collapse">
         <div class="medium-3 columns">
-            <ul class="tabs vertical" id="example-vert-tabs" data-tabs>
-                <li class="tabs-title is-active"><a href="#populair" aria-selected="true">Populaire Categorieën</a></li>
-                <li class="tabs-title"><a href="#voertuigen">Voertuigen</a></li>
-                <li class="tabs-title"><a href="#sport">Sport</a></li>
-                <li class="tabs-title"><a href="#kids">Kids</a></li>
-                <li class="tabs-title"><a href="#computers">Computers</a></li>
+            <ul class="tabs vertical" id="categorieen" data-tabs>
+                <?php
+                $hoofdCategorieen = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
+                if($hoofdCategorieen['code'] == 0){
+                    for($i = 0; $i < count($hoofdCategorieen['data']); $i++){
+                        $hoofdCategorie = $hoofdCategorieen['data'][$i];
+                    echo('<li class="tabs-title"><a href="#'.$hoofdCategorie['categorieId'].'">'.$hoofdCategorie['categorieNaam'].'</a></li>');
+                    
+                
+                ?>
             </ul>
         </div>
         <div class="medium-9 columns">
-            <div class="tabs-content vertical" data-tabs-content="example-vert-tabs">
+            <div class="tabs-content vertical" data-tabs-content="categorieen">
+                <?php
+                    echo('<div class="tabs-panel" id="'.$hoofdCategorie['categorieId'].'">');
+                ?>
+                <div class="row medium-up-3 large-up-5 text-center">
+                <?php
+                    $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ", [$hoofdCategorie['categorieId']]);
+                    if ($subcategorien['code'] == 0) {
+                        for ($j = 0; $j < count($subcategorien['data']); $j++) {
+                            $subcategorie = $subcategorien['data'][$j];
+                            echo('<div class="column column-block"><a href="#"><img src="http://placehold.it/100x100" alt=""><div>'.$subcategorie['categorieNaam'].'</div>');
+                        }
+                    }
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="medium-9 columns">
+            <div class="tabs-content vertical" data-tabs-content="categorieen">
                 <div class="tabs-panel is-active" id="populair">
                     <div class="row medium-up-3 large-up-5 text-center">
                         <div class="column column-block"><a href="#">
