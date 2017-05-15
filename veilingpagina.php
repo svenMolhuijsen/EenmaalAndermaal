@@ -7,6 +7,7 @@ if(true){
 
         $veiling = new veiling($veilingId);
         $gebruiker = new User($veiling->getVerkoperEmail());
+        $categorie = new Categorie($veiling->getCategorieId());
 
         $imgdir = 'img/placeholder';
         $imagesRough = scandir($imgdir);
@@ -32,11 +33,11 @@ include("php/layout/breadcrumbs.php");
 <div class="row">
     <div class="large-6 columns">
             <h1><strong><?php echo($veiling->getTitel()); ?></strong></h1>
-            <h5><?php echo($veiling->getCategorieId());?></h5>
+            <h5 class="subheader"><?php echo($categorie->getCategorieNaam());?></h5><br>
 
             <h4 class="titel"><strong>Verkoper:</strong></h4>
             <h5><?php echo($gebruiker->getVoornaam()." ".$gebruiker->getAchternaam()); ?></h5>
-            <h5 class="subheader"><?php echo($gebruiker->getProvincie()." - ".$gebruiker->getPlaatsnaam()); ?></h5>
+            <h5 class="subheader"><?php echo($gebruiker->getProvincie()." - ".$gebruiker->getPlaatsnaam()); ?></h5><br>
 
             <h4 class="titel"><strong>Omschrijving:</strong></h4>
             <h5><?php echo($veiling->getBeschrijving()); ?></h5>
@@ -60,16 +61,18 @@ include("php/layout/breadcrumbs.php");
             <?php
             for($i = 1; $i < count($images) && $i < 5; $i++){
                 echo('<div class="column">');
-                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$imgdir.'\\'.$images[$i].'">');
+                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$imgdir.'\\'.$images[$i].'" alt="altImage">');
                 echo('</div>');
             }
             ?>
         </div>
         <div class="row">
-            <p>Datums</p>
-            <span>Begin Datum: <?php echo($veiling->getBeginDatum());?></span><br><span>Eind Datum: <?php echo($veiling->getEindDatum());?></span>
-            <h4><strong>Einde veiling</strong></h4>
-            <span id="timer"></span>
+            <div class="columns">
+                <h4><strong>Einddatum:</strong></h4>
+                <h5><?php echo($veiling->getEindDatum());?></h5><br>
+                <h4><strong>Veiling eindigt over:</strong></h4>
+                <span id="timer"></span><br>
+            </div>
         </div>
         <div class="row">
             <div class="large-6 columns">
@@ -80,8 +83,11 @@ include("php/layout/breadcrumbs.php");
             <div class="large-6 columns">
                 <h4><strong>Hoogste bod:</strong></h4>
                 <h5><?php echo("€".round($veiling->getStartPrijs())); ?></h5>
-                <input type="text" placeholder="bedrag">
-                <a href="#" class="button" style="width: 100%; margin: 5% 0;">Bieden</a>
+                <div id="expired">
+                    <input type="text" placeholder="bedrag">
+                    <a href="#" class="button" style="width: 100%; margin: 5% 0;">Bieden</a>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -115,6 +121,7 @@ var x = setInterval(function() {
     if (distance < 0) {
         clearInterval(x);
         document.getElementById("timer").innerHTML = "EXPIRED";
+        document.getElementById("expired").innerHTML = "";
     }
 }, 1000);
 </script>

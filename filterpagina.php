@@ -1,12 +1,10 @@
 <?php
 $pagename = "filterpagina";
+$hoofdcategorie = $_GET["hoofdcategorie"];
 
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
-
-
-
 
 $sortBy = (isset($_GET['sorterenOp']) ? $_GET['sorterenOp'] : null);
 /* onderstaande querry wordt gebruikt om alle veilingen op te halen die voldoen aan de filters
@@ -14,6 +12,39 @@ $query = select fotoPath
 from veilingFoto, veiling
 where veilingFoto.veilingId = veiling.veilingId AND categorie = $geselecteerdeCat
 order by $sortBy*/
+
+$categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie]);
+
+function ding($categorie){
+    if(isset($categorie["subs"])) {
+        for ($i = 0; $i < count($categorie["subs"]); $i++) {
+            $categorie = &$categorie["subs"][$i];
+
+            $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$categorie["categorieId"]]);
+            if ($subcategorien["code"] == 0) {
+                $categorie["subs"] = $subcategorien["data"];
+
+                ding($categorie);
+            }
+        }
+    }
+}
+
+if($categorien["code"] == 0){
+    for($i = 0; $i < count($categorien["data"]); $i++) {
+        $categorie = &$categorien["data"][$i];
+        $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$categorie["categorieId"]]);
+
+        if($subcategorien["code"] == 0){
+            $categorie["subs"] = $subcategorien["data"];
+
+            ding($categorien);
+        }
+    }
+}
+
+var_dump($categorien);
+
  ?>
 
 <div class="row">

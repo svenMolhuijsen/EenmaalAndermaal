@@ -23,7 +23,7 @@
 
         <!-- sign up form -->
         <div id="register">
-            <form id="registerForm" class="form small-12 column">
+            <form id="registerForm" class="form small-12 column" action="php/formtest.php" method="post">
                 <div class="row">
 
                     <!-- Voornaam -->
@@ -104,7 +104,7 @@
                 placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
 
-                <input class="button float-right" type="submit" value="Registreer" rel="registerForm">
+                <input class="button float-right" type="submit" name="submit" value="Registreer" rel="registerForm">
             </form>
         </div>
 
