@@ -83,8 +83,11 @@ include("php/layout/breadcrumbs.php");
             <div class="large-6 columns">
                 <h4><strong>Hoogste bod:</strong></h4>
                 <h5><?php echo("€".round($veiling->getStartPrijs())); ?></h5>
-                <input type="text" placeholder="bedrag">
-                <a href="#" class="button" style="width: 100%; margin: 5% 0;">Bieden</a>
+                <div id="expired">
+                    <input type="text" placeholder="bedrag">
+                    <a href="#" class="button" style="width: 100%; margin: 5% 0;">Bieden</a>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -118,6 +121,7 @@ var x = setInterval(function() {
     if (distance < 0) {
         clearInterval(x);
         document.getElementById("timer").innerHTML = "EXPIRED";
+        document.getElementById("expired").innerHTML = "";
     }
 }, 1000);
 </script>
