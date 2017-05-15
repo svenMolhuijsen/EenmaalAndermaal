@@ -18,6 +18,12 @@ if (!empty($_GET['action'])) {
         case 'categorie':
             setSubcategorien($_GET["arguments"]);
             break;
+        case 'bieden':
+            bieden($_POST);
+            break;
+        case 'biedingCheck':
+            biedingCheck($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -123,3 +129,30 @@ function setSubcategorien($hoofdcategorie){
         }
     }
 }
+
+//bieden
+function bieden($bieding){
+    executeQuery(
+        "INSERT INTO biedingen(veilingId, email, biedingsTijd, biedingsBedrag) VALUES(?, ?, ?, ?)",
+        [$bieding["veilingId"], $_SESSION["gebruiker"]->getEmail(), $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
+    );
+}
+
+/*WIP
+function biedingCheck($bedragen){
+    $hoogsteBedrag = executeQuery("SELECT biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$bedragen["veilingId"]]);
+    if($hoogsteBedrag["code"] == 0){
+        if($bedragen["bedrag"] > $hoogsteBedrag["data"][0]["biedingsBedrag"]){
+            json_encode(true);
+            return true;
+        }
+        else{
+            json_encode(false);
+            return false;
+        }
+    }
+    else{
+        var_dump($hoogsteBedrag);
+    }
+}
+*/

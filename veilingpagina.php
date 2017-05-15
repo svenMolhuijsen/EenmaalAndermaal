@@ -6,8 +6,13 @@ if(true){
     if(checkForEmpty($veilingId)){
 
         $veiling = new veiling($veilingId);
-        $gebruiker = new User($veiling->getVerkoperEmail());
+        $verkoper = new User($veiling->getVerkoperEmail());
         $categorie = new Categorie($veiling->getCategorieId());
+
+        //temp
+        session_destroy();
+        session_start();
+        $_SESSION['gebruiker'] = new User('test1@test1.nl');
 
         $imgdir = 'img/placeholder';
         $imagesRough = scandir($imgdir);
@@ -36,8 +41,8 @@ include("php/layout/breadcrumbs.php");
             <h5 class="subheader"><?php echo($categorie->getCategorieNaam());?></h5><br>
 
             <h4 class="titel"><strong>Verkoper:</strong></h4>
-            <h5><?php echo($gebruiker->getVoornaam()." ".$gebruiker->getAchternaam()); ?></h5>
-            <h5 class="subheader"><?php echo($gebruiker->getProvincie()." - ".$gebruiker->getPlaatsnaam()); ?></h5><br>
+            <h5><?php echo($verkoper->getVoornaam()." ".$verkoper->getAchternaam()); ?></h5>
+            <h5 class="subheader"><?php echo($verkoper->getProvincie()." - ".$verkoper->getPlaatsnaam()); ?></h5><br>
 
             <h4 class="titel"><strong>Omschrijving:</strong></h4>
             <h5><?php echo($veiling->getBeschrijving()); ?></h5>
@@ -83,43 +88,45 @@ include("php/layout/breadcrumbs.php");
             <div class="large-6 columns">
                 <h4><strong>Hoogste bod:</strong></h4>
                 <h5><?php echo("€".round($veiling->getStartPrijs())); ?></h5>
-                <input type="text" placeholder="bedrag">
-                <a href="#" class="button" style="width: 100%; margin: 5% 0;">Bieden</a>
+                <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
+                <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button" style="width: 100%; margin: 5% 0;">
             </div>
         </div>
     </div>
 </div>
-
 <script>
-var eindDatum = "<?php echo($veiling->getEindDatum())?>"
-// Set the date we're counting down to
-var countDownDate = new Date(eindDatum).getTime();
+    //
+    //Timer related
+    //
+    var eindDatum = "<?php echo($veiling->getEindDatum())?>";
+    // Set the date we're counting down to
+    var countDownDate = new Date(eindDatum).getTime();
 
-// Update the count down every 1 second
-var x = setInterval(function() {
+    // Update the count down every 1 second
+    var x = setInterval(function() {
 
-    // Get todays date and time
-    var now = new Date().getTime();
-    
-    // Find the distance between now an the count down date
-    var distance = countDownDate - now;
-    
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    // Output the result in an element with id="timer"
-    document.getElementById("timer").innerHTML = days + "d " + hours + "h "
-    + minutes + "m " + seconds + "s ";
-    
-    // If the count down is over, write some text 
-    if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("timer").innerHTML = "EXPIRED";
-    }
-}, 1000);
+        // Get todays date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now an the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="timer"
+        document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("timer").innerHTML = "EXPIRED";
+        }
+    }, 1000);
 </script>
 <?php
 }
@@ -135,6 +142,7 @@ else{
 </div>
 <?php
 }
-include("php/layout/footer.php")
+include("php/layout/footer.php");
+
 ?>
 

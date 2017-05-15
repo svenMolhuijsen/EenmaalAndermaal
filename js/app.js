@@ -1,6 +1,5 @@
 $(document).foundation();
 
-
 //////////////////////////////////////////////
 //    login Modal
 /////////////////////////////////////////////
@@ -146,3 +145,43 @@ $hoofdcategorie.on('click', function(){
     $categorieImages.fadeToggle(300, function(){
     });
 });
+
+//////////////////////////////////////////////
+//  VeilingPagina
+/////////////////////////////////////////////
+$biedenKnop = $('#biedenKnop');
+$bedrag = $('#bedrag');
+
+$biedenKnop.on('click', function(){
+    var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
+    var bedrag = $bedrag.val();
+
+    if(/*$bedrag > bedragValidatie(veilingId, bedrag)*/true) {
+        var url = "php/api.php?action=bieden";
+        var now = new Date($.now());
+
+        var bieding = {
+            veilingId: veilingId,
+            biedingsTijd: now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds(),
+            biedingsBedrag: bedrag
+        };
+
+        $.post(url, bieding, function (result) {
+        });
+    }
+});
+
+/*WIP
+function bedragValidatie(veilingId, bedrag){
+    var url = "php/api.php?action=biedingCheck";
+    data = {
+        veilingId: veilingId,
+        bedrag: bedrag
+    };
+
+    $.post(url, data, function(result){
+        var res = JSON.parse(result);
+        console.log(res);
+    });
+}
+*/
