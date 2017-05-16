@@ -1,77 +1,78 @@
 <?php
 include("php/core.php");
 include("php/layout/header.php");
+
+
 ?>
 
 <script>
-    function readURL(input) {
+    function readURL1(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#blah')
+                $('#Hoofdfoto')
                     .attr('src', e.target.result)
-                    .width(150)
-                    .height(200);
+                    .width(200)
+                    .height(250);
             };
 
             reader.readAsDataURL(input.files[0]);
         }
     }
+
 </script>
 <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 <main>
     <h3 style="margin-left: 160px; margin-top: 50px">Aanmaken veiling</h3>
     <hr>
-    <form>
+    <form action = "registreerveiling.php" method="post" >
+    <div class = "row">
+        <div class="large-2 float-left">
+            <label>Selecteer Hoofd Categorie
+                <select name = "hoofdcategorie">
+                    <option value="husker">Auto</option>
+                    <option value="starbuck">Speelgoed</option>
+                    <option value="hotdog">Gezondheid</option>
+                    <option value="apollo">Fietsen</option>
+                </select>
+            </label>
+        </div>
+    </div>
         <div class="row">
             <div class="large-2 float-left">
                 <label> Titel
-                    <input type="text" placeholder="Titel" />
+                    <input name = "titel" type="text" placeholder="Titel" pattern="[a-z]{1,15}" />
                 </label>
             </div>
             <div class = "large-2 float-left" style="margin-left: 100px;">
                 <label>Prijs
-                    <input type="text" placeholder="Prijs" />
+                    <input name="startprijs"type="text" placeholder="Prijs" pattern="[a-z]{1,15}"/>
                 </label>
             </div>
             <div class="large-5 float-right">
                 <label>Omschrijving
-                    <textarea placeholder="Omschrijving"></textarea>
+                    <textarea name = "omschrijving" placeholder="Omschrijving" type="text" pattern="[a-z]{1,15} "></textarea>
                 </label>
             </div>
         </div>
         <div class="row">
             <div class="large-2 float-left">
-                <label>Selecteer Hoofd Categorie
-                    <select>
-                        <option value="husker">Auto</option>
-                        <option value="starbuck">Speelgoed</option>
-                        <option value="hotdog">Gezondheid</option>
-                        <option value="apollo">Fietsen</option>
-                    </select>
-                </label>
-            </div>
-            <div class="large-2 float-left" style="margin-left: 100px;">
-                <label>Selecteer Conditie
-                    <select>
-                        <option value="husker">nieuw</option>
-                        <option value="starbuck">ZGAN</option>
-                        <option value="hotdog">Gebruikt</option>
-                    </select>
+                <label>Einddatum
+                    <input name="einddatum"type="date" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" name="einddatum" min="<?php date() ?>>">
                 </label>
             </div>
         </div>
         <br><br><br><br>
         <div class = "row">
             <form action="upload.php" method="post" enctype="multipart/form-data">
-                <label for="exampleFileUpload" class="button">Upload je foto</label>
-                <input type="file" id="exampleFileUpload" class="show-for-sr" onchange="readURL(this);">
+                <label for="hoofdfoto" class="button">Upload je Hoofdfoto</label>
+                <input type="file" id="hoofdfoto" class="show-for-sr" onchange="readURL1(this);">
             </form>
         </div>
         <div class = "row">
-            <img id="blah" src="#" alt="your image" />
+            <img id="Hoofdfoto" src="#" alt="Uw Afbeelding" />
         </div>
         <br><br>
         <div class = "row">
@@ -80,44 +81,47 @@ include("php/layout/header.php");
         <div class = "row">
             <div class="large-2 float-left">
                 <label> Straat
-                    <input type="text" placeholder="Titel" />
+                    <input name="straat" type="text" placeholder="Straat" pattern="[a-z]{1,15}" />
                 </label>
             </div>
             <div class = "large-2 float-left" style="margin-left: 100px;">
                 <label>nr
-                    <input type="text" placeholder="Prijs" />
+                    <input name="huisnummer" type="number" placeholder="Huisnummer" patter="[0,9] "/>
                 </label>
             </div>
         </div>
         <div class = "row">
             <div class="large-2 float-left">
                 <label> Plaats
-                    <input type="text" placeholder="Titel" />
+                    <input name="plaats" type="text" placeholder="Plaats" pattern="[a-z]{1,15}" />
                 </label>
             </div>
             <div class = "large-2 float-left" style="margin-left: 100px;">
                 <label>Postcode
-                    <input type="text" placeholder="Prijs" />
+                    <input name="postcode" type="text" placeholder="Prijs" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" />
                 </label>
             </div>
         </div>
         <div class = "row">
             <div class = "large-2 float-left" >
                 <label>Provincie
-                    <input type="text" placeholder="Prijs" />
+                    <input name="provincie" type="text" placeholder="Provincie" pattern="[a-z]{1,15}" />
                 </label>
             </div>
         </div>
-        <br><br><br><br>
-
 
 
         <div class = "row">
-            <input class = "button large"type="submit" value="Start je veiling">
+            <input class = "button large" type="submit" value="Start je veiling">
         </div>
 
     </form>
+
 </main>
+
+
+
+
 
 
 
