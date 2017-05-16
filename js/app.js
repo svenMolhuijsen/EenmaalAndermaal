@@ -151,8 +151,6 @@ $hoofdcategorie.on('click', function(){
 /////////////////////////////////////////////
 var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
 var hoogsteBedrag = getHoogsteBedrag(veilingId);
-var veilingPaginaFadeTime = 300;
-
 
 $biedenKnop = $('#biedenKnop');
 $bedrag = $('#bedrag');

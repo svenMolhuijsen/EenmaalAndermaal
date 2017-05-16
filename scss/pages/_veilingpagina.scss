@@ -3,7 +3,10 @@
     margin-top: 5%;
   }
   .veilingImage {
-    margin: 5% auto 5% auto;
+    img {
+      display: block;
+      margin: 5% auto 5% auto;
+    }
   }
 
   #bedragError {
