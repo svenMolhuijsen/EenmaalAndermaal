@@ -22,7 +22,7 @@ if (!empty($_GET['action'])) {
             bieden($_POST);
             break;
         case 'biedingCheck':
-            biedingCheck($_POST);
+            getHoogsteBedrag($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -138,21 +138,12 @@ function bieden($bieding){
     );
 }
 
-/*WIP
-function biedingCheck($bedragen){
-    $hoogsteBedrag = executeQuery("SELECT biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$bedragen["veilingId"]]);
+function getHoogsteBedrag($data){
+    $hoogsteBedrag = executeQuery("SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]);
     if($hoogsteBedrag["code"] == 0){
-        if($bedragen["bedrag"] > $hoogsteBedrag["data"][0]["biedingsBedrag"]){
-            json_encode(true);
-            return true;
-        }
-        else{
-            json_encode(false);
-            return false;
-        }
+        echo json_encode($hoogsteBedrag['data'][0]['biedingsBedrag']);
     }
     else{
         var_dump($hoogsteBedrag);
     }
 }
-*/

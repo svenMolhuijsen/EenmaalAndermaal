@@ -9,6 +9,14 @@ if(true){
         $verkoper = new User($veiling->getVerkoperEmail());
         $categorie = new Categorie($veiling->getCategorieId());
 
+        $hoogsteBod = executeQuery("SELECT TOP 1 * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$veiling->getVeilingId()]);
+        if($hoogsteBod['code'] == 0){
+            $hoogsteBod = $hoogsteBod['data'][0];
+        }
+        else{
+            var_dump($hoogsteBod);
+        }
+
         //temp
         session_destroy();
         session_start();
@@ -35,7 +43,7 @@ if($veiling->getCode() == 0){
 include("php/layout/breadcrumbs.php");
 
 ?>
-
+<div class="veilingpagina">
 <div class="row">
     <div class="large-6 columns">
             <h1><strong><?php echo($veiling->getTitel()); ?></strong></h1>
@@ -88,12 +96,16 @@ include("php/layout/breadcrumbs.php");
             </div>
             <div class="large-6 columns">
                 <h4><strong>Hoogste bod:</strong></h4>
-                <h5><?php echo("€".round($veiling->getStartPrijs())); ?></h5>
-                <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
-                <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button" style="width: 100%; margin: 5% 0;">
+                <h5 id="hoogsteBedrag"><?php echo("€".round($hoogsteBod['biedingsBedrag'])); ?></h5>
+                <div id="expired">
+                    <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
+                    <label class="is-invalid-label" id="bedragError">Invalid entry</label>
+                    <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button" style="width: 100%; margin: 5% 0;">
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <script>
     //
