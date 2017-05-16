@@ -15,8 +15,16 @@ if (!empty($_GET['action'])) {
         case 'logout':
             logout();
             break;
-        case 'categorie':
-            setSubcategorien($_GET["arguments"]);
+
+        case 'getCategories' :
+            $hoofdCategory = null;
+            $hoofdCategory = trim($_POST['hoofdCategory']);
+
+            $params = array(
+                'hoofdCategory' => $hoofdCategory
+            );
+
+            getSubCategories($params);
             break;
         case 'bieden':
             bieden($_POST);
@@ -72,8 +80,24 @@ function logout()
 //    echo json_encode($a_result);
 }
 
+
+function getSubCategories($data)
+{
+    if ($data['hoofdCategory'] == null) {
+        $result = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
+    } else {
+        $result = executeQuery("SELECT * FROM categorie WHERE superId = ? ", [$data['hoofdCategory']]);
+    }
+    stuurTerug($result);
+
+}
+
+
+
+
 function stuurTerug($data)
 {
+
     global $user;
     if ($user == null) {
         $response = array_merge(['login' => false], $data);

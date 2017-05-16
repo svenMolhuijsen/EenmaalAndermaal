@@ -1,33 +1,37 @@
 .categoriepagina{
-  border: 1px solid black;
+  border: 1px solid $secondary-light;
   text-align: center;
 
   ul.side-nav {
     list-style-type: none;
     text-align: left;
-    margin:auto;
+    margin: 0;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .subcategorien {
+    max-height: 500px;
+    overflow-y: auto;
+    margin: 0 !important;
+
   }
 
   div.side-nav-block {
-
-    border-right: 1px solid black;
-    float: bottom;
+    padding: 0;
+    border-right: 1px solid $secondary-light;
   }
 
   li:hover {
     background-color: #FFA500;
   }
 
-  img {
-    margin-top: 10px;
-  }
-
-  .categorieImage {
-    display: none;
-
-    .active {
-      float: left;
-      display: inline-block;
+  .mobile-subcategorien {
+    ul li {
+      list-style: none;
+      a {
+        line-height: 30px;
+      }
     }
+
   }
 }

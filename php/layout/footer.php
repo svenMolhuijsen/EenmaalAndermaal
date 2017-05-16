@@ -51,6 +51,8 @@
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/what-input/dist/what-input.js"></script>
 <script src="bower_components/foundation-sites/dist/js/foundation.js"></script>
+<script src="bower_components/foundation-sites/dist/js/plugins/foundation.equalizer.js"></script>
+
 <script src="js/plugins/jquery.validate.js"></script>
 <script src="js/plugins/additional-methods.js"></script>
 <script src="js/plugins/messages_nl.js"></script>
