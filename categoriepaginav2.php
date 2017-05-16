@@ -11,11 +11,10 @@ include("php/layout/breadcrumbs.php");
             <ul class="tabs vertical" id="categorieen" data-tabs>
                 <?php
                 $hoofdCategorieen = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
-                if($hoofdCategorieen['code'] == 0){
-                    for($i = 0; $i < count($hoofdCategorieen['data']); $i++){
-                        $hoofdCategorie = $hoofdCategorieen['data'][$i];
-                    echo('<li class="tabs-title"><a href="#'.$hoofdCategorie['categorieId'].'">'.$hoofdCategorie['categorieNaam'].'</a></li>');
-                    
+                for($i = 0; $i < count($hoofdCategorieen['data']); $i++){
+                    $hoofdCategorie = $hoofdCategorieen['data'][$i];
+                echo('<li class="tabs-title"><a href="#'.$hoofdCategorie['categorieId'].'">'.$hoofdCategorie['categorieNaam'].'</a></li>');
+                }
                 
                 ?>
             </ul>
@@ -23,21 +22,19 @@ include("php/layout/breadcrumbs.php");
         <div class="medium-9 columns">
             <div class="tabs-content vertical" data-tabs-content="categorieen">
                 <?php
-                    echo('<div class="tabs-panel" id="'.$hoofdCategorie['categorieId'].'">');
-                ?>
-                <div class="row medium-up-3 large-up-5 text-center">
-                <?php
-                    $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ", [$hoofdCategorie['categorieId']]);
-                    if ($subcategorien['code'] == 0) {
-                        for ($j = 0; $j < count($subcategorien['data']); $j++) {
-                            $subcategorie = $subcategorien['data'][$j];
-                            echo('<div class="column column-block"><a href="#"><img src="http://placehold.it/100x100" alt=""><div>'.$subcategorie['categorieNaam'].'</div>');
-                        }
+                    for($i = 0; $i < count($hoofdCategorieen['data']); $i++){
+                        $hoofdCategorie = $hoofdCategorieen['data'][$i];
+                        echo('<div class="tabs-panel" id="'.$hoofdCategorie['categorieId'].'">');
+                        echo('<div class="row medium-up-3 large-up-5 text-center">');
+                            $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdCategorie['categorieId']]);
+                            for ($j = 0; $j < count($subcategorien['data']); $j++) {
+                                $subcategorie = $subcategorien['data'][$j];
+                                echo('<div class="column column-block"><a href="#"><img src="http://placehold.it/100x100" alt=""><div>'.$subcategorie['categorieNaam'].'</div></a></div>');
+                            }
+                        echo('</div>');
+                        echo('</div>');
                     }
-                    }
-                }
                 ?>
-            </ul>
         </div>
         <div class="medium-9 columns">
             <div class="tabs-content vertical" data-tabs-content="categorieen">
