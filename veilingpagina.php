@@ -99,7 +99,7 @@ include("php/layout/breadcrumbs.php");
                 <h5 id="hoogsteBedrag"><?php echo("€".round($hoogsteBod['biedingsBedrag'])); ?></h5>
                 <div id="expired">
                     <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
-                    <label class="is-invalid-label" id="bedragError">Invalid entry</label>
+                    <label class="is-invalid-label" id="bedragError">U Kunt niet lager bieden dan het hoogste bod.</label>
                     <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button" style="width: 100%; margin: 5% 0;">
                 </div>
             </div>
