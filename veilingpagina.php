@@ -33,6 +33,7 @@ include("php/layout/header.php");
 
 if($veiling->getCode() == 0){
 include("php/layout/breadcrumbs.php");
+
 ?>
 
 <div class="row">
@@ -125,8 +126,20 @@ include("php/layout/breadcrumbs.php");
         if (distance < 0) {
             clearInterval(x);
             document.getElementById("timer").innerHTML = "EXPIRED";
+            document.getElementById("expired").innerHTML = "";
+            sentEmail();
         }
     }, 1000);
+
+    function sentEmail(){
+        var veilingid = "<?php $veiling->getVeilingId();?>";
+
+        $.ajax({
+            url:"api.php",
+            type:"post",
+            data:{veilingId: veilingid}
+        })
+    }
 </script>
 <?php
 }
