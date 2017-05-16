@@ -86,7 +86,7 @@ $(document).ready(function () {
 //  Forms versturen
 /////////////////////////////////////////////
     $('#login input[type="submit"]').on('click', function () {
-        var basisurl = "/IProject/php/api.php?action=login"; // the script where you handle the form input.
+        var basisurl = "/php/api.php?action=login"; // the script where you handle the form input.
 
         var password = $('#login #signin-password').val();
         var email = $('#login #signin-email').val();
@@ -146,7 +146,7 @@ $(document).ready(function () {
 /////////////////////////////////////////////
     $hoofdcategorie = $('.categoriepagina .hoofdcategorien');
 
-    $.post("/IProject/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
+    $.post("/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
         // Kijken of het result true is
@@ -187,7 +187,7 @@ $(document).ready(function () {
                 $subcategorien.append("Categorien laden...");
                 $("#" + id).append("Categorien laden...");
 
-                $.post("/IProject/php/api.php?action=getCategories", {hoofdCategory: id}, function (result) {
+                $.post("/php/api.php?action=getCategories", {hoofdCategory: id}, function (result) {
                     // JSON result omzetten naar var
                     var res = JSON.parse(result);
                     // Kijken of het result true is
