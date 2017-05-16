@@ -196,10 +196,10 @@ $(document).ready(function () {
                         $("#" + id).empty();
                         $.each(res.data, function (index, value) {
 
-                            $("#" + id).append("<li><a href='filterpagina.php?hoofdCategorie=" + value.categorieNaam + "' class =''><img src='http://placehold.it/30x30'/> " + value.categorieNaam + "</a></li>").hide().fadeIn(500);
+                            $("#" + id).append("<li><a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class =''><img src='http://placehold.it/30x30'/> " + value.categorieNaam + "</a></li>").hide().fadeIn(500);
                         });
                         $.each(res.data, function (index, value) {
-                            $subcategorien.append("<a href='filterpagina.php?hoofdCategorie=" + value.categorieNaam + "' data-equalizer-watch class ='column medium-6 large-3'><img src='http://placehold.it/200x200'/> " + value.categorieNaam + "</a>");
+                            $subcategorien.append("<a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' data-equalizer-watch class ='column medium-6 large-3'><img src='http://placehold.it/200x200'/> " + value.categorieNaam + "</a>");
                         });
                         new Foundation.Equalizer($subcategorien).getHeightsByRow();
                     }
