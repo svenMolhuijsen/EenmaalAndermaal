@@ -32,6 +32,9 @@ if (!empty($_GET['action'])) {
         case 'biedingCheck':
             getHoogsteBedrag($_POST);
             break;
+        case 'sluitVeiling':
+            sluitVeiling($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -170,4 +173,26 @@ function getHoogsteBedrag($data){
     else{
         var_dump($hoogsteBedrag);
     }
+}
+
+//veiling sluiten
+function sluitVeiling($data){
+    if(executeQuery("SELECT emailVerzonden FORM veiling WHERE veilingId = ?,", [$data["veilingId"]]) == 1){
+        return;
+    }else{
+        executeQuery("UPDATE veiling SET emailVerzonden = 1 WHERE veilingId = ?",[$data["veilingId"]]);
+        verzendEmail($data);
+        return;
+    }
+}
+
+//verzenden Email
+function verzendEmail($data){
+$to = "sinke.carsten95@gmail.com";
+$subject = "verzendEmail";
+$txt = "Hello world!";
+$headers = "From: info@EenmaalAndermaal.nl"
+
+mail($to,$subject,$txt,$headers);
+?>
 }
