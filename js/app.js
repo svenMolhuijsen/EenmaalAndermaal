@@ -150,40 +150,60 @@ $hoofdcategorie.on('click', function(){
 //  VeilingPagina
 /////////////////////////////////////////////
 var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
-var hoogsteBedrag = getHoogsteBedrag(veilingId);
+var gebruiker;
 
-$biedenKnop = $('#biedenKnop');
-$bedrag = $('#bedrag');
-$bedragError = $('#bedragError');
-$hoogsteBedrag = $('#hoogsteBedrag');
-
-$biedenKnop.on('click', function(){
-    var bedrag = $bedrag.val();
-
-    if(bedrag > hoogsteBedrag) {
-        var url = "php/api.php?action=bieden";
-        var now = new Date($.now());
-
-        var bieding = {
-            veilingId: veilingId,
-            biedingsTijd: now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds(),
-            biedingsBedrag: bedrag
-        };
-
-        $.post(url, bieding);
-
-        hoogsteBedrag = bedrag;
-        $hoogsteBedrag.html('€'+hoogsteBedrag);
-        $bedragError.hide();
-        $bedrag.removeClass('is-invalid-input');
-    }
-    else{
-        $bedragError.show();
-        $bedrag.addClass('is-invalid-input')
+$.ajax({
+    url: 'php/api.php?action=getGebruiker',
+    type: 'POST',
+    dataType: 'json',
+    success: function(result){
+        gebruiker = result;
     }
 });
 
-function getHoogsteBedrag(veilingId, bedrag){
+$biedenKnop = $('#biedenKnop');
+$bedrag = $('#bedrag');
+
+$hoogsteBedrag = $('#hoogsteBedrag');
+
+$biedenError = $('#biedenError');
+$bedragError = $('#bedragError');
+
+$biedenKnop.on('click', function(){
+    var hoogsteBod = getHoogsteBod(veilingId);
+    var biedDrempel = Number(hoogsteBod['biedingsBedrag'])+bepaalBiedStap(hoogsteBod['biedingsBedrag']);
+
+    var now = new Date($.now());
+    var biedingsTijd = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
+
+    var bod = { veilingId: veilingId, email: gebruiker["email"],  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
+
+    if(bod['email'] != hoogsteBod['email']) {
+        $biedenError.hide();
+
+        if (bod['biedingsBedrag'] > biedDrempel) {
+
+            $.post("php/api.php?action=bieden", bod);
+
+            hoogsteBod = bod;
+            biedDrempel = Number(hoogsteBod['biedingsBedrag']) + bepaalBiedStap(hoogsteBod['biedingsBedrag']);
+
+            $hoogsteBedrag.html('€' + hoogsteBod['biedingsBedrag']);
+            $bedragError.html('U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €' + biedDrempel);
+            $bedragError.hide();
+            $bedrag.removeClass('is-invalid-input');
+        }
+        else {
+            $bedragError.show();
+            $bedrag.addClass('is-invalid-input');
+        }
+    }
+    else{
+        $biedenError.show();
+    }
+});
+
+function getHoogsteBod(veilingId, bedrag){
     var response;
     var url = "php/api.php?action=biedingCheck";
     var data = {
@@ -197,9 +217,22 @@ function getHoogsteBedrag(veilingId, bedrag){
         dataType: 'json',
         async: false,
         success: function(result){
-            response = $.parseJSON(result);
+            response = result;
         }
     });
 
     return response;
+}
+
+function bepaalBiedStap(hoogsteBedrag){
+    if(hoogsteBedrag > 50){
+        if(hoogsteBedrag > 500){
+            if(hoogsteBedrag > 1000){
+                return 50;
+            }
+            return 5;
+        }
+        return 1;
+    }
+    return 0.5;
 }

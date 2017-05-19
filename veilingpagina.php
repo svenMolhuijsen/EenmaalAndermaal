@@ -13,6 +13,9 @@ if(true){
         if($hoogsteBod['code'] == 0){
             $hoogsteBod = $hoogsteBod['data'][0];
         }
+        else if($hoogsteBod['code'] == 1){
+            $hoogsteBod = $veiling->getStartPrijs();
+        }
         else{
             var_dump($hoogsteBod);
         }
@@ -32,6 +35,19 @@ if(true){
         }
 
         $images = array_values($imagesRough);
+
+        function bepaalBiedStap($hoogsteBedrag){
+            if($hoogsteBedrag > 50){
+                if($hoogsteBedrag > 500){
+                    if($hoogsteBedrag > 1000){
+                        return 50;
+                    }
+                    return 5;
+                }
+                return 1;
+            }
+            return 0.5;
+        }
     }
 };
 
@@ -71,7 +87,7 @@ include("php/layout/breadcrumbs.php");
                 ?>
             </div>
         </div>
-        <div class="altImages row large-up-4 small-up-4">
+        <div class="altImages row small-up-4">
             <?php
             for($i = 1; $i < count($images) && $i < 5; $i++){
                 echo('<div class="column">');
@@ -96,10 +112,31 @@ include("php/layout/breadcrumbs.php");
             </div>
             <div class="large-6 columns">
                 <h4><strong>Hoogste bod:</strong></h4>
-                <h5 id="hoogsteBedrag"><?php echo("€".round($hoogsteBod['biedingsBedrag'])); ?></h5>
+                <h5 id="hoogsteBedrag">
+                    <?php
+                    echo("€");
+                    if(is_array($hoogsteBod)){
+                        echo(round($hoogsteBod['biedingsBedrag'], 2));
+                    }
+                    else{
+                        echo(round($hoogsteBod, 2));
+                    }
+                    ?>
+                </h5>
                 <div id="expired">
                     <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
-                    <label class="is-invalid-label" id="bedragError">U Kunt niet lager bieden dan het hoogste bod.</label>
+                    <label class="is-invalid-label veilingError" id="bedragError">
+                        U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €
+                        <?php
+                        if(is_array($hoogsteBod)){
+                            echo(round($hoogsteBod['biedingsBedrag']+bepaalBiedStap($hoogsteBod['biedingsBedrag']), 2));
+                        }
+                        else{
+                            echo(round($hoogsteBod+bepaalBiedStap($hoogsteBod), 2));
+                        }
+                        ?>
+                    </label>
+                    <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
                     <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button" style="width: 100%; margin: 5% 0;">
                 </div>
             </div>

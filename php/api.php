@@ -22,7 +22,10 @@ if (!empty($_GET['action'])) {
             bieden($_POST);
             break;
         case 'biedingCheck':
-            getHoogsteBedrag($_POST);
+            getHoogsteBod($_POST);
+            break;
+        case 'getGebruiker':
+            getGebruiker();
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -138,12 +141,25 @@ function bieden($bieding){
     );
 }
 
-function getHoogsteBedrag($data){
-    $hoogsteBedrag = executeQuery("SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]);
-    if($hoogsteBedrag["code"] == 0){
-        echo json_encode($hoogsteBedrag['data'][0]['biedingsBedrag']);
+function getHoogsteBod($data){
+    $hoogsteBod = executeQuery("SELECT TOP 1 * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]);
+    if($hoogsteBod["code"] == 0){
+        echo json_encode($hoogsteBod['data'][0]);
+    }
+    else if($hoogsteBod['code'] == 1){
+        $hoogsteBod = executeQuery("SELECT TOP 1 startPrijs FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
+        if($hoogsteBod['code'] == 0){
+            echo json_encode($hoogsteBod['data'][0]['startPrijs']);
+        }
+        else{
+            var_dump($hoogsteBod);
+        }
     }
     else{
-        var_dump($hoogsteBedrag);
+        var_dump($hoogsteBod);
     }
+}
+
+function getGebruiker(){
+    echo json_encode($_SESSION["gebruiker"]->toArray());
 }
