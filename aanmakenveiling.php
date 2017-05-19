@@ -1,4 +1,5 @@
 <?php
+$pagename = "nieuwe veiling";
 include("php/core.php");
 include("php/layout/header.php");
 
