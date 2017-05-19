@@ -181,13 +181,22 @@ include("php/layout/breadcrumbs.php");
     }, 1000);
 
     function sentEmail(){
+        var response;
         var veilingid = "<?php $veiling->getVeilingId();?>";
+        var url = "php/api.php?action=sluitVeiling";
+        var data = {veilingId: veilingId};
 
         $.ajax({
-            url:"api.php",
-            type:"post",
-            data:{veilingId: veilingid}
-        })
+            url: url,
+            data: data,
+            type:"POST",
+            dataType:'JSON',
+            async:false,
+            success: function(result){
+                response = $.parseJSON(result);
+            }
+        });
+        return response;
     }
 </script>
 <?php

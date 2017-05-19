@@ -15,8 +15,16 @@ if (!empty($_GET['action'])) {
         case 'logout':
             logout();
             break;
-        case 'categorie':
-            setSubcategorien($_GET["arguments"]);
+
+        case 'getCategories' :
+            $hoofdCategory = null;
+            $hoofdCategory = trim($_POST['hoofdCategory']);
+
+            $params = array(
+                'hoofdCategory' => $hoofdCategory
+            );
+
+            getSubCategories($params);
             break;
         case 'bieden':
             bieden($_POST);
@@ -26,6 +34,9 @@ if (!empty($_GET['action'])) {
             break;
         case 'getGebruiker':
             getGebruiker();
+            break;
+        case 'sluitVeiling':
+            sluitVeiling($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -75,8 +86,24 @@ function logout()
 //    echo json_encode($a_result);
 }
 
+
+function getSubCategories($data)
+{
+    if ($data['hoofdCategory'] == null) {
+        $result = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
+    } else {
+        $result = executeQuery("SELECT * FROM categorie WHERE superId = ? ", [$data['hoofdCategory']]);
+    }
+    stuurTerug($result);
+
+}
+
+
+
+
 function stuurTerug($data)
 {
+
     global $user;
     if ($user == null) {
         $response = array_merge(['login' => false], $data);
@@ -163,3 +190,25 @@ function getHoogsteBod($data){
 function getGebruiker(){
     echo json_encode($_SESSION["gebruiker"]->toArray());
 }
+
+//veiling sluiten
+function sluitVeiling($data){
+    if(executeQuery("SELECT emailVerzonden FORM veiling WHERE veilingId = ?,", [$data["veilingId"]]) == 1){
+        return;
+    }else{
+        executeQuery("UPDATE veiling SET emailVerzonden = 1 WHERE veilingId = ?",[$data["veilingId"]]);
+        verzendEmail($data);
+        return;
+    }
+}
+
+//verzenden Email
+function verzendEmail($data){
+$to = "sinke.carsten95@gmail.com";
+$subject = "verzendEmail";
+$txt = "Hello world!";
+$headers = "From: info@EenmaalAndermaal.nl";
+mail($to,$subject,$txt,$headers);
+}
+
+?>
