@@ -38,9 +38,13 @@ if (!empty($_GET['action'])) {
         case 'sluitVeiling':
             sluitVeiling($_POST);
             break;
+        case 'MaakVeilingAan':
+            aanmakenveiling($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
+
     }
 }
 
@@ -211,4 +215,13 @@ $headers = "From: info@EenmaalAndermaal.nl";
 mail($to,$subject,$txt,$headers);
 }
 
+
+//registreren van veiling
+function aanmakenveiling($veiling){
+    executeQuery("INSERT INTO veiling(titel, beschrijving,startPrijs,eindDatum,land,provincie,postcode,plaatsnaam,straatnaam,huisnummer) VALUES = (?,?,?,?,?,?,?,?,?)",
+        [$veiling["titel"],$veiling["omschrijving"],$veiling["prijs"],$veiling["einddatum"],$veiling["land"],$veiling["provincie"],$veiling["postcode"],$veiling["straatnaam"],$veiling["huisnummer"]]
+        );
+
+
+}
 ?>
