@@ -2,6 +2,11 @@
 include("php/core.php");
 include("php/layout/header.php");
 
+$verkoper = false;
+if(! $_SESSION["gebruiker"]->getVerkoper()){
+    header('Location: http://localhost/EenmaalAndermaal/index.php');
+    exit();
+}
 
 ?>
 <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
