@@ -26,6 +26,11 @@ if (!empty($_GET['action'])) {
 
             getSubCategories($params);
             break;
+
+        case'getParentCategories':
+            $category = trim($_POST['category']);
+            getParentCategories($category);
+            break;
         case 'bieden':
             bieden($_POST);
             break;
@@ -90,7 +95,29 @@ function logout()
 //    echo json_encode($a_result);
 }
 
+function getParentCategories($category)
+{
+    $result = executeQuery(";with category_tree as (
+   select categorieId, categorieNaam, superId
+   from categorie
+   where categorieId = ? -- this is the starting point you want in your recursion
+   union all
+   select C.categorieId, C.categorieNaam, C.superId
+   from categorie c
+   join category_tree p on C.categorieId = P.superId  -- this is the recursion
+   -- Since your parent id is not NULL the recursion will happen continously.
+   -- For that we apply the condition C.id<>C.parentid 
 
+) 
+-- Here you can insert directly to a temp table without CREATE TABLE synthax
+select *
+from category_tree
+OPTION (MAXRECURSION 0)
+", [$category]);
+
+    stuurTerug($result);
+
+}
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
@@ -99,15 +126,11 @@ function getSubCategories($data)
         $result = executeQuery("SELECT * FROM categorie WHERE superId = ? ", [$data['hoofdCategory']]);
     }
     stuurTerug($result);
-
 }
-
-
 
 
 function stuurTerug($data)
 {
-
     global $user;
     if ($user == null) {
         $response = array_merge(['login' => false], $data);
@@ -119,7 +142,8 @@ function stuurTerug($data)
 }
 
 //genereren categorie-accordion
-function categorieAccordion(){
+function categorieAccordion()
+{
     echo('
         <div class="side-nav-block medium-3 large-3 columns">
         <ul class="side-nav accordion" data-accordion data-allow-all-closed="true" data-multi-expand="false">
@@ -127,12 +151,12 @@ function categorieAccordion(){
 
     $hoofdcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
 
-    if($hoofdcategorien['code'] == 0) {
+    if ($hoofdcategorien['code'] == 0) {
         for ($i = 0; $i < count($hoofdcategorien['data']); $i++) {
             $hoofdcategorie = $hoofdcategorien['data'][$i];
 
             echo('<li onclick="updateSubCategorie()" class="accordion-item" data-accordion-item>');
-            echo('<a href="#" rel="categorie-'.$hoofdcategorie['categorieId'].'" class="hoofdcategorie accordion-title">' . $hoofdcategorie['categorieNaam'] . '</a>');
+            echo('<a href="#" rel="categorie-' . $hoofdcategorie['categorieId'] . '" class="hoofdcategorie accordion-title">' . $hoofdcategorie['categorieNaam'] . '</a>');
             echo('<div class="accordion-content show-for-small-only" data-tab-content>');
 
             $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie['categorieId']]);
@@ -150,7 +174,8 @@ function categorieAccordion(){
     }
 }
 
-function setSubcategorien($hoofdcategorie){
+function setSubcategorien($hoofdcategorie)
+{
     $hoofdcategorie = substr($hoofdcategorie, 12);
     $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie]);
 
@@ -165,7 +190,8 @@ function setSubcategorien($hoofdcategorie){
 }
 
 //bieden
-function bieden($bieding){
+function bieden($bieding)
+{
     executeQuery(
         "INSERT INTO biedingen(veilingId, email, biedingsTijd, biedingsBedrag) VALUES(?, ?, ?, ?)",
         [$bieding["veilingId"], $_SESSION["gebruiker"]->getEmail(), $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
