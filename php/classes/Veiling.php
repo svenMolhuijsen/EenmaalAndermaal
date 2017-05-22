@@ -33,11 +33,11 @@ class Veiling
             $this->veilingId = $veiling["veilingId"];
             $this->titel = $veiling["titel"];
             $this->beschrijving = $veiling["beschrijving"];
-            $this->verkoperEmail = $veiling["verkoperEmail"];
-            $this->koperEmail = $veiling["koperEmail"];
+            $this->verkoperGebruikersnaam = $veiling["verkoperGebruikersnaam"];
+            $this->koperGebruikersnaam = $veiling["koperGebruikersnaam"];
             $this->startPrijs = $veiling["startPrijs"];
             $this->verkoopPrijs = $veiling["verkoopPrijs"];
-            $this->verzendKosten = $veiling["verzendKosten"];
+            //$this->verzendKosten = $veiling["verzendKosten"];
             $this->betalingswijze = $veiling["betalingswijze"];
             $this->verzendwijze = $veiling["verzendwijze"];
             $this->beginDatum = $veiling["beginDatum"];
@@ -141,38 +141,38 @@ class Veiling
      * @return mixed
      */
     public
-    function getVerkoperEmail()
+    function getVerkoperGebruikersnaam()
     {
-        return $this->verkoperEmail;
+        return $this->verkoperGebruikersnaam;
     }
 
     /**
      * @param mixed $verkoperId
      */
     public
-    function setVerkoperEmail($verkoperEmail)
+    function setVerkoperGebruikersnaam($verkoperGebruikersnaam)
     {
-        $this::update("verkoperEmail", $this->verkoperEmail, $verkoperEmail);
-        $this->verkoperEmail = $verkoperEmail;
+        $this::update("verkoperGebruikersnaam", $this->verkoperGebruikersnaam, $verkoperGebruikersnaam);
+        $this->verkoperGebruikersnaam = $verkoperGebruikersnaam;
     }
 
     /**
      * @return mixed
      */
     public
-    function getKoperEmail()
+    function getKoperGebruikersnaam()
     {
-        return $this->koperEmail;
+        return $this->koperGebruikersnaam;
     }
 
     /**
      * @param mixed $koperId
      */
     public
-    function setKoperEmail($koperEmail)
+    function setKoperGebruikersnaam($koperGebruikersnaam)
     {
-        $this::update("koperEmail", $this->koperEmail, $koperEmail);
-        $this->koperId = $koperEmail;
+        $this::update("koperGebruikersnaam", $this->koperGebruikersnaam, $koperGebruikersnaam);
+        $this->koperId = $koperGebruikersnaam;
     }
 
     /**

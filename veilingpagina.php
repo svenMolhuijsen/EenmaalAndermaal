@@ -5,7 +5,7 @@ $veilingId = stripInput($_GET["veilingId"]);
 if(checkForEmpty($veilingId)){
 
     $veiling = new veiling($veilingId);
-    $verkoper = new User($veiling->getVerkoperEmail());
+    $verkoper = new User($veiling->getVerkoperGebruikersnaam());
     $categorie = new Categorie($veiling->getCategorieId());
 
     $boden = executeQuery("SELECT * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$veiling->getVeilingId()]);
