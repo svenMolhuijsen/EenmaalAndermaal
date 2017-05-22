@@ -169,7 +169,10 @@ $(document).ready(function () {
             $hoofdcategorie.append("<li>sub categorien laden...</li>");
         }
         Foundation.reInit('accordion');
+        bindClickListenercategoriePagina();
+    });
 
+    function bindClickListenercategoriePagina() {
         //Bind click listener to newly created element
         $(".categoriepagina .hoofdcategorien .accordion-item a").click(function () {
             var id = $(this).data('category');
@@ -195,7 +198,6 @@ $(document).ready(function () {
                         $subcategorien.empty();
                         $("#" + id).empty();
                         $.each(res.data, function (index, value) {
-
                             $("#" + id).append("<li><a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class =''><img src='http://placehold.it/30x30'/> " + value.categorieNaam + "</a></li>").hide().fadeIn(500);
                         });
                         $.each(res.data, function (index, value) {
@@ -204,19 +206,15 @@ $(document).ready(function () {
                         new Foundation.Equalizer($subcategorien).getHeightsByRow();
                     }
 
-                })
-
+                });
             }
-
         });
-    });
-
-});
+    }
 
 
 
 //////////////////////////////////////////////
-//  VeilingPagina
+//  Veilingpagina
 /////////////////////////////////////////////
 var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
 var veiling;
@@ -315,4 +313,80 @@ function bepaalBiedStap(hoogsteBedrag){
         return 1;
     }
     return 0.5;
+}
+
+//////////////////////////////////////////////
+//  filterpagina
+/////////////////////////////////////////////
+    if ($('#filterpagina').length != 0) {
+        var category = getURLParameter('hoofdcategorie');
+        var target = $('#filterpagina aside .filter .categorien');
+        generateParentCategories(category, target);
+    }
+
+});
+
+//////////////////////////////////////////////
+//  Functions
+/////////////////////////////////////////////
+
+function generateParentCategories(category, target) {
+    target.empty();
+    $(target).unbind("change");
+    $.post("/IProject/php/api.php?action=getParentCategories", {category: category}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+
+        // Kijken of het result true is
+        if (res.code == 0) {
+            var parents = res["data"];
+            var inverse = 0;
+            console.log(parents);
+            for (var i = parents.length - 1; i >= 0; i--) {
+                //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
+                target.append("<div class='" + inverse + "'></div>")
+                var childtarget = $('.' + inverse, target);
+
+                generateCategorySelect(childtarget, parents[i]['superId'], parents[i]['categorieId']);
+                inverse++;
+                if (i == 0) {
+                    var childtarget = $('.' + inverse, target);
+
+                }
+            }
+        } else {
+            generateCategorySelect(target, null, null);
+        }
+
+    });
+}
+
+function generateCategorySelect($target, category, selected) {
+    $.post("/IProject/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+        if (res.code == 0) {
+            $select = $("<select data-superid='" + category + "'name=''></select>");
+            $($select).append("<option selected value='*'>Categorie selecteren</option>");
+
+            $.each(res.data, function (index, item) {
+                if (selected == item["categorieId"]) {
+                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                } else {
+                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                }
+            });
+            $target.append($select);
+        }
+
+        $($target).change(function () {
+            var value = $($target).find(":selected").val()
+            generateParentCategories(value, $target);
+            generateCategorySelect($target, value, null);
+        });
+    });
+}
+
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
