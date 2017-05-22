@@ -229,7 +229,7 @@ $(document).ready(function () {
 function generateParentCategories(category, target) {
     target.empty();
     $(target).unbind("change");
-    $.post("/IProject/php/api.php?action=getParentCategories", {category: category}, function (result) {
+    $.post("/php/api.php?action=getParentCategories", {category: category}, function (result) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
 
@@ -243,22 +243,25 @@ function generateParentCategories(category, target) {
                 target.append("<div class='" + inverse + "'></div>")
                 var childtarget = $('.' + inverse, target);
 
-                generateCategorySelect(childtarget, parents[i]['superId'], parents[i]['categorieId']);
+                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
                 inverse++;
                 if (i == 0) {
+                    console.log("0");
+                    target.append("<div class='" + inverse + "'></div>")
                     var childtarget = $('.' + inverse, target);
+                    generateCategorySelect(childtarget, target, category, null);
 
                 }
             }
         } else {
-            generateCategorySelect(target, null, null);
+            generateCategorySelect(target, target, null, null);
         }
 
     });
 }
 
-function generateCategorySelect($target, category, selected) {
-    $.post("/IProject/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
+function generateCategorySelect($childtarget, $target, category, selected) {
+    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
         if (res.code == 0) {
@@ -272,13 +275,13 @@ function generateCategorySelect($target, category, selected) {
                     $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
                 }
             });
-            $target.append($select);
+            $childtarget.append($select);
         }
 
-        $($target).change(function () {
-            var value = $($target).find(":selected").val()
+        $($childtarget).change(function () {
+            var value = $($childtarget).find(":selected").val();
             generateParentCategories(value, $target);
-            generateCategorySelect($target, value, null);
+            // generateCategorySelect($target, value, null);
         });
     });
 }

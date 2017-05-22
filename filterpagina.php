@@ -56,6 +56,13 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
             <h3> Filter op: </h3>
             <form class="filter">
                 <div class="categorien"></div>
+                <div class="slider" data-slider data-initial-start="0" data-initial-end="100">
+                    <span class="slider-handle" data-slider-handle role="slider" tabindex="1"></span>
+                    <span class="slider-fill" data-slider-fill></span>
+                    <span class="slider-handle" data-slider-handle role="slider" tabindex="1"></span>
+                    <input type="hidden">
+                    <input type="hidden">
+                </div>
                 <button type="button"
                         style="width: 175px; color: white; border-color: #E25822; background-color: #E25822">
                     Zoekresultaten Ophalen!
