@@ -35,36 +35,14 @@ include("php/layout/breadcrumbs.php");
             <input type="text" placeholder="cardnumber">
             <div class="button" type="submit" value="Submit">Submit</div>
         </div>
-        <div class="tabs-panel" id="categorie">
+        <div class="tabs-panel categoriemanager" id="categorie">
             <div class="row expanded" style="margin-top:0;">
                 <input type="text" placeholder="new Categorie">
-                <ul class="vertical menu" data-accordion-menu data-multi-expand="false">
-                    <li>
-                        <a href="#">Computers</a>
-                        <ul class="menu vertical nested">
-                        <li>
-                            <a href="#">Laptops</a>
-                            <ul class="menu vertical nested">
-                            <li class="active"><a href="#">Apple</a></li>
-                            <li><a href="#">Dell</a></li>
-                            <li><a href="#">Lenovo</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Monitoren</a></li>
-                        <li><a href="#">Servers</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Auto</a>
-                        <ul class="menu vertical nested">
-                        <li><a href="#">BMW</a></li>
-                        <li><a href="#">Mercedes</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Sport</a></li>
-                </ul>
-
                 <div type="submit" class="button" value="Submit">Submit</div>
+
+                <ul class="vertical menu root" data-accordion-menu>
+
+                </ul>
             </div>
         </div>
     </div>
