@@ -333,7 +333,7 @@ function bepaalBiedStap(hoogsteBedrag){
 function generateParentCategories(category, target) {
     target.empty();
     $(target).unbind("change");
-    $.post("/IProject/php/api.php?action=getParentCategories", {category: category}, function (result) {
+    $.post("/php/api.php?action=getParentCategories", {category: category}, function (result) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
 
