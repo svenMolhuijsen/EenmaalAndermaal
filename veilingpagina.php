@@ -40,7 +40,7 @@ if(checkForEmpty($veilingId)){
     }
 };
 
-$pagename = $veiling->getTitel();
+$pagename = 'veilingPagina - '.$veiling->getTitel();
 
 include("php/layout/header.php");
 
@@ -48,7 +48,7 @@ if($veiling->getCode() == 0){
 include("php/layout/breadcrumbs.php");
 
 ?>
-    <hr>
+<hr>
 <div class="veilingpagina">
 <div class="row">
     <div class="columns">
@@ -84,6 +84,7 @@ include("php/layout/breadcrumbs.php");
         <h4><strong>Omschrijving:</strong></h4>
         <h5><?php echo($veiling->getBeschrijving()); ?></h5>
     </div>
+    <hr class="show-for-small-only">
     <div class="large-4 columns">
         <div class="card">
             <div class="card-divider">
@@ -128,7 +129,24 @@ include("php/layout/breadcrumbs.php");
     </div>
 </div>
 </div>
+<?php
+}
+else{
+?>
+<div class="row">
+    <div class="small-12 columns">
+        <div class="callout alert">
+            <h5>Geen veiling gevonden</h5>
+            <p>Ga terug en probeer het opnieuw</p>
+        </div>
+    </div>
+</div>
+<?php
+}
+include("php/layout/footer.php");
+?>
 <script>
+$(document).ready(function(){
     //
     //Timer related
     //
@@ -182,21 +200,110 @@ include("php/layout/breadcrumbs.php");
         });
         return response;
     }
-</script>
-<?php
-}
-else{
-?>
-<div class="row">
-    <div class="small-12 columns">
-        <div class="callout alert">
-            <h5>Geen veiling gevonden</h5>
-            <p>Ga terug en probeer het opnieuw</p>
-        </div>
-    </div>
-</div>
-<?php
-}
-include("php/layout/footer.php");
-?>
 
+
+    //
+    //Bieden related
+    //
+    var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
+    var veiling;
+    var gebruiker;
+    var data = { veilingId: veilingId };
+
+    $.ajax({
+        url: 'php/api.php?action=getVeilingInfo',
+        data: data,
+        type: 'post',
+        dataType: 'json',
+        success: function(result) {
+            gebruiker = result.gebruiker;
+            veiling = result.veiling.data[0];
+        }
+    });
+
+    $biedenKnop = $('#biedenKnop');
+    $bedrag = $('#bedrag');
+
+    $biedingen = $('.biedingen');
+
+    $biedenError = $('#biedenError');
+    $bedragError = $('#bedragError');
+
+    $biedenKnop.on('click', function(){
+        checkHoogsteBod(veiling["veilingId"]);
+    });
+
+    function checkHoogsteBod(veilingId, bedrag){
+        var response;
+        var url = "php/api.php?action=biedingCheck";
+        var data = {
+            veilingId: veilingId
+        };
+
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'POST',
+            dataType: 'json',
+            success: function(result) {
+                biedAttempt(result);
+            }
+        });
+    }
+
+    function biedAttempt(hoogsteBod){
+        var biedDrempel;
+        if(hoogsteBod.code == 0) {
+            biedDrempel = Number(hoogsteBod.data[0].biedingsBedrag) + bepaalBiedStap(hoogsteBod.data[0].biedingsBedrag);
+        }
+        else if(hoogsteBod.code == 1){
+            biedDrempel = Number(veiling["startPrijs"]) + bepaalBiedStap(veiling["startPrijs"]);
+        }
+
+        var now = new Date($.now());
+        var biedingsTijd = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
+
+        var bod = { veilingId: veiling["veilingId"], email: gebruiker.email,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
+
+        if(hoogsteBod.code == 1 || bod['email'] != hoogsteBod.data[0]["email"]) {
+            $biedenError.hide();
+            console.log(gebruiker);
+            if (bod.biedingsBedrag > biedDrempel) {
+
+                $.post("php/api.php?action=bieden", bod);
+
+                hoogsteBod = bod;
+                biedDrempel = Number(hoogsteBod.biedingsBedrag) + bepaalBiedStap(hoogsteBod.biedingsBedrag);
+
+                var dateString = ("0"+(now.getDate().toString())).slice(-2)+'-'+("0"+(now.getMonth()+1)).toString().slice(-2)+'-'+now.getFullYear().toString().substring(2);
+                $biedingen.prepend('<tr><td>'+bod.email+'</td><td>€'+bod.biedingsBedrag+'</td><td>'+dateString+'</td></tr>');
+                $bedragError.html('U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €' + biedDrempel);
+                $bedragError.hide();
+                $bedrag.removeClass('is-invalid-input');
+            }
+            else {
+                $bedragError.show();
+                $bedrag.addClass('is-invalid-input');
+            }
+        }
+        else{
+            $biedenError.show();
+        }
+    }
+
+    function bepaalBiedStap(hoogsteBedrag){
+        if(hoogsteBedrag > 50){
+            if(hoogsteBedrag > 500){
+                if(hoogsteBedrag > 1000){
+                    return 50;
+                }
+                return 5;
+            }
+            return 1;
+        }
+        return 0.5;
+    }
+});
+</script>
+</body>
+</html>
