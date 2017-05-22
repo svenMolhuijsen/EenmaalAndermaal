@@ -365,7 +365,7 @@ function generateParentCategories(category, target) {
 }
 
 function generateCategorySelect($childtarget, $target, category, selected) {
-    $.post("/IProject/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
+    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
         if (res.code == 0) {
