@@ -64,7 +64,7 @@ $(document).ready(function () {
 /////////////////////////////////////////////
 
 //Grote image van het product
-    $bigImage = $('.veilingImage .columns img');
+    $bigImage = $('.veilingImage #image');
 
 //Wisselt de grote image met een alt image via fades
     $('.altImages .column img').on('click', function () {
@@ -219,45 +219,56 @@ $(document).ready(function () {
 //  VeilingPagina
 /////////////////////////////////////////////
 var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
+var veiling;
 var gebruiker;
+var data = { veilingId: veilingId };
 
 $.ajax({
-    url: 'php/api.php?action=getGebruiker',
-    type: 'POST',
+    url: 'php/api.php?action=getVeilingInfo',
+    data: data,
+    type: 'post',
     dataType: 'json',
-    success: function(result){
-        gebruiker = result;
+    success: function(result) {
+        gebruiker = result.gebruiker;
+        veiling = result.veiling.data[0];
     }
 });
 
 $biedenKnop = $('#biedenKnop');
 $bedrag = $('#bedrag');
 
-$hoogsteBedrag = $('#hoogsteBedrag');
+$biedingen = $('.biedingen');
 
 $biedenError = $('#biedenError');
 $bedragError = $('#bedragError');
 
 $biedenKnop.on('click', function(){
-    var hoogsteBod = getHoogsteBod(veilingId);
-    var biedDrempel = Number(hoogsteBod['biedingsBedrag'])+bepaalBiedStap(hoogsteBod['biedingsBedrag']);
+    var hoogsteBod = getHoogsteBod(veiling["veilingId"]);
+    var biedDrempel;
+    if(hoogsteBod.code == 0) {
+        biedDrempel = Number(hoogsteBod.data[0].biedingsBedrag) + bepaalBiedStap(hoogsteBod.data[0].biedingsBedrag);
+    }
+    else if(hoogsteBod.code == 1){
+        biedDrempel = Number(veiling["startPrijs"]) + bepaalBiedStap(veiling["startPrijs"]);
+    }
 
     var now = new Date($.now());
     var biedingsTijd = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
 
-    var bod = { veilingId: veilingId, email: gebruiker["email"],  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
+    var bod = { veilingId: veiling["veilingId"], email: gebruiker.email,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
 
-    if(bod['email'] != hoogsteBod['email']) {
+    if(hoogsteBod.code == 1 || bod['email'] != hoogsteBod.data[0]["email"]) {
         $biedenError.hide();
-
-        if (bod['biedingsBedrag'] > biedDrempel) {
+        console.log(gebruiker);
+        if (bod.biedingsBedrag > biedDrempel) {
 
             $.post("php/api.php?action=bieden", bod);
 
             hoogsteBod = bod;
-            biedDrempel = Number(hoogsteBod['biedingsBedrag']) + bepaalBiedStap(hoogsteBod['biedingsBedrag']);
+            biedDrempel = Number(hoogsteBod.biedingsBedrag) + bepaalBiedStap(hoogsteBod.biedingsBedrag);
 
-            $hoogsteBedrag.html('€' + hoogsteBod['biedingsBedrag']);
+            var dateString = ("0"+(now.getDate().toString())).slice(-2)+'-'+("0"+(now.getMonth()+1)).toString().slice(-2)+'-'+now.getFullYear().toString().substring(2);
+            $biedingen.prepend('<tr><td>'+bod.email+'</td><td>€'+bod.biedingsBedrag+'</td><td>'+dateString+'</td></tr>');
             $bedragError.html('U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €' + biedDrempel);
             $bedragError.hide();
             $bedrag.removeClass('is-invalid-input');

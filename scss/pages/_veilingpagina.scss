@@ -3,13 +3,27 @@
     margin-top: 5%;
   }
   .veilingImage {
+    border: solid 2px #dbdbdb;
+
     img {
       display: block;
-      margin: 5% auto 5% auto;
+      margin: auto;
+      height: auto;
+      width: auto;
+      max-height: 500px;
     }
   }
 
   .veilingError {
+    text-align: center;
     display: none;
+  }
+
+  #bedrag, #biedenKnop {
+    margin: 0;
+  }
+
+  .biedingen tr td {
+    padding: 0;
   }
 }

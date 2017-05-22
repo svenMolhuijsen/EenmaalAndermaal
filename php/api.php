@@ -32,8 +32,8 @@ if (!empty($_GET['action'])) {
         case 'biedingCheck':
             getHoogsteBod($_POST);
             break;
-        case 'getGebruiker':
-            getGebruiker();
+        case 'getVeilingInfo':
+            getVeilingInfo($_POST);
             break;
         case 'sluitVeiling':
             sluitVeiling($_POST);
@@ -170,25 +170,16 @@ function bieden($bieding){
 
 function getHoogsteBod($data){
     $hoogsteBod = executeQuery("SELECT TOP 1 * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]);
-    if($hoogsteBod["code"] == 0){
-        echo json_encode($hoogsteBod['data'][0]);
-    }
-    else if($hoogsteBod['code'] == 1){
-        $hoogsteBod = executeQuery("SELECT TOP 1 startPrijs FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
-        if($hoogsteBod['code'] == 0){
-            echo json_encode($hoogsteBod['data'][0]['startPrijs']);
-        }
-        else{
-            var_dump($hoogsteBod);
-        }
+    if($hoogsteBod["code"] == 0 || $hoogsteBod['code'] == 1){
+        echo json_encode($hoogsteBod);
     }
     else{
         var_dump($hoogsteBod);
     }
 }
 
-function getGebruiker(){
-    echo json_encode($_SESSION["gebruiker"]->toArray());
+function getVeilingInfo($data){
+    echo json_encode(["gebruiker" => $_SESSION['gebruiker']->toArray(), "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
 
 //veiling sluiten
