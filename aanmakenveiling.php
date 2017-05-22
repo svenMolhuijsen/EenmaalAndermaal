@@ -10,17 +10,10 @@ include("php/layout/header.php");
     <h3 style="margin-left: 160px; margin-top: 50px">Aanmaken veiling</h3>
     <hr>
     <form action = "php/api.php?action=MaakVeilingAan" method="post" >
-        <div class = "row">
-            <div class="large-2 float-left">
-                <label>Selecteer Hoofd Categorie
-                    <select name = "hoofdcategorie">
-                        <option value="husker">Auto</option>
-                        <option value="starbuck">Speelgoed</option>
-                        <option value="hotdog">Gezondheid</option>
-                        <option value="apollo">Fietsen</option>
-                    </select>
-                </label>
-            </div>
+        <div class = "row" id="filterpagina">
+            <?php
+           // include ("php/include/categorieen.php");
+            ?>
         </div>
         <div class="row">
             <div class="large-2 float-left">
@@ -41,14 +34,14 @@ include("php/layout/header.php");
         </div>
         <div class="row">
             <div class="large-2 float-left">
-                <label>Einddatum
+                <label>Einddatum van de veiling
                     <input id= "einddatum" name="einddatum"type="date" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" name="einddatum" min="<?php date() ?>>">
                 </label>
             </div>
         </div>
         <br><br><br><br>
         <div class = "row">
-            <form action="upload.php" method="post" enctype="multipart/form-data">      <?php //de afbeelding moet nog in de database komen. Hoe gaan wij die opslaan? ?>
+            <form action="upload.php" method="post" enctype="multipart/form-data"><?php //de afbeelding moet nog in de database komen. Hoe gaan wij die opslaan? ?>
                 <label for="hoofdfoto" class="button">Upload je Hoofdfoto</label>
                 <input type="file" id="hoofdfoto" class="show-for-sr" onchange="readURL1(this);">
             </form>
@@ -67,7 +60,7 @@ include("php/layout/header.php");
                 </label>
             </div>
             <div class = "large-2 float-left" style="margin-left: 100px;">
-                <label>nr
+                <label>Huisnummer<br>
                     <input id = "huisnummer"name="huisnummer" type="varchar(255)" placeholder="Huisnummer" patter="[0,9] "/>
                 </label>
             </div>
@@ -80,15 +73,28 @@ include("php/layout/header.php");
             </div>
             <div class = "large-2 float-left" style="margin-left: 100px;">
                 <label>Postcode
-                    <input id= "postcode"name="postcode" type="varchar(10)" placeholder="Prijs" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" />
+                    <input id= "postcode"name="postcode" type="varchar(10)" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" />
                 </label>
             </div>
         </div>
         <div class = "row">
-            <div class = "large-2 float-left" >
+            <div class = "large-2" >
                 <label>Provincie
                     <input  id ="provincie"name="provincie" type="varchar(255)" placeholder="Provincie" pattern="[a-z]{1,15}" />
                 </label>
+            </div>
+            <div class="large-2 end" style="margin-left: 100px;" >
+                <select id = land>
+                    <?php
+                    $landen= executeQuery("SELECT land FROM landen"); //alle waardes uit de tabel komt in landen[]
+                            for($i=0; $i< count($landen['data']) ; $i++){ //i is kleiner dan aantal landen
+                            $land = $landen['data'][$i]; //pompt de huidige waarde van landen[i] in land
+                            echo('<option value= '.$land["land"]. '>'.$land["land"].'</option>');
+                        }
+                    ?>
+
+                </select>
+
             </div>
         </div>
     </form>
@@ -130,7 +136,7 @@ include("php/layout/header.php");
             $postcode=  $('#postcode');
             $straat = $('#straat');
             $huisnummer = $('#huisnummer');
-
+            $land = $('#land');
 
     $(function() {
         $('#add-Veiling').click(function () { //als je op de knop drukt voert ajax de executequerry uit
@@ -143,6 +149,7 @@ include("php/layout/header.php");
             console.log($postcode.val());
             console.log($straat.val());
             console.log($huisnummer.val());
+            console.log($land.val());
 
             $titelVal = $titel.val();
             $prijsVal = $prijs.val();
@@ -153,7 +160,8 @@ include("php/layout/header.php");
             $postcodeVal = $postcode.val();
             $straatVal= $straat.val();
             $huisnummerVal = $huisnummer.val();
-            
+            $landVal = $land.val();
+
             $.ajax({
                 type: 'POST',
                 url: 'php/api.php?action=MaakVeilingAan',
@@ -166,7 +174,8 @@ include("php/layout/header.php");
                     $provincieVal,
                     $postcodeVal,
                     $straatVal,
-                    $huisnummerVal
+                    $huisnummerVal,
+                    $landVal,
                        },
 
                 success: function () {
