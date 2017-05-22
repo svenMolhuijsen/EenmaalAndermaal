@@ -57,5 +57,3 @@
 <script src="js/plugins/additional-methods.js"></script>
 <script src="js/plugins/messages_nl.js"></script>
 <script src="js/app.js"></script>
-</body>
-</html>
