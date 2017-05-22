@@ -46,6 +46,9 @@ if (!empty($_GET['action'])) {
         case 'MaakVeilingAan':
             aanmakenveiling($_POST);
             break;
+        case 'SelecteerCategorie':
+            selecteercategorie($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -235,10 +238,17 @@ mail($to,$subject,$txt,$headers);
 
 //registreren van veiling
 function aanmakenveiling($veiling){
-    executeQuery("INSERT INTO veiling(titel, beschrijving,startPrijs,eindDatum,land,provincie,postcode,plaatsnaam,straatnaam,huisnummer) VALUES = (?,?,?,?,?,?,?,?,?)",
-        [$veiling["titel"],$veiling["omschrijving"],$veiling["prijs"],$veiling["einddatum"],$veiling["land"],$veiling["provincie"],$veiling["postcode"],$veiling["straatnaam"],$veiling["huisnummer"]]
-        );
-
+    var_dump($veiling);
+    executeQuery("INSERT INTO veiling (titel, beschrijving, verkoperEmail, startPrijs, betalingswijze, beginDatum, eindDatum, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer, categorieId) 
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        [$veiling['$titelVal'],$veiling['$omschrijvingVal'],'test@test.nl' /*$_SESSION["gebruiker"]->getEmail() */,$veiling['$prijsVal'],'IDEAL',date("Y/m/d"),$veiling['$einddatumVal'],$veiling['$landVal'],$veiling['$provincieVal'],$veiling['$postcodeVal'], $veiling['$plaatsVal'] ,$veiling['$straatVal'],$veiling['$huisnummerVal'],1]
+    );
 
 }
+
+function getLanden(){
+    $Land = executeQuery("SELECT  * FROM landen",null );
+    return $Land;
+}
+
 ?>
