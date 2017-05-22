@@ -49,6 +49,7 @@ class Veiling
             $this->straatnaam = $veiling["straatnaam"];
             $this->huisnummer = $veiling["huisnummer"];
             $this->categorieId = $veiling["categorieId"];
+            $this->veilingGestopt = $veiling["veilingGestopt"];
         }
     }
 
@@ -61,6 +62,17 @@ class Veiling
     function update($column, $oldVal, $newVal)
     {
         return $result = executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
+    }
+
+    public
+    function getVeilingGestopt(){
+        return $this->veilingGestopt;
+    }
+
+    public
+    function setVeilingGestopt($veilingGestopt){
+        $this::update("veilingGestopt", $this->veilingGestopt, $veilingGestopt);
+        $this->veilingGestopt = $veilingGestopt;
     }
 
     public

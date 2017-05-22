@@ -13,7 +13,7 @@ if(checkForEmpty($veilingId)){
     //temp
     session_destroy();
     session_start();
-    $_SESSION['gebruiker'] = new User('test1@test1.nl');
+    //$_SESSION['gebruiker'] = new User('test1@test1.nl');
 
     $imgdir = 'img/placeholder';
     $imagesRough = scandir($imgdir);
@@ -84,7 +84,8 @@ include("php/layout/breadcrumbs.php");
         <h4><strong>Omschrijving:</strong></h4>
         <h5><?php echo($veiling->getBeschrijving()); ?></h5>
     </div>
-    <hr class="show-for-small-only">
+
+    <hr class="hide-for-large">
     <div class="large-4 columns">
         <div class="card">
             <div class="card-divider">
@@ -92,9 +93,11 @@ include("php/layout/breadcrumbs.php");
                 <span id="timer"></span><br>
             </div>
 
+            <?php if(!$veiling->getVeilingGestopt()){ ?>
             <div id="expired">
+            <?php if(isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])){ ?>
                 <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
-                <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button" style="width: 100%;">
+                <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
                 <label class="is-invalid-label veilingError" id="bedragError">
                     U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €
                     <?php
@@ -107,8 +110,12 @@ include("php/layout/breadcrumbs.php");
                     ?>
                 </label>
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
+            <?php } else{ ?>
+                <p class="callout warning" style="margin: 1% 0;">U bent niet ingelogd, log in om te bieden.</p>
+                <input name="loginKnop" value="Login" type="submit" id="loginKnop" class="login_button button biedKnop"">
+            <?php } ?>
             </div>
-
+            <?php } ?>
             <table class="card-section biedingen">
                 <?php
                     if($boden['code'] == 0) {
