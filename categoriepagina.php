@@ -20,7 +20,7 @@ include("php/layout/breadcrumbs.php");
     </div>
 </div>
 <hr>
-<div class="row">
+<div class="row" id="categoriepagina">
     <div class="clearfix">
         <h4 class="float-left">Populaire producten</h4>
         <!--<a href="#" class="button hollow float-right">view more ></a>!-->

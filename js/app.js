@@ -155,33 +155,35 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Categoriepagina
 /////////////////////////////////////////////
-    $hoofdcategorie = $('.categoriepagina .hoofdcategorien');
+    if ($('#categoriepagina').length != 0) {
+        $hoofdcategorie = $('.categoriepagina .hoofdcategorien');
 
-    $.post("/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-        // Kijken of het result true is
-        if (res.code == 0) {
-            //correct
-            $.each(res.data, function (index, value) {
-                $hoofdcategorie.append('<li class="accordion-item " data-accordion-item> ' +
-                    '<a href="#" data-category="' + value.categorieId + '" class="accordion-title">' + value.categorieNaam + '</a> ' +
-                    '<div class="accordion-content hide-for-small-only show-for-medium-up " data-tab-content> ' +
-                    'Bekijk rechts de categorien' +
-                    '</div> ' +
-                    '<div class="accordion-content mobile-subcategorien show-for-small-only " aria-hidden="true" data-tab-content> ' +
-                    '<ul id="' + value.categorieId + '"></ul>' +
-                    '</div> ' +
-                    '</li>');
-            });
-        }
-        else {
-            //fout afvangen
-            $hoofdcategorie.append("<li>sub categorien laden...</li>");
-        }
-        Foundation.reInit('accordion');
-        bindClickListenercategoriePagina();
-    });
+        $.post("/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
+            // JSON result omzetten naar var
+            var res = JSON.parse(result);
+            // Kijken of het result true is
+            if (res.code == 0) {
+                //correct
+                $.each(res.data, function (index, value) {
+                    $hoofdcategorie.append('<li class="accordion-item " data-accordion-item> ' +
+                        '<a href="#" data-category="' + value.categorieId + '" class="accordion-title">' + value.categorieNaam + '</a> ' +
+                        '<div class="accordion-content hide-for-small-only show-for-medium-up " data-tab-content> ' +
+                        'Bekijk rechts de categorien' +
+                        '</div> ' +
+                        '<div class="accordion-content mobile-subcategorien show-for-small-only " aria-hidden="true" data-tab-content> ' +
+                        '<ul id="' + value.categorieId + '"></ul>' +
+                        '</div> ' +
+                        '</li>');
+                });
+            }
+            else {
+                //fout afvangen
+                $hoofdcategorie.append("<li>sub categorien laden...</li>");
+            }
+            Foundation.reInit('accordion');
+            bindClickListenercategoriePagina();
+        });
+    }
 
     function bindClickListenercategoriePagina() {
         //Bind click listener to newly created element
