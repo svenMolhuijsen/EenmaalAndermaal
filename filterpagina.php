@@ -19,7 +19,7 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
 
 <div class="row" id="filterpagina">
         <div class="column">
-            <h2 class="float-left">Jouw Zoekresultaten: </h2>
+            <h2 class="float-left">Uw Zoekresultaten: </h2>
             <form method="get" class="float-right" action="filterpagina.php">
                 <label for="sortering">Filter op: </label>
                 <select id="sortering" style="width: 100%" name="sorterenOp" style="width:20%">

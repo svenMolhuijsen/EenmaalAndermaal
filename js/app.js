@@ -339,6 +339,13 @@ function zoeken() {
             $('.veilingen  .row').foundation('destroy');
             new Foundation.Equalizer($('.veilingen  .row')).getHeightsByRow();
 
+        } else {
+            $(".veilingen .row").append('<div class="column veiling" data-equalizer-watch>' +
+                "<div class='callout warning'> " +
+                "<h5>Niets gevonden</h5> " +
+                "<p>Probeer met andere zoekcriteria te vinden wat u wilt</p> " +
+                "</div></div></div>");
+
         }
     });
 }
