@@ -36,14 +36,9 @@ include("php/layout/breadcrumbs.php");
             <div class="button" type="submit" value="Submit">Submit</div>
         </div>
         <div class="tabs-panel categoriemanager" id="categorie">
-            <div class="row expanded" style="margin-top:0;">
-                <input type="text" placeholder="new Categorie">
-                <div type="submit" class="button" value="Submit">Submit</div>
-
-                <ul class="vertical menu root" data-accordion-menu>
-
-                </ul>
-            </div>
+            <?php
+            include("php/layout/categorieToevoegen.php");
+            ?>
         </div>
     </div>
 </main>
@@ -52,3 +47,25 @@ include("php/layout/breadcrumbs.php");
 <?php
 include("php/layout/footer.php")
 ?>
+<script>
+    $('#addCategorieToDatabase').click(function () {
+        var categorie = {
+            categorieNaam: $('#categorieNaam').val(),
+            superId: $('#categorien').children().last().prev().find(":selected").val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=addCategorieToDatabase',
+            data: categorie,
+            dataType: 'json',
+            complete: function(){
+                alert('Categorie toevoegen geslaagd!');
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>

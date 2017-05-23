@@ -49,8 +49,8 @@ if (!empty($_GET['action'])) {
         case 'MaakVeilingAan':
             aanmakenveiling($_POST);
             break;
-        case 'SelecteerCategorie':
-            selecteercategorie($_POST);
+        case 'addCategorieToDatabase':
+            nieuweCategorieToevoegen($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -316,14 +316,24 @@ function verzendEmail($data)
 
 
 //registreren van veiling
-function aanmakenveiling($veiling)
-{
-    var_dump($veiling);
-    executeQuery("INSERT INTO veiling (titel, beschrijving, verkoperEmail, startPrijs, betalingswijze, beginDatum, eindDatum, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer, categorieId) 
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-        [$veiling['$titelVal'], $veiling['$omschrijvingVal'], 'test@test.nl' /*$_SESSION["gebruiker"]->getEmail() */, $veiling['$prijsVal'], 'IDEAL', date("Y/m/d"), $veiling['$einddatumVal'], $veiling['$landVal'], $veiling['$provincieVal'], $veiling['$postcodeVal'], $veiling['$plaatsVal'], $veiling['$straatVal'], $veiling['$huisnummerVal'], 1]
-    );
+function aanmakenveiling($veiling){
+    $veiling['verkoperGebruikersnaam'] = "((marion))";
+    $veiling['koperGebruikersnaam'] = null;
+    $veiling['beginDatum'] = date("Y-m-d H:m:s");
+    $veiling['veilingGestopt'] = false;
+    $veiling['categorieId'] = intval($veiling['categorieId']);
+    $veiling['startPrijs'] = intval($veiling['startPrijs']);
+    $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
 
+    var_dump($veiling);
+    $superVeiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        $veiling['titel'], $veiling['beschrijving'], $veiling['categorieId'], $veiling['postcode'],
+        $veiling['land'], $veiling['verkoperGebruikersnaam'], $veiling['koperGebruikersnaam'],
+        $veiling['startPrijs'], $veiling['verkoopPrijs'], $veiling['provincie'],
+        $veiling['plaatsnaam'], $veiling['straatnaam'], $veiling['huisnummer'],
+        $veiling['betalingswijze'], $veiling['verzendwijze'], $veiling['beginDatum'],
+        $veiling['eindDatum'], $veiling['conditie'], $veiling['thumbNail'], $veiling['veilingGestopt']
+    ]);
 }
 
 function getLanden()
@@ -332,4 +342,7 @@ function getLanden()
     return $Land;
 }
 
+function nieuweCategorieToevoegen($categorie){
+    var_dump($categorie);
+}
 ?>

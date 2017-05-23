@@ -17,5 +17,17 @@ function executeQuery($query, $data = []){
         return ['status' => 'error', 'code' => 2, 'message' => "Er ging iets fout bij uitvoeren van query: " . $query . $e->getMessage()];
     }
 }
+
+function executeQueryNoFetch($query, $data = []){
+    global $pdo;
+
+    try {
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $pdo->prepare("$query");
+        $stmt->execute($data);
+    } catch (PDOException $e) {
+        return ['status' => 'error', 'code' => 2, 'message' => "Er ging iets fout bij uitvoeren van query: " . $query . $e->getMessage()];
+    }
+}
 ?>
 
