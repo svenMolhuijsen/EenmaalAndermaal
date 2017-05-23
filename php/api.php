@@ -217,22 +217,27 @@ function getVeilingInfo($data){
 
 //veiling sluiten
 function sluitVeiling($data){
-    if(executeQuery("SELECT emailVerzonden FORM veiling WHERE veilingId = ?,", [$data["veilingId"]]) == 1){
-        return;
+    $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
+    $today = date("Y-m-d");
+    if($veiling["veilingGestopt"]){
+       return;
     }else{
-        executeQuery("UPDATE veiling SET emailVerzonden = 1 WHERE veilingId = ?",[$data["veilingId"]]);
-        verzendEmail($data);
-        return;
+        if($veiling["eindDatum"] < $today){
+            setVeilingGestopt($veiling);
+            verzendEmail($veiling);
+        }else{
+            return;
+        }
     }
 }
 
 //verzenden Email
 function verzendEmail($data){
-$to = "sinke.carsten95@gmail.com";
-$subject = "verzendEmail";
-$txt = "Hello world!";
-$headers = "From: info@EenmaalAndermaal.nl";
-mail($to,$subject,$txt,$headers);
+    $to = "sinke.carsten95@gmail.com";
+    $subject = "verzendEmail";
+    $txt = "Hello world!";
+    $headers = "From: info@EenmaalAndermaal.nl";
+    mail($to,$subject,$txt,$headers);
 }
 
 

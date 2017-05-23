@@ -3,7 +3,7 @@
 include("php/core.php");
 $veilingId = stripInput($_GET["veilingId"]);
 if(checkForEmpty($veilingId)){
-
+    
     $veiling = new veiling($veilingId);
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
     $categorie = new Categorie($veiling->getCategorieId());
@@ -112,7 +112,7 @@ include("php/layout/breadcrumbs.php");
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
             <?php } else{ ?>
                 <p class="callout warning" style="margin: 1% 0;">U bent niet ingelogd, log in om te bieden.</p>
-                <input name="loginKnop" value="Login" type="submit" id="loginKnop" class="login_button button biedKnop"">
+                <input name="loginKnop" value="Login" type="submit" id="loginKnop" class="login_button button biedKnop">
             <?php } ?>
             </div>
             <?php } ?>
