@@ -18,27 +18,6 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
 ?>
 
 <div class="row" id="filterpagina">
-    <div class="clearfix">
-        <div class="small-up-1 medium-up-3 columns-12 float-center">
-            <div class="column column-block" id="blocks">
-                <input type="text" placeholder="zoek">
-            </div>
-            <div class="column column-block" id="blocks">
-                <select>
-                    <option value="Voertuigen">Voertuigen</option>
-                    <option value="Kleding">Kleding</option>
-                    <option value="Vakanties">Vakanties</option>
-                    <option value="Sport">Sport</option>
-                </select>
-            </div>
-            <div class="column column-block" id="blocks">
-                <input type="submit" class="button" value="submit">
-            </div>
-        </div>
-
-
-    </div>
-    <div class="row">
         <div class="column">
             <h2 class="float-left">Jouw Zoekresultaten: </h2>
             <form method="get" class="float-right" action="filterpagina.php">
@@ -52,25 +31,41 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
                 </select>
             </form>
         </div>
-        <aside class="column medium-3">
+    <aside class="column small-3">
             <h3> Filter op: </h3>
             <form class="filter">
-                <div class="categorien"></div>
-                <div class="slider" data-slider data-initial-start="0" data-initial-end="100">
-                    <span class="slider-handle" data-slider-handle role="slider" tabindex="1"></span>
-                    <span class="slider-fill" data-slider-fill></span>
-                    <span class="slider-handle" data-slider-handle role="slider" tabindex="1"></span>
-                    <input type="hidden">
-                    <input type="hidden">
+                <label for="searchterm">Zoekterm:</label>
+                <input type="text" placeholder="Zoekterm" id="searchterm" name="searchterm">
+                <label for="categories">Categorie:</label>
+
+                <div class="categorien" id="categories"></div>
+                <div class="row">
+                    <div class='columns'>
+                        <label for="priceSlider">Prijs:</label>
+                        <div class="slider" id="priceSlider" data-slider data-initial-start='0' data-initial-end='1000'
+                             data-start="0"
+                             data-end="1000">
+            <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                  aria-controls='sliderOutput1'></span>
+                            <span class="slider-fill" data-slider-fill></span>
+                            <span class="slider-handle" data-slider-handle role="slider" tabindex="1"
+                                  aria-controls='sliderOutput2'></span>
+                        </div>
+                    </div>
+                    <div class="small-5 columns">
+                        <input type="number" id="sliderOutput1">
+                    </div>
+                    <div class="small-5 columns">
+                        <input type="number" id="sliderOutput2">
+                    </div>
                 </div>
-                <button type="button"
-                        style="width: 175px; color: white; border-color: #E25822; background-color: #E25822">
-                    Zoekresultaten Ophalen!
-                </button>
+                <input type="submit" class="button primary" value="Zoekresultaten Ophalen!"/>
+                <a href="filterpagina.php" class="button secondary">reset</a>
+
             </form>
         </aside>
 
-        <main class="products column medium-9">
+    <main class="products column small-9">
             <div class="row">
                 <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
                         <div style="color: #E25822">titel Product<br>€100</div>
@@ -116,7 +111,6 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
                     </a></div>
             </div>
         </main>
-    </div>
 </div>
 
 

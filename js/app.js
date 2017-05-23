@@ -81,7 +81,18 @@ $(document).ready(function () {
             $(this).fadeIn(fadeLength);
         });
     });
-
+//////////////////////////////////////////////
+//  Navbar
+/////////////////////////////////////////////
+    if ($('#navigatie-menu').length != 0) {
+        var target = $('#navigatie-menu .categorie');
+        generateCategorySelect(target, null, null, null);
+        $('#navigatie-menu .menu button.submit').click(function () {
+            var searchterm = $('#navigatie-menu .menu input').val();
+            var categorie = $('#navigatie-menu .categorie select').val();
+            document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
+        })
+    }
 //////////////////////////////////////////////
 //  Forms versturen
 /////////////////////////////////////////////
@@ -216,6 +227,9 @@ $(document).ready(function () {
 /////////////////////////////////////////////
     if ($('#filterpagina').length != 0) {
         var category = getURLParameter('hoofdcategorie');
+        var searchterm = getURLParameter('searchterm');
+        console.log(searchterm);
+        searchterm != null ? $("#searchterm").val(searchterm) : null;
         var target = $('#filterpagina aside .filter .categorien');
         generateParentCategories(category, target);
     }
@@ -266,7 +280,7 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         var res = JSON.parse(result);
         if (res.code == 0) {
             $select = $("<select data-superid='" + category + "'name=''></select>");
-            $($select).append("<option selected value='*'>Categorie selecteren</option>");
+            $($select).append("<option selected value='" + category + "'>Categorie selecteren</option>");
 
             $.each(res.data, function (index, item) {
                 if (selected == item["categorieId"]) {
@@ -281,7 +295,6 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         $($childtarget).change(function () {
             var value = $($childtarget).find(":selected").val();
             generateParentCategories(value, $target);
-            // generateCategorySelect($target, value, null);
         });
     });
 }
