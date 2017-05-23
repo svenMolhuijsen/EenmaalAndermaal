@@ -1,5 +1,5 @@
 $(document).foundation();
-
+var currCategory = null;
 $(document).ready(function () {
 
 
@@ -228,13 +228,21 @@ $(document).ready(function () {
 //  filterpagina
 /////////////////////////////////////////////
     if ($('#filterpagina').length != 0) {
-        var category = getURLParameter('hoofdcategorie');
         var searchterm = getURLParameter('searchterm');
-        console.log(searchterm);
         searchterm != null ? $("#searchterm").val(searchterm) : null;
+        var category = getURLParameter('hoofdcategorie');
         var target = $('#filterpagina aside .filter .categorien');
         generateParentCategories(category, target);
+        currCategory = category;
+
+        $('.filter .slider').on('changed.zf.slider', function () {
+            zoeken();
+        });
+        $('#searchterm').on('keyup', function () {
+            zoeken();
+        });
     }
+
 
 });
 
@@ -266,7 +274,6 @@ function generateParentCategories(category, target) {
                     target.append("<div class='" + inverse + "'></div>")
                     var childtarget = $('.' + inverse, target);
                     generateCategorySelect(childtarget, target, category, null);
-
                 }
             }
         } else {
@@ -296,11 +303,43 @@ function generateCategorySelect($childtarget, $target, category, selected) {
 
         $($childtarget).change(function () {
             var value = $($childtarget).find(":selected").val();
+            currCategory = value;
             generateParentCategories(value, $target);
+            zoeken();
         });
     });
 }
+function zoeken() {
+    var minBedrag = $('#sliderOutput1').val();
+    var maxBedrag = $('#sliderOutput2').val();
+    var searchterm = $('#searchterm').val();
+    var categorie = currCategory
 
+    $.post("/php/api.php?action=search", {
+        category: categorie,
+        minprice: minBedrag,
+        maxprice: maxBedrag,
+        searchterm: searchterm
+    }, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+        $(".veilingen  .row").empty();
+        if (res.code == 0) {
+            $.each(res.data, function (index, item) {
+                $(".veilingen .row").append('<div class="column small-6 medium-4 large-3 veiling" data-equalizer-watch>' +
+                    '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><img src="http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + '" alt=""> ' +
+                    '<div class="omschrijving">' +
+                    '<div class="titel">' + item["titel"] + '</div> ' +
+                    '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
+                    '<div class="eindtijd">' + item["eindDatum"] + '</div> ' +
+                    '</a></div></div>');
+            })
+            $('.veilingen  .row').foundation('destroy');
+            new Foundation.Equalizer($('.veilingen  .row')).getHeightsByRow();
+
+        }
+    });
+}
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }

@@ -65,51 +65,10 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
             </form>
         </aside>
 
-    <main class="products column small-9">
-            <div class="row">
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-                <div class="column small-6 medium-4 large-3"><a href="#"><img src="http://placehold.it/150x300" alt="">
-                        <div style="color: #E25822">titel Product<br>€100</div>
-                    </a></div>
-            </div>
+    <main class="veilingen column small-9">
+        <div class="row" data-equalizer>
+
+        </div>
         </main>
 </div>
 
