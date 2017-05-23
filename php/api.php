@@ -46,8 +46,8 @@ if (!empty($_GET['action'])) {
         case 'MaakVeilingAan':
             aanmakenveiling($_POST);
             break;
-        case 'SelecteerCategorie':
-            selecteercategorie($_POST);
+        case 'addCategorieToDatabase':
+            nieuweCategorieToevoegen($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -265,5 +265,9 @@ function aanmakenveiling($veiling){
 function getLanden(){
     $Land = executeQuery("SELECT  * FROM landen",null );
     return $Land;
+}
+
+function nieuweCategorieToevoegen($categorie){
+    var_dump($categorie);
 }
 ?>

@@ -237,6 +237,7 @@ $(document).ready(function () {
     }
 
     generateParentCategories(null, $('.aanmakenveiling #categorie'));
+    generateParentCategories(null, $('#categorieToevoegen form .categorien'));
 });
 
 //////////////////////////////////////////////
