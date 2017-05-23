@@ -7,7 +7,7 @@ class User
     private $voornaam;
     private $achternaam;
     private $geboortedatum;
-    private $email;
+    private $gebruikersnaam;
     private $telefoonnmr;
     private $verkoper;
     private $land;
@@ -17,13 +17,13 @@ class User
     private $straatnaam;
     private $huisnummer;
 
-    function __construct($email)
+    function __construct($gebruikersnaam)
     {
-        $gebruikers = executeQuery("SELECT * FROM gebruikers WHERE email = ?", [$email]);
+        $gebruikers = executeQuery("SELECT * FROM gebruikers WHERE gebruikersnaam = ?", [$gebruikersnaam]);
         if ($gebruikers['code'] == 0) {
             $gebruiker = $gebruikers['data']['0'];
 
-            $this->email = $gebruiker["email"];
+            $this->gebruikersnaam = $gebruiker["gebruikersnaam"];
             $this->wachtwoord = $gebruiker["wachtwoord"];
             $this->voornaam = $gebruiker["voornaam"];
             $this->achternaam = $gebruiker["achternaam"];
@@ -39,16 +39,16 @@ class User
         }
     }
 
-    public static function newUser($email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
+    public static function newUser($gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
     {
-        executeQuery("INSERT INTO Gebruikers (email, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
+        executeQuery("INSERT INTO Gebruikers (gebruikersnaam, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
                       VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [$email, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
+            [$gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
     }
 
     public function toArray()
     {
-        return ['email' => $this->email,
+        return ['gebruikersnaam' => $this->gebruikersnaam,
             'voornaam' => $this->voornaam,
             'achternaam' => $this->achternaam,
             'geboortedatum' => $this->geboortedatum,
@@ -151,9 +151,9 @@ class User
      * @return mixed
      */
     public
-    function getEmail()
+    function getGebruikersnaam()
     {
-        return $this->email;
+        return $this->gebruikersnaam;
     }
 
     /**
@@ -162,8 +162,8 @@ class User
     public
     function setEmail($email)
     {
-        $this::update("email", $this->email, $email);
-        $this->email = $email;
+        $this::update("gebruikersnaam", $this->geberuikersnaam, $gebruikersnaam);
+        $this->gebruikersnaam = $gebruikersnaam;
     }
 
     /**

@@ -6,7 +6,7 @@ class Veiling
     private $veilingId;
     private $titel;
     private $beschrijving;
-    private $verkoperEmail;
+    private $verkoperGebruikersnaam;
     private $koperId;
     private $startPrijs;
     private $verkoopPrijs;
@@ -37,7 +37,6 @@ class Veiling
             $this->koperGebruikersnaam = $veiling["koperGebruikersnaam"];
             $this->startPrijs = $veiling["startPrijs"];
             $this->verkoopPrijs = $veiling["verkoopPrijs"];
-            //$this->verzendKosten = $veiling["verzendKosten"];
             $this->betalingswijze = $veiling["betalingswijze"];
             $this->verzendwijze = $veiling["verzendwijze"];
             $this->beginDatum = $veiling["beginDatum"];
