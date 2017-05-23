@@ -236,6 +236,7 @@ $(document).ready(function () {
         generateParentCategories(category, target);
     }
 
+    generateParentCategories(null, $('.aanmakenveiling #categorie'));
 });
 
 //////////////////////////////////////////////
@@ -256,7 +257,7 @@ function generateParentCategories(category, target) {
             console.log(parents);
             for (var i = parents.length - 1; i >= 0; i--) {
                 //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
-                target.append("<div class='" + inverse + "'></div>")
+                target.append("<div class='" + inverse + "'></div>");
                 var childtarget = $('.' + inverse, target);
 
                 generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
@@ -281,7 +282,7 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
         if (res.code == 0) {
-            $select = $("<select data-superid='" + category + "'name=''></select>");
+            $select = $("<select data-superid='" + category + "' name=''></select>");
             $($select).append("<option selected value='" + category + "'>Categorie selecteren</option>");
 
             $.each(res.data, function (index, item) {

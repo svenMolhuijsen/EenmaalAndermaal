@@ -2,7 +2,6 @@
 
 class Veiling
 {
-    private $code;
     private $veilingId;
     private $titel;
     private $beschrijving;
@@ -22,34 +21,49 @@ class Veiling
     private $straatnaam;
     private $huisnummer;
     private $categorieId;
+    private $code;
 
-    public function __construct($veilingId)
-    {
+    public function __construct(){}
+
+    public function fill($veiling){
+        $this->veilingId = $veiling["veilingId"];
+        $this->titel = $veiling["titel"];
+        $this->beschrijving = $veiling["beschrijving"];
+        $this->verkoperGebruikersnaam = $veiling["verkoperGebruikersnaam"];
+        $this->koperGebruikersnaam = $veiling["koperGebruikersnaam"];
+        $this->startPrijs = $veiling["startPrijs"];
+        $this->verkoopPrijs = $veiling["verkoopPrijs"];
+        $this->betalingswijze = $veiling["betalingswijze"];
+        $this->verzendwijze = $veiling["verzendwijze"];
+        $this->beginDatum = $veiling["beginDatum"];
+        $this->eindDatum = $veiling["eindDatum"];
+        $this->land = $veiling["land"];
+        $this->provincie = $veiling["provincie"];
+        $this->postcode = $veiling["postcode"];
+        $this->plaatsnaam = $veiling["plaatsnaam"];
+        $this->straatnaam = $veiling["straatnaam"];
+        $this->huisnummer = $veiling["huisnummer"];
+        $this->categorieId = $veiling["categorieId"];
+        $this->veilingGestopt = $veiling["veilingGestopt"];
+    }
+
+    public static function existingVeiling($veilingId) {
+        $instance = new self();
+
         $veilingen = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$veilingId]);
-        $this->code = $veilingen['code'];
 
         if ($veilingen['code'] == 0) {
-            $veiling = $veilingen['data'][0];
-            $this->veilingId = $veiling["veilingId"];
-            $this->titel = $veiling["titel"];
-            $this->beschrijving = $veiling["beschrijving"];
-            $this->verkoperGebruikersnaam = $veiling["verkoperGebruikersnaam"];
-            $this->koperGebruikersnaam = $veiling["koperGebruikersnaam"];
-            $this->startPrijs = $veiling["startPrijs"];
-            $this->verkoopPrijs = $veiling["verkoopPrijs"];
-            $this->betalingswijze = $veiling["betalingswijze"];
-            $this->verzendwijze = $veiling["verzendwijze"];
-            $this->beginDatum = $veiling["beginDatum"];
-            $this->eindDatum = $veiling["eindDatum"];
-            $this->land = $veiling["land"];
-            $this->provincie = $veiling["provincie"];
-            $this->postcode = $veiling["postcode"];
-            $this->plaatsnaam = $veiling["plaatsnaam"];
-            $this->straatnaam = $veiling["straatnaam"];
-            $this->huisnummer = $veiling["huisnummer"];
-            $this->categorieId = $veiling["categorieId"];
-            $this->veilingGestopt = $veiling["veilingGestopt"];
+            $instance->fill($veilingen['data'][0]);
+            $instance->setCode($veilingen['code']);
         }
+
+        return $instance;
+    }
+
+    public static function newVeiling($veiling) {
+        $instance = new self();
+        $instance->fill($veiling);
+        return $instance;
     }
 
     /**
@@ -64,6 +78,16 @@ class Veiling
     }
 
     public
+    function getCode(){
+        return $this->code;
+    }
+
+    public
+    function setCode($code){
+        $this->code = $code;
+    }
+
+    public
     function getVeilingGestopt(){
         return $this->veilingGestopt;
     }
@@ -72,11 +96,6 @@ class Veiling
     function setVeilingGestopt($veilingGestopt){
         $this::update("veilingGestopt", $this->veilingGestopt, $veilingGestopt);
         $this->veilingGestopt = $veilingGestopt;
-    }
-
-    public
-    function getCode(){
-        return $this->code;
     }
 
     /**

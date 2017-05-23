@@ -3,8 +3,8 @@
 include("php/core.php");
 $veilingId = stripInput($_GET["veilingId"]);
 if(checkForEmpty($veilingId)){
-    
-    $veiling = new veiling($veilingId);
+
+    $veiling = Veiling::existingVeiling($veilingId);
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
     $categorie = new Categorie($veiling->getCategorieId());
 
