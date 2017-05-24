@@ -26,7 +26,10 @@ if (!empty($_GET['action'])) {
 
             getSubCategories($params);
             break;
+        case 'search':
+            search($_POST);
 
+            break;
         case'getParentCategories':
             $category = trim($_POST['category']);
             getParentCategories($category);
@@ -46,8 +49,8 @@ if (!empty($_GET['action'])) {
         case 'MaakVeilingAan':
             aanmakenveiling($_POST);
             break;
-        case 'SelecteerCategorie':
-            selecteercategorie($_POST);
+        case 'addCategorieToDatabase':
+            nieuweCategorieToevoegen($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -98,6 +101,73 @@ function logout()
 //    echo json_encode($a_result);
 }
 
+function search()
+{
+    $searchterm = $_POST['searchterm'];
+    $minprice = (float)$_POST['minprice'];
+    $maxprice = (float)$_POST['maxprice'];
+    $category = (int)$_POST['category'];
+
+    if ($category == null) {
+        $result = executeQuery(
+            ";with category_tree as 
+(
+   select categorieId
+   from categorie
+   where superId IS NULL
+   union all
+   select C.categorieId
+   from categorie c
+   join category_tree p on C.superId = P.categorieId 
+) 
+
+SELECT DISTINCT TOP(100) V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
+WHERE V.titel LIKE '%'+?+'%' AND 
+V.eindDatum >= GETDATE()  AND
+V.beginDatum <= GETDATE() AND
+(V.categorieId = ? OR
+V.categorieId IN (
+SELECT categorieId
+FROM category_tree
+))
+GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
+HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
+ORDER BY hoogsteBieding DESC
+", [$searchterm, $category, $minprice, $maxprice]);
+
+    } else {
+
+        $result = executeQuery(
+            ";with category_tree as 
+(
+   select categorieId
+   from categorie
+   where superId =?
+   union all
+   select C.categorieId
+   from categorie c
+   join category_tree p on C.superId = P.categorieId 
+) 
+
+SELECT DISTINCT TOP(100) V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
+WHERE V.titel LIKE '%'+?+'%' AND 
+V.eindDatum >= GETDATE()  AND
+V.beginDatum <= GETDATE() AND
+(V.categorieId = ? OR
+V.categorieId IN (
+SELECT categorieId
+FROM category_tree
+))
+GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
+HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
+ORDER BY hoogsteBieding DESC
+", [$category, $searchterm, $category, $minprice, $maxprice]);
+    }
+    stuurTerug($result);
+}
+
 function getParentCategories($category)
 {
     $result = executeQuery(";with category_tree as (
@@ -121,6 +191,7 @@ OPTION (MAXRECURSION 0)
     stuurTerug($result);
 
 }
+
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
@@ -201,43 +272,46 @@ function bieden($bieding)
     );
 }
 
-function getHoogsteBod($data){
+function getHoogsteBod($data)
+{
     $hoogsteBod = executeQuery("SELECT TOP 1 * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]);
-    if($hoogsteBod["code"] == 0 || $hoogsteBod['code'] == 1){
+    if ($hoogsteBod["code"] == 0 || $hoogsteBod['code'] == 1) {
         echo json_encode($hoogsteBod);
-    }
-    else{
+    } else {
         var_dump($hoogsteBod);
     }
 }
 
-function getVeilingInfo($data){
+function getVeilingInfo($data)
+{
     echo json_encode(["gebruiker" => $_SESSION['gebruiker']->toArray(), "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
 
 //veiling sluiten
-function sluitVeiling($data){
+function sluitVeiling($data)
+{
     $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
     $today = date("Y-m-d");
-    if($veiling["veilingGestopt"]){
-       return;
-    }else{
-        if($veiling["eindDatum"] < $today){
+    if ($veiling["veilingGestopt"]) {
+        return;
+    } else {
+        if ($veiling["eindDatum"] < $today) {
             setVeilingGestopt($veiling);
             verzendEmail($veiling);
-        }else{
+        } else {
             return;
         }
     }
 }
 
 //verzenden Email
-function verzendEmail($data){
+function verzendEmail($data)
+{
     $to = "sinke.carsten95@gmail.com";
     $subject = "verzendEmail";
     $txt = "Hello world!";
     $headers = "From: info@EenmaalAndermaal.nl";
-    mail($to,$subject,$txt,$headers);
+    mail($to, $subject, $txt, $headers);
 }
 
 
@@ -262,8 +336,13 @@ function aanmakenveiling($veiling){
     ]);
 }
 
-function getLanden(){
-    $Land = executeQuery("SELECT  * FROM landen",null );
+function getLanden()
+{
+    $Land = executeQuery("SELECT  * FROM landen", null);
     return $Land;
+}
+
+function nieuweCategorieToevoegen($categorie){
+    var_dump($categorie);
 }
 ?>
