@@ -302,16 +302,6 @@ function sluitVeiling($data){
     }
 }
 
-//verzenden Email
-function verzendEmail($data){
-    $to = "sinke.carsten95@gmail.com";
-    $subject = "verzendEmail";
-    $txt = "Hello world!";
-    $headers = "From: info@EenmaalAndermaal.nl";
-    mail($to,$subject,$txt,$headers);
-}
-
-
 //registreren van veiling
 function aanmakenveiling($veiling){
     $veiling['verkoperGebruikersnaam'] = "((marion))";
