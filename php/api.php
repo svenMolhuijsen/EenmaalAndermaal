@@ -286,22 +286,6 @@ function getVeilingInfo($data)
     echo json_encode(["gebruiker" => $_SESSION['gebruiker']->toArray(), "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
 
-//veiling sluiten
-function sluitVeiling($data){
-    $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
-    $today = date("Y-m-d");
-    if($veiling["veilingGestopt"]){
-       return;
-    }else{
-        if($veiling["eindDatum"] < $today){
-            setVeilingGestopt($veiling);
-            verzendEmail($veiling);
-        }else{
-            return;
-        }
-    }
-}
-
 //registreren van veiling
 function aanmakenveiling($veiling){
     $veiling['verkoperGebruikersnaam'] = "((marion))";
