@@ -343,6 +343,9 @@ function getLanden()
 }
 
 function nieuweCategorieToevoegen($categorie){
-    var_dump($categorie);
+    $nieuweCategorie = executeQueryNoFetch("INSERT INTO categorie VALUES (?, ?)", [
+        $categorie['categorieNaam'], 
+        $categorie['superId']
+    ]);
 }
 ?>
