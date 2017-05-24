@@ -328,13 +328,13 @@ function zoeken() {
         $(".veilingen  .row").empty();
         if (res.code == 0) {
             $.each(res.data, function (index, item) {
-                $(".veilingen .row").append('<div class="column small-6 medium-4 large-3 veiling" data-equalizer-watch>' +
-                    '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><img src="http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + '" alt=""> ' +
-                    '<div class="omschrijving">' +
+                $(".veilingen .row").append('<div class="column small-6 medium-4 large-3 veiling" data-equalizer-watch><div class="inner">' +
+                    '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
+                    '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
                     '<div class="titel">' + item["titel"] + '</div> ' +
                     '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
                     '<div class="eindtijd">' + item["eindDatum"] + '</div> ' +
-                    '</a></div></div>');
+                    '</a></div></div></div>');
             })
             $('.veilingen  .row').foundation('destroy');
             new Foundation.Equalizer($('.veilingen  .row')).getHeightsByRow();

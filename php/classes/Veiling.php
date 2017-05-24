@@ -22,6 +22,7 @@ class Veiling
     private $huisnummer;
     private $categorieId;
     private $code;
+    private $veilingGestopt;
 
     public function __construct(){}
 
@@ -91,11 +92,22 @@ class Veiling
     function getVeilingGestopt(){
         return $this->veilingGestopt;
     }
-
+    //UPDATE veiling SET veilingGestopt = 0 WHERE veilingId = 6576921535
     public
     function setVeilingGestopt($veilingGestopt){
-        $this::update("veilingGestopt", $this->veilingGestopt, $veilingGestopt);
-        $this->veilingGestopt = $veilingGestopt;
+        //$this::update("veilingGestopt","veilingId", $this->veilingId, $veilingGestopt);
+        //$this->veilingGestopt = $veilingGestopt;
+        $hoogsteBod = executeQuery("SELECT top 1 gebruikersnaam, biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC ", [
+            $this->veilingId
+        ]);
+
+        return $result = executeQuery("UPDATE veiling SET veilingGestopt = ?, koperGebruikersnaam = ?, verkoopPrijs = ? WHERE veilingId = ? ",[
+            $veilingGestopt,
+            $hoogsteBod["data"][0]["gebruikersnaam"],
+            $hoogsteBod["data"][0]["biedingsBedrag"],
+            $this->veilingId
+
+        ]);
     }
 
     /**
