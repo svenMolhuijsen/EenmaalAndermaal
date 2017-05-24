@@ -107,7 +107,6 @@ function search()
     $minprice = (float)$_POST['minprice'];
     $maxprice = (float)$_POST['maxprice'];
     $category = (int)$_POST['category'];
-
     if ($category == null) {
         $result = executeQuery(
             ";with category_tree as 
@@ -121,7 +120,7 @@ function search()
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP(100) V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 100 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -133,7 +132,7 @@ FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY hoogsteBieding DESC
+ORDER BY hoogsteBieding DESC LIMIT 10
 ", [$searchterm, $category, $minprice, $maxprice]);
 
     } else {
@@ -150,7 +149,7 @@ ORDER BY hoogsteBieding DESC
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP(100) V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
