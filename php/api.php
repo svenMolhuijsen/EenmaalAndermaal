@@ -194,7 +194,6 @@ OPTION (MAXRECURSION 0)
     stuurTerug($result);
 
 }
-
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
@@ -291,30 +290,28 @@ function getVeilingInfo($data)
 }
 
 //veiling sluiten
-function sluitVeiling($data)
-{
+function sluitVeiling($data){
     $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
     $today = date("Y-m-d");
-    if ($veiling["veilingGestopt"]) {
-        return;
-    } else {
-        if ($veiling["eindDatum"] < $today) {
+    if($veiling["veilingGestopt"]){
+       return;
+    }else{
+        if($veiling["eindDatum"] < $today){
             setVeilingGestopt($veiling);
             verzendEmail($veiling);
-        } else {
+        }else{
             return;
         }
     }
 }
 
 //verzenden Email
-function verzendEmail($data)
-{
+function verzendEmail($data){
     $to = "sinke.carsten95@gmail.com";
     $subject = "verzendEmail";
     $txt = "Hello world!";
     $headers = "From: info@EenmaalAndermaal.nl";
-    mail($to, $subject, $txt, $headers);
+    mail($to,$subject,$txt,$headers);
 }
 
 
@@ -364,6 +361,9 @@ executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $g
 
 
 function nieuweCategorieToevoegen($categorie){
-    var_dump($categorie);
+    $nieuweCategorie = executeQueryNoFetch("INSERT INTO categorie VALUES (?, ?)", [
+        $categorie['categorieNaam'], 
+        $categorie['superId']
+    ]);
 }
 ?>

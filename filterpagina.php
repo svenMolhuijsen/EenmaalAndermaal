@@ -20,16 +20,16 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
 <div class="row" id="filterpagina">
         <div class="column">
             <h2 class="float-left">Uw Zoekresultaten: </h2>
-            <form method="get" class="float-right" action="filterpagina.php">
-                <label for="sortering">Filter op: </label>
-                <select id="sortering" style="width: 100%" name="sorterenOp" style="width:20%">
-                    <option value="null">Sorteren op:</option>
-                    <option value="verkoopPrijs ASC">Prijs Oplopend:</option>
-                    <option value="verkoopPrijs DSC">Prijs Aflopend:</option>
-                    <option value="Date ACS">Datum Aflopend:</option>
-                    <option value="Date DCS">Meest Recente:</option>
-                </select>
-            </form>
+            <!--            <form method="get" class="float-right" action="filterpagina.php">-->
+            <!--                <label for="sortering">Filter op: </label>-->
+            <!--                <select id="sortering" style="width: 100%" name="sorterenOp" style="width:20%">-->
+            <!--                    <option value="null">Sorteren op:</option>-->
+            <!--                    <option value="verkoopPrijs ASC">Prijs Oplopend:</option>-->
+            <!--                    <option value="verkoopPrijs DSC">Prijs Aflopend:</option>-->
+            <!--                    <option value="Date ACS">Datum Aflopend:</option>-->
+            <!--                    <option value="Date DCS">Meest Recente:</option>-->
+            <!--                </select>-->
+            <!--            </form>-->
         </div>
     <aside class="column small-3">
             <h3> Filter op: </h3>
