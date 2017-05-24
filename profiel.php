@@ -28,39 +28,39 @@ $lopendeBiedingen = executeQuery("SELECT titel, beschrijving, verkoopPrijs from 
                                 
                 <div class="columns small-6">
                     <h5>Gebruikersnaam en wachtwoord</h5><hr>
-                    <button  id="showEditFormContact"  type="button" class = "button hollow tiny">Edit</button>
+                    <button  id="showInlogGegevens"  type="button" class = "button hollow tiny">Edit</button>
                     <?php echo('<p>Gebruikersnaam: '.$user->getGebruikersnaam().'</p>'); echo('<p>Wachtwoord:'.$user->getWachtwoord().'<p>');?>
-                    <input id="editWachtwoord" type="password" placeholder="New Password" style="width: 300px; ">
+                    <input class="editInlogGegevens" id="editWachtwoord" type="password" placeholder="New Password" style="width: 300px; display:none;">
                 </div>
 
                 <div class="columns small-6">
                     <h5>Naam en geboortedatum</h5><hr>
-                    <button  id="showEditFormContact"  type="button" class = "button hollow tiny">Edit</button>
+                    <button  id="showPersoonsgegevens"  type="button" class = "button hollow tiny">Edit</button>
                     <?php echo('<p>Naam: '.$user->getVoornaam().' '.$user->getAchternaam().'</p>');?>
-                    <input id="editNaam" type="text" placeholder"Voornaam" style="width:300px;">
+                    <input class="editPersoonsgegevens" id="editNaam" type="text" placeholder"Voornaam" style="width:300px;display:none;">
                     <?php echo('<p>Geboortedatum: '.$user->getGeboortedatum().'</p>'); ?>
-                    <input id="editGeboortedatum" type="date" style="width:300px;">
+                    <input class="editPersoonsgegevens" id="editGeboortedatum" type="date" style="width:300px;display:none;">
                 </div>
             </div>
             <div class="row small-up-1 medium-up-2">
             <div class="columns small-6">
                 <h5>Adres</h5><hr>
-                    <button id="showEditFormContact"  type="button" class="button tiny hollow">Edit</button>
+                    <button id="showAdres"  type="button" class="button tiny hollow">Edit</button>
                     <?php echo('<p>Provincie: '.$user->getProvincie().'</p>');
                     echo('<p>Plaats: '.$user->getPlaatsNaam().'</p>');
                     echo('<p>Straat :'.$user->getStraatnaam().' '.$user->getHuisnummer().'</p>');
                     ?>
-                    <input id = "editProvincie" type="text" placeholder = "Provincie" style = "width: 300px;">
-                    <input id = "editPlaats" type="text" placeholder = "Plaats"  style = "width: 300px;">
-                    <input id = "editStraat" type="text" placeholder = "Straat"  style = "width: 300px;">
-                    <input id = "editHuisnummer" type="text" placeholder = "Huisnummer" style = "width: 300px;">
+                    <input class="editAdres" id="editProvincie" type="text" placeholder = "Provincie" style = "width: 300px;display:none;">
+                    <input class="editAdres" id = "editPlaats" type="text" placeholder = "Plaats"  style = "width: 300px;display:none;">
+                    <input class="editAdres" id = "editStraat" type="text" placeholder = "Straat"  style = "width: 300px;display:none;">
+                    <input class="editAdres" id = "editHuisnummer" type="text" placeholder = "Huisnummer" style = "width: 300px;display:none;">
             </div>
 
             <div class="columns small-6">
                 <h5>Jouw contact gegevens</h5><hr>
-                <button  id="showEditFormContact"  type="button" class = "button hollow tiny">Edit</button>
+                <button  id="showContactgegevens"  type="button" class = "button hollow tiny">Edit</button>
                 <?php echo('<p>Telefoonnummer: '.$user->getTelefoonnmr().'</p>'); ?>
-                <input id = "editTelefoonnummer" type="text" placeholder = "Telefoonnmr" style = "width: 300px;">
+                <input class="editContactgegevens" id = "editTelefoonnummer" type="text" placeholder = "Telefoonnmr" style = "width: 300px;display:none;">
             </div>
             </div>
             <hr>
@@ -109,7 +109,18 @@ $lopendeBiedingen = executeQuery("SELECT titel, beschrijving, verkoopPrijs from 
         $('#editWachtwoord').show());
     });*/
 
-
+    $('#showInlogGegevens').click(function(){
+        $('.editInlogGegevens').css("display", "block");
+    });
+    $('#showPersoonsgegevens').click(function(){
+        $('.editPersoonsgegevens').css("display", "block");
+    });
+    $('#showAdres').click(function(){
+        $('.editAdres').css("display", "block");
+    });
+    $('#showContactgegevens').click(function(){
+        $('.editContactgegevens').css("display", "block");
+    });
 
     $('#submitChanges').click(function () {
 
@@ -142,3 +153,5 @@ $lopendeBiedingen = executeQuery("SELECT titel, beschrijving, verkoopPrijs from 
 <?php
 include("php/layout/footer.php")
 ?>
+</body>
+</html>
