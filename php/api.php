@@ -52,6 +52,9 @@ if (!empty($_GET['action'])) {
         case 'addCategorieToDatabase':
             nieuweCategorieToevoegen($_POST);
             break;
+        case 'AanpassenGegevens':
+            pasgegevensaan($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -341,6 +344,24 @@ function getLanden()
     $Land = executeQuery("SELECT  * FROM landen", null);
     return $Land;
 }
+
+function pasgegevensaan($gegevens){
+$gebruikersnaam = "admul";/*
+$user = new User($gebruikersnaam);
+$user->setWachtwoord($gegevens['NEWpassword']);
+$user->setVoornaam($gegevens['NEWname']);
+$user->setGeboortedatum($gegevens['NEWbirthday']);*/
+executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?",[$gegevens['NEWpassword'] ,$gebruikersnaam]);
+executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $gegevens['NEWname'] ,$gebruikersnaam] );
+    executeQuery("UPDATE gebruikers SET geboortedatum ? WHERE gebruikersNaam = ?",[$gegevens['NEWgeboortedatum'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?",[$gegevens['NEWprovincie'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWplaats'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWstraat'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?",[$gegevens['NEWhuisnummer'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+}
+
+
 
 function nieuweCategorieToevoegen($categorie){
     var_dump($categorie);
