@@ -52,6 +52,9 @@ if (!empty($_GET['action'])) {
         case 'addCategorieToDatabase':
             nieuweCategorieToevoegen($_POST);
             break;
+        case 'AanpassenGegevens':
+            pasgegevensaan($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -190,7 +193,6 @@ OPTION (MAXRECURSION 0)
     stuurTerug($result);
 
 }
-
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
@@ -287,30 +289,28 @@ function getVeilingInfo($data)
 }
 
 //veiling sluiten
-function sluitVeiling($data)
-{
+function sluitVeiling($data){
     $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
     $today = date("Y-m-d");
-    if ($veiling["veilingGestopt"]) {
-        return;
-    } else {
-        if ($veiling["eindDatum"] < $today) {
+    if($veiling["veilingGestopt"]){
+       return;
+    }else{
+        if($veiling["eindDatum"] < $today){
             setVeilingGestopt($veiling);
             verzendEmail($veiling);
-        } else {
+        }else{
             return;
         }
     }
 }
 
 //verzenden Email
-function verzendEmail($data)
-{
+function verzendEmail($data){
     $to = "sinke.carsten95@gmail.com";
     $subject = "verzendEmail";
     $txt = "Hello world!";
     $headers = "From: info@EenmaalAndermaal.nl";
-    mail($to, $subject, $txt, $headers);
+    mail($to,$subject,$txt,$headers);
 }
 
 
@@ -341,7 +341,28 @@ function getLanden()
     return $Land;
 }
 
+function pasgegevensaan($gegevens){
+$gebruikersnaam = "admul";/*
+$user = new User($gebruikersnaam);
+$user->setWachtwoord($gegevens['NEWpassword']);
+$user->setVoornaam($gegevens['NEWname']);
+$user->setGeboortedatum($gegevens['NEWbirthday']);*/
+executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?",[$gegevens['NEWpassword'] ,$gebruikersnaam]);
+executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $gegevens['NEWname'] ,$gebruikersnaam] );
+    executeQuery("UPDATE gebruikers SET geboortedatum ? WHERE gebruikersNaam = ?",[$gegevens['NEWgeboortedatum'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?",[$gegevens['NEWprovincie'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWplaats'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWstraat'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?",[$gegevens['NEWhuisnummer'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+}
+
+
+
 function nieuweCategorieToevoegen($categorie){
-    var_dump($categorie);
+    $nieuweCategorie = executeQueryNoFetch("INSERT INTO categorie VALUES (?, ?)", [
+        $categorie['categorieNaam'], 
+        $categorie['superId']
+    ]);
 }
 ?>
