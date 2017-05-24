@@ -30,13 +30,31 @@
     }
   }
   .veilingen {
+    position: relative;
     .veiling {
-      img {
+      .inner {
+        height: 100%;
+        border-bottom: 30px solid white;
+        background: lighten($secondary-light, 10%);
+      }
+      .button {
+        position: absolute;
+        overflow: hidden;
+        padding: 0;
+        height: 0;
+        margin: 0;
+        border: none;
+        top: -50px;
+        left: 0;
+      }
+      .image {
         width: 100%;
-        max-height: 300px;
+        height: 150px;
+        background-size: cover;
+        background-repeat: no-repeat;
       }
       .omschrijving {
-        background: $secondary-light;
+        position: relative;
         padding: 10px;
         .titel {
           color: $secondary;
@@ -45,9 +63,17 @@
         }
         .bod {
           font-weight: bolder;
+          font-size: 18px;
+        }
+
+      }
+      &:hover {
+        .button {
+          overflow: visible;
+          padding: 15px;
+          height: 50px;
         }
       }
-
     }
   }
 }
