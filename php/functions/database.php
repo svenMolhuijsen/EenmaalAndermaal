@@ -25,6 +25,7 @@ function executeQueryNoFetch($query, $data = []){
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $pdo->prepare("$query");
         $stmt->execute($data);
+        return ['status' => 'success', 'code' => 0];
     } catch (PDOException $e) {
         return ['status' => 'error', 'code' => 2, 'message' => "Er ging iets fout bij uitvoeren van query: " . $query . $e->getMessage()];
     }
