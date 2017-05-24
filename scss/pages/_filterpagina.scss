@@ -30,9 +30,10 @@
     }
   }
   .veilingen {
-    position: relative;
+
     .veiling {
       .inner {
+        position: relative;
         height: 100%;
         border-bottom: 30px solid white;
         background: lighten($secondary-light, 10%);
@@ -52,6 +53,8 @@
         height: 150px;
         background-size: cover;
         background-repeat: no-repeat;
+        background-position: center;
+
       }
       .omschrijving {
         position: relative;
@@ -62,17 +65,26 @@
           margin-bottom: 10px;
         }
         .bod {
+
           font-weight: bolder;
-          font-size: 18px;
+          font-size: 25px;
         }
 
       }
+
       &:hover {
         .button {
           overflow: visible;
           padding: 15px;
           height: 50px;
         }
+      }
+      .clock {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        text-align: center;
+        font-size: 30px
       }
     }
   }
