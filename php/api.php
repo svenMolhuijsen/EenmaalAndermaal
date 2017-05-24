@@ -312,11 +312,42 @@ function getLanden()
     $Land = executeQuery("SELECT  * FROM landen", null);
     return $Land;
 }
+function checkVeilingenInCategorie($categorieId){
+    $veiling = executeQuery("SELECT count(*) FROM veiling WHERE categorieId = ?", [$categorieId]);
+    //var_dump($veiling);
+
+    if($veiling > 0){
+        print('Er zitten veilingen in deze categorie');
+        return true;
+    }else{
+        print('Er zitten GEEN veilingen in deze categorie');
+        return false;
+    }
+}
 
 function nieuweCategorieToevoegen($categorie){
-    $nieuweCategorie = executeQueryNoFetch("INSERT INTO categorie VALUES (?, ?)", [
-        $categorie['categorieNaam'], 
-        $categorie['superId']
+
+    if(checkVeilingenInCategorie($categorie["superId"])){
+        executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId)VALUES('Overige', ?)", [$categorie["superId"]]);
+
+        $overigSuperId = executeQuery("SELECT categorieId FROM categorie WHERE superId = ? AND categorieNaam = 'Overige'",[$categorie["superId"]]);
+
+        executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE categorieId = ?", [$overigSuperId, $categorie["superId"]]);
+
+       voegCategorieToe($categorie);
+
+       var_dump($overigSuperId);
+       var_dump($categorie["superId"]);
+    }
+    else {
+        //voegCategorieToe($categorie);
+    }
+}
+
+function voegCategorieToe($categorie){
+    executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES (?, ?)", [
+        $categorie["categorieNaam"],
+        $categorie["superId"]
     ]);
 }
 ?>
