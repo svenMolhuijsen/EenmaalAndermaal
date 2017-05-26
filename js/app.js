@@ -290,8 +290,8 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
         if (res.code == 0) {
-            $select = $("<select data-superid='" + category + "' name=''></select>");
-            $($select).append("<option selected value='" + category + "'>Categorie selecteren</option>");
+            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='"+category+"' required></select>");
+            $($select).append("<option value='" + category + "' selected disabled>Categorie selecteren</option>");
 
             $.each(res.data, function (index, item) {
                 if (selected == item["categorieId"]) {

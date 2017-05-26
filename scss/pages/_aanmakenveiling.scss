@@ -1,5 +1,17 @@
 .aanmakenveiling {
+  h4, h5 {
+    margin-bottom: 0;
+  }
+
   .titel {
     margin: 5% auto 0 auto;
+  }
+
+  .validationError {
+    color: red;
+  }
+
+  #omschrijving {
+    height: 218px;
   }
 }

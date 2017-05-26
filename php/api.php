@@ -317,15 +317,23 @@ function verzendEmail($data)
 
 //registreren van veiling
 function aanmakenveiling($veiling){
-    $veiling['verkoperGebruikersnaam'] = "((marion))";
+    $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
     $veiling['koperGebruikersnaam'] = null;
     $veiling['beginDatum'] = date("Y-m-d H:m:s");
     $veiling['veilingGestopt'] = false;
     $veiling['categorieId'] = intval($veiling['categorieId']);
     $veiling['startPrijs'] = intval($veiling['startPrijs']);
     $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
+    $veiling['betalingswijze'] = 'IDEAL';
+    $veiling['verzendwijze'] = 'POSTNL';
+    foreach($veiling as $key => $value){
+        if($veiling[$key] == ""){
+            $veiling[$key] = null;
+        }
+    }
 
     var_dump($veiling);
+
     $superVeiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
         $veiling['titel'], $veiling['beschrijving'], $veiling['categorieId'], $veiling['postcode'],
         $veiling['land'], $veiling['verkoperGebruikersnaam'], $veiling['koperGebruikersnaam'],
@@ -334,6 +342,8 @@ function aanmakenveiling($veiling){
         $veiling['betalingswijze'], $veiling['verzendwijze'], $veiling['beginDatum'],
         $veiling['eindDatum'], $veiling['conditie'], $veiling['thumbNail'], $veiling['veilingGestopt']
     ]);
+
+    var_dump($superVeiling);
 }
 
 function getLanden()

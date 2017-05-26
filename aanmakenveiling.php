@@ -5,12 +5,7 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
-//$verkoper = false;
-//if(! $_SESSION["gebruiker"]->getVerkoper()){
-    //header('Location: http://localhost/EenmaalAndermaal/index.php');
-    //exit();
-//}
-
+$_SESSION['gebruiker'] = new User("((marion))");
 ?>
 <main>
     <div class="aanmakenveiling">
@@ -18,62 +13,63 @@ include("php/layout/breadcrumbs.php");
         <h1><strong>Aanmaken veiling</strong></h1>
     </div>
     <hr>
-    <form action="php/api.php?action=MaakVeilingAan" method="post">
+    <form id="veilingForm">
         <div class="row">
             <div class="large-6 columns float-left">
                 <h4><strong>Titel</strong></h4>
-                <input id="titel" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z]" />
+                <input id="titel" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z0-9]+" required/>
 
-                <h4 class="titel"><strong>Prijs</strong></h4>
-                <input id="prijs" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]"/>
+                <h4><strong>Prijs</strong></h4>
+                <input id="prijs" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]+" required/>
 
-                <h4 class="titel"><strong>Einddatum van de veiling</strong></h4>
-                <input title="einddatum" id="einddatum" name="einddatum" type="date" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" min="<?php date(); ?>">
-            </div>
-            <div class="large-6 columns float-right">
-                <h4><strong>Omschrijving</strong></h4>
-                <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text"></textarea>
+                <h4><strong>Einddatum van de veiling</strong></h4>
+                <input id="einddatum" name="einddatum" type="date" placeholder="Einddatum" required/>
 
-                <h4 class="titel"><strong>Conditie</strong></h4>
-                <input id="conditie" name="conditie" placeholder="Conditie" pattern="[A-Za-z]" type="text"/>
+                <h4><strong>Conditie</strong></h4>
+                <select title="conditie" name="conditie" id="conditie">
+                    <option value="" selected disabled>Kies een conditie</option>
+                    <?php
+                    $condities= executeQuery("SELECT distinct conditie FROM veiling WHERE conditie != ''");
+                    for($i = 0; $i < count($condities['data']) ; $i++){
+                        $conditie = $condities['data'][$i];
+                        echo('<option value= '.$conditie["conditie"]. '>'.$conditie["conditie"].'</option>');
+                    }
+                    ?>
+                </select>
 
-                <h4 class="titel"><strong>Categorie</strong></h4>
+                <h4><strong>Categorie</strong></h4>
                 <div id="categorie">
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="large-6 columns float-left">
-                <form action="php/functions/upload.php" method="post" enctype="multipart/form-data">
-                    <label for="hoofdfoto" class="button">Upload je Hoofdfoto</label>
+            <div class="large-6 columns float-right">
+                <h4><strong>Omschrijving</strong></h4>
+                <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text" required></textarea>
+
+                <div action="php/functions/upload.php" method="post" enctype="multipart/form-data">
+                    <label for="hoofdfoto" class="button">Upload je Hoofdfoto</label for="hoofdfoto">
                     <input type="file" id="hoofdfoto" class="show-for-sr" onchange="readURL1(this);">
-                </form>
+                </div>
+                <div class="small-up-5 row" id="imgGallery">
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="large-6 columns float-left"
-                <img id="Hoofdfoto" src="#" alt="Uw Afbeelding"/>
-            </div>
-        </div>
-        <hr>
         <div class="row">
             <div class="large-6 columns float-left">
-                <fieldset class="fieldset">
-                <legend><strong>Verkoopadres</strong></legend>
+                <h4><strong>Verkoopadres</strong></h4>
                 <div class="row">
                     <div class="large-6 columns">
                         <h5>Straat</h5>
-                        <input id="straat" name="straat" type="text" placeholder="Straat" pattern="[A-Za-z]"/>
+                        <input id="straat" name="straat" type="text" placeholder="Straat" pattern="[A-Za-z]+"/>
 
                         <h5 class="titel">Plaats</h5>
-                        <input id="plaats" name="plaats" type="text" placeholder="Plaats" pattern="[A-Za-z]"/>
+                        <input id="plaats" name="plaats" type="text" placeholder="Plaats" pattern="[A-Za-z]+"/>
 
                         <h5 class="titel">Land</h5>
-                        <select title="land" name="land" id="land">
+                        <select title="land" name="land" id="land" required>
+                            <option value="" disabled selected>Kies een land</option>
                             <?php
                             $landen= executeQuery("SELECT land FROM landen"); //alle waardes uit de tabel komt in landen[]
-                            for($i=0; $i< count($landen['data']) ; $i++){ //i is kleiner dan aantal landen
+                            for($i = 0; $i < count($landen['data']) ; $i++){ //i is kleiner dan aantal landen
                                 $land = $landen['data'][$i]; //pompt de huidige waarde van landen[i] in land
                                 echo('<option value= '.$land["land"]. '>'.$land["land"].'</option>');
                             }
@@ -82,16 +78,15 @@ include("php/layout/breadcrumbs.php");
                     </div>
                     <div class="large-6 columns">
                         <h5>Huisnummer</h5>
-                        <input id="huisnummer" name="huisnummer" type="text" placeholder="Huisnummer" pattern="[0-9]"/>
+                        <input id="huisnummer" name="huisnummer" type="number" placeholder="Huisnummer"/>
 
                         <h5 class="titel">Provincie</h5>
-                        <input id="provincie" name="provincie" type="text" placeholder="Provincie" pattern="[A-Za-z]"/>
+                        <input id="provincie" name="provincie" type="text" placeholder="Provincie" pattern="[A-Za-z]+"/>
 
                         <h5 class="titel">Postcode</h5>
-                        <input id="postcode" name="postcode" type="text" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}"/>
+                        <input id="postcode" name="postcode" type="text" placeholder="Postcode" pattern="[0-9a-zA-Z]+"/>
                     </div>
                 </div>
-                </fieldset>
             </div>
         </div>
         <div class="row column">
@@ -103,24 +98,69 @@ include("php/layout/breadcrumbs.php");
 include("php/layout/footer.php");
 ?>
 <script>
+    $veilingForm = $('#veilingForm');
+
+    $veilingForm.validate({
+        errorClass: 'validationError',
+        errorElement: 'strong',
+        focusCleanup: true,
+        focusInvalid: false,
+        highlight: function(element){
+            $(element).addClass('is-invalid-input validationError');
+        },
+        unhighlight: function(element){
+            $(element).removeClass('is-invalid-input validationError');
+        },
+        submitHandler: function(){submit()},
+        messages: {
+            land: "Dit is een verplicht veld."
+        },
+        errorPlacement: function(error, element) {
+            if(element.hasClass('categorieLijst')){
+                if(element.parent().prev().is('h4')){
+                    error.appendTo(element.parent().prev());
+                }
+                else{
+                    error.appendTo(element.parent().parent().prev());
+                }
+            }
+            else {
+                error.appendTo(element.prev());
+            }
+
+            error.css('font-size', '70%');
+            error.css('margin-bottom', '0');
+            error.css('position', 'absolute');
+            error.parent().css('position', 'relative');
+            error.css('bottom', '0');
+            error.css('right', '0');
+        },
+        rules: {
+            einddatum: {
+                date: true
+            }
+        }
+    });
+
+    $imgGallery = $('#imgGallery');
 
     function readURL1(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#Hoofdfoto')
-                    .attr('src', e.target.result)
-                    .width(200)
-                    .height(250);
+                if($imgGallery.find('img').length > 4) {
+                    $imgGallery.find('img').first().remove();
+                }
+
+                $imgGallery.append('<img class="column" src="' + e.target.result + '" alt="image">');
             };
 
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    $('#add-Veiling').click(function () { //als je op de knop drukt voert ajax de executequerry uit
-
+    function submit(){
         var veiling = {
             titel: $('#titel').val(),
             beschrijving: $('#omschrijving').val(),
@@ -133,8 +173,6 @@ include("php/layout/footer.php");
             plaatsnaam: $('#plaats').val(),
             straatnaam: $('#straat').val(),
             huisnummer: $('#huisnummer').val(),
-            betalingswijze: 'IDEAL',
-            verzendwijze: 'POSTNL',
             eindDatum: $('#einddatum').val(),
             conditie: $('#conditie').val(),
             thumbNail: null
@@ -148,9 +186,8 @@ include("php/layout/footer.php");
             complete: function(){
                 alert('Veiling toevoegen geslaagd!');
             }
-            }
         });
-    });
+    }
 </script>
 </body>
 </html>
