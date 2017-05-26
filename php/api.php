@@ -52,6 +52,9 @@ if (!empty($_GET['action'])) {
         case 'addCategorieToDatabase':
             nieuweCategorieToevoegen($_POST);
             break;
+        case 'AanpassenGegevens':
+            pasgegevensaan($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -107,7 +110,6 @@ function search()
     $minprice = (float)$_POST['minprice'];
     $maxprice = (float)$_POST['maxprice'];
     $category = (int)$_POST['category'];
-
     if ($category == null) {
         $result = executeQuery(
             ";with category_tree as 
@@ -121,7 +123,7 @@ function search()
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP(100) V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 100 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -133,7 +135,7 @@ FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY hoogsteBieding DESC
+ORDER BY hoogsteBieding DESC LIMIT 10
 ", [$searchterm, $category, $minprice, $maxprice]);
 
     } else {
@@ -150,7 +152,7 @@ ORDER BY hoogsteBieding DESC
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP(100) V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -191,7 +193,6 @@ OPTION (MAXRECURSION 0)
     stuurTerug($result);
 
 }
-
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
@@ -287,34 +288,6 @@ function getVeilingInfo($data)
     echo json_encode(["gebruiker" => $_SESSION['gebruiker']->toArray(), "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
 
-//veiling sluiten
-function sluitVeiling($data)
-{
-    $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]);
-    $today = date("Y-m-d");
-    if ($veiling["veilingGestopt"]) {
-        return;
-    } else {
-        if ($veiling["eindDatum"] < $today) {
-            setVeilingGestopt($veiling);
-            verzendEmail($veiling);
-        } else {
-            return;
-        }
-    }
-}
-
-//verzenden Email
-function verzendEmail($data)
-{
-    $to = "sinke.carsten95@gmail.com";
-    $subject = "verzendEmail";
-    $txt = "Hello world!";
-    $headers = "From: info@EenmaalAndermaal.nl";
-    mail($to, $subject, $txt, $headers);
-}
-
-
 //registreren van veiling
 function aanmakenveiling($veiling){
     $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
@@ -351,8 +324,60 @@ function getLanden()
     $Land = executeQuery("SELECT  * FROM landen", null);
     return $Land;
 }
+function checkVeilingenInCategorie($categorieId){
+    $veiling = executeQuery("SELECT count(*) FROM veiling WHERE categorieId = ?", [$categorieId]);
+    //var_dump($veiling);
+
+    if($veiling > 0){
+        print('Er zitten veilingen in deze categorie');
+        return true;
+    }else{
+        print('Er zitten GEEN veilingen in deze categorie');
+        return false;
+    }
+}
+
+function pasgegevensaan($gegevens){
+$gebruikersnaam = "admul";/*
+$user = new User($gebruikersnaam);
+$user->setWachtwoord($gegevens['NEWpassword']);
+$user->setVoornaam($gegevens['NEWname']);
+$user->setGeboortedatum($gegevens['NEWbirthday']);*/
+executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?",[$gegevens['NEWpassword'] ,$gebruikersnaam]);
+executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $gegevens['NEWname'] ,$gebruikersnaam] );
+    executeQuery("UPDATE gebruikers SET geboortedatum ? WHERE gebruikersNaam = ?",[$gegevens['NEWgeboortedatum'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?",[$gegevens['NEWprovincie'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWplaats'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWstraat'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?",[$gegevens['NEWhuisnummer'] ,$gebruikersnaam]);
+    executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+}
+
+
 
 function nieuweCategorieToevoegen($categorie){
-    var_dump($categorie);
+
+    if(checkVeilingenInCategorie($categorie["superId"])){
+        executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId)VALUES('Overige', ?)", [$categorie["superId"]]);
+
+        $overigSuperId = executeQuery("SELECT categorieId FROM categorie WHERE superId = ? AND categorieNaam = 'Overige'",[$categorie["superId"]]);
+
+        executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE categorieId = ?", [$overigSuperId, $categorie["superId"]]);
+
+       voegCategorieToe($categorie);
+
+       var_dump($overigSuperId);
+       var_dump($categorie["superId"]);
+    }
+    else {
+        //voegCategorieToe($categorie);
+    }
+}
+
+function voegCategorieToe($categorie){
+    executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES (?, ?)", [
+        $categorie["categorieNaam"],
+        $categorie["superId"]
+    ]);
 }
 ?>

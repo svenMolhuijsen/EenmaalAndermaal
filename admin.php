@@ -51,7 +51,7 @@ include("php/layout/footer.php")
     $('#addCategorieToDatabase').click(function () {
         var categorie = {
             categorieNaam: $('#categorieNaam').val(),
-            superId: $('#categorien').children().last().prev().find(":selected").val()
+            superId: $('.categorien').children().last().prev().find(":selected").val()
         };
 
         $.ajax({

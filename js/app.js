@@ -315,7 +315,7 @@ function zoeken() {
     var minBedrag = $('#sliderOutput1').val();
     var maxBedrag = $('#sliderOutput2').val();
     var searchterm = $('#searchterm').val();
-    var categorie = currCategory
+    var categorie = currCategory;
 
     $.post("/php/api.php?action=search", {
         category: categorie,
@@ -328,16 +328,21 @@ function zoeken() {
         $(".veilingen  .row").empty();
         if (res.code == 0) {
             $.each(res.data, function (index, item) {
-                $(".veilingen .row").append('<div class="column small-6 medium-4 large-3 veiling" data-equalizer-watch>' +
-                    '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><img src="http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + '" alt=""> ' +
-                    '<div class="omschrijving">' +
+                $(".veilingen .row").append('<div class="column small-6 medium-4 veiling" data-equalizer-watch><div class="inner">' +
+                    '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
+                    '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
                     '<div class="titel">' + item["titel"] + '</div> ' +
                     '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
-                    '<div class="eindtijd">' + item["eindDatum"] + '</div> ' +
-                    '</a></div></div>');
-            })
+                    '<br></div> ' +
+                    '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
+                createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);
+
+            });
+
+
             $('.veilingen  .row').foundation('destroy');
             new Foundation.Equalizer($('.veilingen  .row')).getHeightsByRow();
+
 
         } else {
             $(".veilingen .row").append('<div class="column veiling" data-equalizer-watch>' +
@@ -349,6 +354,36 @@ function zoeken() {
         }
     });
 }
+function createCountdown($target, countDownDate) {
+
+    setInterval(function () {
+
+        // Get todays date and time
+        var now = new Date().getTime();
+        console.log(now);
+        // Find the distance between now an the count down date
+        var distance = new Date(countDownDate).getTime() - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="timer"
+        $target.html(days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ");
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("timer").innerHTML = "VERLOPEN";
+            document.getElementById("expired").innerHTML = "";
+            sentEmail();
+        }
+    }, 1000)
+}
+
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }

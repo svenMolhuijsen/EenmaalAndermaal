@@ -1,7 +1,8 @@
 <?php
-
 include("php/core.php");
+
 $veilingId = stripInput($_GET["veilingId"]);
+
 if(checkForEmpty($veilingId)){
 
     $veiling = Veiling::existingVeiling($veilingId);
@@ -39,6 +40,33 @@ if(checkForEmpty($veilingId)){
         return 0.5;
     }
 };
+//verzenden Email
+function verzendEmail(){
+    $to = "dewildtluuk@gmail.com";
+    $subject = "verzendEmail";
+    $txt = "Beste iConcept medeweker,</br> </br>
+            ";
+    $headers = "From: info@EenmaalAndermaal.nl";
+    mail($to,$subject,$txt,$headers);
+}
+//veiling sluiten
+function sluitVeiling($data){
+    $today = date("Y-m-d");
+    if($data->getVeilingGestopt()){
+        echo("veiling is al gesloten");
+        return;
+    }else{
+        if($data->getEindDatum() < $today){
+            $data->setVeilingGestopt(1);
+            verzendEmail();
+            echo("veiling is beeindigd");
+        }else{
+            echo("veiling is nog niet afgelopen");
+            return;
+        }
+    }
+}
+sluitVeiling($veiling);
 
 $pagename = 'veilingPagina - '.$veiling->getTitel();
 
@@ -122,7 +150,7 @@ include("php/layout/breadcrumbs.php");
                         for ($i = 0; $i < count($boden['data']); $i++) {
                             echo('
                         <tr>
-                            <td>' . $boden['data'][$i]["email"] . '</td>
+                            <td>' . $boden['data'][$i]["gebruikersnaam"] . '</td>
                             <td>€' . $boden['data'][$i]["biedingsBedrag"] . '</td>
                             <td>' . substr_replace(date("d-m-Y", strtotime(substr($boden['data'][$i]["biedingsTijd"], 0, 10))), "", 6, 2) . '</td>
                         </tr>
@@ -183,7 +211,7 @@ $(document).ready(function(){
         // If the count down is over, write some text
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("timer").innerHTML = "EXPIRED";
+            document.getElementById("timer").innerHTML = "VERLOPEN";
             document.getElementById("expired").innerHTML = "";
             sentEmail();
         }
