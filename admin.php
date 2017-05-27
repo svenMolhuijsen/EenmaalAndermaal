@@ -64,8 +64,6 @@ include("php/layout/footer.php")
             }
         });
     });
-
-
 </script>
 </body>
 </html>
