@@ -55,6 +55,9 @@ if (!empty($_GET['action'])) {
         case 'AanpassenGegevens':
             pasgegevensaan($_POST);
             break;
+        case 'uploadFile':
+            uploadFile();
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -293,17 +296,17 @@ function aanmakenveiling($veiling){
     $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
     $veiling['koperGebruikersnaam'] = null;
     $veiling['beginDatum'] = date("Y-m-d H:m:s");
-    $veiling['veilingGestopt'] = false;
     $veiling['categorieId'] = intval($veiling['categorieId']);
     $veiling['startPrijs'] = intval($veiling['startPrijs']);
     $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
     $veiling['betalingswijze'] = 'IDEAL';
     $veiling['verzendwijze'] = 'POSTNL';
     foreach($veiling as $key => $value){
-        if($veiling[$key] == ""){
+        if(empty($veiling[$key])){
             $veiling[$key] = null;
         }
     }
+    $veiling['veilingGestopt'] = false;
 
     var_dump($veiling);
 
@@ -317,6 +320,32 @@ function aanmakenveiling($veiling){
     ]);
 
     var_dump($superVeiling);
+}
+
+function uploadFile()
+{
+    $data = array();
+
+    $error = false;
+    $files = array();
+
+    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/img/uploads/';
+
+    foreach($_FILES as $file)
+    {
+        if(move_uploaded_file($file['tmp_name'], $uploaddir.basename($file['name'])))
+        {
+            $files[] = $uploaddir.$file['name'];
+        }
+        else
+        {
+            $error = true;
+        }
+    }
+
+    $data = ($error) ? array('error' => 'There was an error uploading your files') : array('file' => basename($files[0]));
+
+    echo json_encode($data);
 }
 
 function getLanden()
@@ -352,8 +381,6 @@ executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $g
     executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?",[$gegevens['NEWhuisnummer'] ,$gebruikersnaam]);
     executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
 }
-
-
 
 function nieuweCategorieToevoegen($categorie){
 

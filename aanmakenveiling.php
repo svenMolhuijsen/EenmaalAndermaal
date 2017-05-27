@@ -41,14 +41,12 @@ $_SESSION['gebruiker'] = new User("((marion))");
                 <div id="categorie">
                 </div>
             </div>
-            <div class="large-6 columns float-right">
+            <div-- class="large-6 columns float-right">
                 <h4><strong>Omschrijving</strong></h4>
                 <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text" required></textarea>
 
-                <div action="php/functions/upload.php" method="post" enctype="multipart/form-data">
-                    <label for="hoofdfoto" class="button">Upload je Hoofdfoto</label for="hoofdfoto">
-                    <input type="file" id="hoofdfoto" class="show-for-sr" onchange="readURL1(this);">
-                </div>
+                <input type="file" name="fileToUpload" id="fileToUpload" required>
+
                 <div class="small-up-5 row" id="imgGallery">
                 </div>
             </div>
@@ -68,9 +66,9 @@ $_SESSION['gebruiker'] = new User("((marion))");
                         <select title="land" name="land" id="land" required>
                             <option value="" disabled selected>Kies een land</option>
                             <?php
-                            $landen= executeQuery("SELECT land FROM landen"); //alle waardes uit de tabel komt in landen[]
-                            for($i = 0; $i < count($landen['data']) ; $i++){ //i is kleiner dan aantal landen
-                                $land = $landen['data'][$i]; //pompt de huidige waarde van landen[i] in land
+                            $landen= executeQuery("SELECT land FROM landen");
+                            for($i = 0; $i < count($landen['data']) ; $i++){
+                                $land = $landen['data'][$i];
                                 echo('<option value= '.$land["land"]. '>'.$land["land"].'</option>');
                             }
                             ?>
@@ -111,7 +109,7 @@ include("php/layout/footer.php");
         unhighlight: function(element){
             $(element).removeClass('is-invalid-input validationError');
         },
-        submitHandler: function(){submit()},
+        submitHandler: submitFiles,
         messages: {
             land: "Dit is een verplicht veld."
         },
@@ -142,25 +140,44 @@ include("php/layout/footer.php");
         }
     });
 
-    $imgGallery = $('#imgGallery');
+    var files;
 
-    function readURL1(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    $('input[type=file]').on('change', prepareUpload);
 
-            reader.onload = function (e) {
-                if($imgGallery.find('img').length > 4) {
-                    $imgGallery.find('img').first().remove();
-                }
-
-                $imgGallery.append('<img class="column" src="' + e.target.result + '" alt="image">');
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
+    function prepareUpload(event)
+    {
+        files = event.target.files;
     }
 
-    function submit(){
+    function submitFiles(event) {
+        var data = new FormData();
+        $.each(files, function (key, value) {
+            data.append(key, value);
+        });
+
+        $.ajax({
+            url: 'php/api.php?action=uploadFile',
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (data, textStatus, jqXHR) {
+                if (typeof data.error === 'undefined') {
+                    submit(data.file);
+                }
+                else {
+                    console.log('ERRORS: ' + data.error);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('ERRORS: ' + textStatus);
+            }
+        });
+    }
+
+    function submit(filename){
         var veiling = {
             titel: $('#titel').val(),
             beschrijving: $('#omschrijving').val(),
@@ -175,7 +192,7 @@ include("php/layout/footer.php");
             huisnummer: $('#huisnummer').val(),
             eindDatum: $('#einddatum').val(),
             conditie: $('#conditie').val(),
-            thumbNail: null
+            thumbNail: filename
         };
 
         $.ajax({
