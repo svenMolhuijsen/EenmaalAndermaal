@@ -330,7 +330,7 @@ function uploadFile()
 
     $uploadOk = true;
 
-    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/img/upload/';
+    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/upload/';
 
     $prefix = date("ymdhms").rand(0, 999);
 

@@ -16,16 +16,7 @@ if(checkForEmpty($veilingId)){
     session_start();
     //$_SESSION['gebruiker'] = new User('test1@test1.nl');
 
-    $imgdir = 'img/placeholder';
-    $imagesRough = scandir($imgdir);
-
-    for($i = 0; $i < count($imagesRough); $i++){
-        if($imagesRough[$i] == '.' || $imagesRough[$i] == '..'){
-            unset($imagesRough[$i]);
-        }
-    }
-
-    $images = array_values($imagesRough);
+    $images = glob("upload/".$veiling->getPrefix()."*", GLOB_NOSORT);
 
     function bepaalBiedStap($hoogsteBedrag){
         if($hoogsteBedrag > 50){
@@ -90,7 +81,7 @@ include("php/layout/breadcrumbs.php");
             <?php
             echo('<img id="image" src="');
             if(!is_null($images[0])){
-                echo($imgdir.'\\'.$images[0]);
+                echo($images[0]);
             }
             else{
                 echo('http://placehold.it/450x450');
@@ -103,7 +94,7 @@ include("php/layout/breadcrumbs.php");
             <?php
             for($i = 1; $i < count($images) && $i < 5; $i++){
                 echo('<div class="column">');
-                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$imgdir.'\\'.$images[$i].'" alt="altImage">');
+                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$images[$i].'" alt="altImage">');
                 echo('</div>');
             }
             ?>
