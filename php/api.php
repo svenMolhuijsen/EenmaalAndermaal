@@ -301,7 +301,7 @@ function aanmakenveiling($veiling){
     $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
     $veiling['betalingswijze'] = 'IDEAL';
     $veiling['verzendwijze'] = 'POSTNL';
-    foreach($veiling as $key => $value){
+    foreach($veiling as $key){
         if(empty($veiling[$key])){
             $veiling[$key] = null;
         }
@@ -325,7 +325,6 @@ function aanmakenveiling($veiling){
 function uploadFile()
 {
     $data = array();
-
     $error = false;
     $files = array();
 
