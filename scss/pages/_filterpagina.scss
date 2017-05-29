@@ -15,8 +15,6 @@
       line-height: 40px;
       box-shadow: none;
       border: hidden;
-      background: $secondary-light;
-      color: $secondary;
 
     }
     input[type="submit"] {
@@ -34,11 +32,11 @@
     .veiling {
       .inner {
         position: relative;
-        height: 100%;
         border-bottom: 30px solid white;
         background: lighten($secondary-light, 10%);
       }
       .button {
+        transition: 200ms;
         position: absolute;
         overflow: hidden;
         padding: 0;
@@ -65,18 +63,17 @@
           margin-bottom: 10px;
         }
         .bod {
-
           font-weight: bolder;
           font-size: 25px;
         }
 
       }
-
       &:hover {
         .button {
           overflow: visible;
           padding: 15px;
           height: 50px;
+          color: white;
         }
       }
       .clock {
@@ -84,7 +81,9 @@
         width: 100%;
         bottom: 0;
         text-align: center;
-        font-size: 30px
+        font-size: 30px;
+        color: $secondary;
+        height: 35px
       }
     }
   }
