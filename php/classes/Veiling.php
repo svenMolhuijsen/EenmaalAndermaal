@@ -77,7 +77,7 @@ class Veiling
     private
     function update($column, $oldVal, $newVal)
     {
-        return $result = executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
+        return executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
     }
 
     public

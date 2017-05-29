@@ -157,16 +157,6 @@ class User
     }
 
     /**
-     * @param mixed $emailAdres
-     */
-    public
-    function setEmail($email)
-    {
-        $this::update("gebruikersnaam", $this->gebruikersnaam, $gebruikersnaam);
-        $this->gebruikersnaam = $gebruikersnaam;
-    }
-
-    /**
      * @return mixed
      */
     public
