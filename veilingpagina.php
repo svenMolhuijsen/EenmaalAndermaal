@@ -174,9 +174,9 @@ include("php/layout/footer.html");
 ?>
 <script>
 $(document).ready(function(){
-    //
+    ///////////////////////////////////////////////
     //Timer related
-    //
+    ////////////////////////////////////////
     var eindDatum = "<?php echo($veiling->getEindDatum())?>";
     // Set the date we're counting down to
     var countDownDate = new Date(eindDatum).getTime();
@@ -229,9 +229,9 @@ $(document).ready(function(){
     }
 
 
-    //
+    //////////////////////////////////////////////
     //Bieden related
-    //
+    /////////////////////////////////////////////
     var veilingId = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
     var veiling;
     var gebruiker;
@@ -330,6 +330,29 @@ $(document).ready(function(){
         }
         return 0.5;
     }
+});
+
+//////////////////////////////////////////////
+//  Image gallery
+/////////////////////////////////////////////
+
+//Grote image van het product
+$bigImage = $('.veilingImage #image');
+
+//Wisselt de grote image met een alt image via fades
+$('.altImages .column img').on('click', function () {
+    var imageToShow = $(this).attr('src');
+    var fadeLength = 300;
+
+    $(this).fadeOut(fadeLength, function () {
+        $(this).attr('src', $bigImage.attr('src'));
+        $bigImage.attr('src', imageToShow);
+        $(this).fadeIn(fadeLength);
+    });
+
+    $bigImage.fadeOut(fadeLength, function () {
+        $(this).fadeIn(fadeLength);
+    });
 });
 </script>
 </body>
