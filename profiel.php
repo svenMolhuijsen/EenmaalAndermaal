@@ -151,7 +151,7 @@ $lopendeBiedingen = executeQuery("SELECT titel, beschrijving, verkoopPrijs from 
 
 
 <?php
-include("php/layout/footer.php")
+include("php/layout/footer.html")
 ?>
 </body>
 </html>

@@ -22,7 +22,7 @@ $_SESSION['gebruiker'] = new User("((marion))");
                 <h4><strong>Prijs</strong></h4>
                 <input id="prijs" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]+" required/>
 
-                <h4><strong>Einddatum van de veiling</strong></h4>
+                <h4><strong>Einddatum</strong></h4>
                 <input id="einddatum" name="einddatum" type="date" placeholder="Einddatum" required/>
 
                 <h4><strong>Conditie</strong></h4>
@@ -46,9 +46,6 @@ $_SESSION['gebruiker'] = new User("((marion))");
                 <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text" required></textarea>
 
                 <input type="file" name="fileToUpload" id="fileToUpload" required>
-
-                <div class="small-up-5 row" id="imgGallery">
-                </div>
             </div>
         </div>
         <div class="row">
@@ -93,10 +90,27 @@ $_SESSION['gebruiker'] = new User("((marion))");
     </form>
 </main>
 <?php
-include("php/layout/footer.php");
+include("php/layout/footer.html");
 ?>
 <script>
+    var date = new Date();
+    now = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+":"+date.getMilliseconds();
+
+    jQuery.validator.addMethod("greaterThanDate",
+        function(value, element, params) {
+
+            if (!/Invalid|NaN/.test(new Date(value))) {
+                return new Date(value) > params;
+            }
+
+            return isNaN(value) && isNaN(params)
+                || (Number(value) > Number(params));
+        },
+        'Voer een latere datum in.'
+    );
+
     $veilingForm = $('#veilingForm');
+    $imageUploader = $('#fileToUpload');
 
     $veilingForm.validate({
         errorClass: 'validationError',
@@ -111,7 +125,10 @@ include("php/layout/footer.php");
         },
         submitHandler: submitFiles,
         messages: {
-            land: "Dit is een verplicht veld."
+            land: "Dit is een verplicht veld.",
+            eindDatum: {
+                greaterThanDate: "Voer een latere datum in."
+            }
         },
         errorPlacement: function(error, element) {
             if(element.hasClass('categorieLijst')){
@@ -135,7 +152,8 @@ include("php/layout/footer.php");
         },
         rules: {
             einddatum: {
-                date: true
+                date: true,
+                greaterThanDate: date
             }
         }
     });
@@ -164,11 +182,18 @@ include("php/layout/footer.php");
             processData: false,
             contentType: false,
             success: function (data, textStatus, jqXHR) {
-                if (typeof data.error === 'undefined') {
-                    submit(data.file);
-                }
-                else {
-                    console.log('ERRORS: ' + data.error);
+                switch(data.status){
+                    case 'success':
+                        $imageUploader.removeClass('is-invalid-input');
+                        submit(data.file);
+                        break;
+                    case 'error':
+                        console.log(data.message);
+                        break;
+                    case 'userError':
+                        $imageUploader.addClass('is-invalid-input');
+                        alert(data.feedback);
+                        break;
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -190,6 +215,7 @@ include("php/layout/footer.php");
             plaatsnaam: $('#plaats').val(),
             straatnaam: $('#straat').val(),
             huisnummer: $('#huisnummer').val(),
+            beginDatum: now,
             eindDatum: $('#einddatum').val(),
             conditie: $('#conditie').val(),
             thumbNail: filename

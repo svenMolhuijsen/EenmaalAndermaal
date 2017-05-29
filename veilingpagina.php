@@ -178,7 +178,7 @@ else{
 </div>
 <?php
 }
-include("php/layout/footer.php");
+include("php/layout/footer.html");
 ?>
 <script>
 $(document).ready(function(){

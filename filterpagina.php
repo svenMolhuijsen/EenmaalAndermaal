@@ -73,4 +73,4 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
 </div>
 
 
-<?php include("php/layout/footer.php") ?>
+<?php include("php/layout/footer.html") ?>
