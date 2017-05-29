@@ -45,9 +45,10 @@ $_SESSION['gebruiker'] = new User("((marion))");
                 <h4><strong>Omschrijving</strong></h4>
                 <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text" required></textarea>
 
-                <input type="file" name="fileToUpload" id="fileToUpload" required>
+                <input type="file" name="fileToUpload" id="fileToUpload" required multiple>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="large-6 columns float-left">
                 <h4><strong>Verkoopadres</strong></h4>
@@ -185,7 +186,7 @@ include("php/layout/footer.html");
                 switch(data.status){
                     case 'success':
                         $imageUploader.removeClass('is-invalid-input');
-                        submit(data.file);
+                        submit(data.prefix);
                         break;
                     case 'error':
                         console.log(data.message);
