@@ -8,6 +8,5 @@ include("classes/Bieding.php");
 include("functions/database.php");
 include("functions/forms.php");
 
-$user;
 
 include("session.php");
