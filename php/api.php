@@ -325,42 +325,47 @@ function uploadFile()
 {
     $error = false;
     $files = array();
+    $fileStatus = array();
     $feedbacks = array();
+
+    $uploadOk = true;
 
     $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/img/upload/';
 
+    $prefix = date("ymdhms").rand(0, 999);
+
     foreach($_FILES as $file)
     {
-        $uploadOk = true;
         $feedback = array();
-        $toevoeging = date("ymdhms").rand(0, 999);
-        $target_file = $uploaddir.$toevoeging.basename($file['name']);
+        $target_file = $uploaddir.$prefix.basename($file['name']);
         $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif" ) {
-            array_push($feedback, "Only JPG, JPEG, PNG & GIF files are allowed.");
+            array_push($feedback, "Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan.");
             $uploadOk = false;
         }
+
         if ($file["size"] > 500000) {
-            array_push($feedback, "File is too large.");
+            array_push($feedback, "Een bestand is te groot.");
             $uploadOk = false;
         }
 
         if(!empty($feedback)){
             array_push($feedbacks, $feedback);
         }
+    }
 
-        if($uploadOk) {
-            if (move_uploaded_file($file['tmp_name'], $target_file)) {
-                array_push($files, $toevoeging.basename($file['name']));
+    if($uploadOk) {
+        foreach ($_FILES as $file) {
+            if (move_uploaded_file($file['tmp_name'], $uploaddir.$prefix.basename($file['name']))) {
+                array_push($files, $prefix.basename($file['name']));
             } else {
                 $error = true;
             }
         }
     }
 
-    $data = array();
     if($error){
         $data = array('status' => 'error', 'message' => 'There was an error uploading your files');
     }
@@ -369,7 +374,7 @@ function uploadFile()
             $data = array('status' => 'userError', 'feedback' => $feedbacks);
         }
         else {
-            $data = array('status' => 'success', 'file' => basename($files[0]));
+            $data = array('status' => 'success', 'prefix' => $prefix);
         }
     }
 
