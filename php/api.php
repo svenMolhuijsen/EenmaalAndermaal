@@ -403,15 +403,17 @@ function checkVeilingenInCategorie($categorieId){
         var_dump($veiling);
     }
 }
-function pasgegevensaan($gegevens){
-    $gebruikersnaam = "admul";/*
-$user = new User($gebruikersnaam);
-$user->setWachtwoord($gegevens['NEWpassword']);
-$user->setVoornaam($gegevens['NEWname']);
-$user->setGeboortedatum($gegevens['NEWbirthday']);*/
-    if($gegevens['NEWpassword'] != ""){
-        executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam  = ?", [[$gegevens['NEWpassword'], $gebruikersnaam]]);
+
+function pasgegevensaan($gegevens)
+{
+    $gebruikersnaam = "admul";
+    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]);
+    if ($gegevens['NEWpassword'] != "") {
+       if(password_verify($gegevens['OLDpassword'], $fetchPassword['data'])) {
+        $password = password_hash($gegevens['NEWpassword'], PASSWORD_BCRYPT);
+        executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$password, $gebruikersnaam]);
     }
+}
     if($gegevens['NEWprovincie'] != "") {
         executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$gegevens['NEWprovincie'], $gebruikersnaam]);
     }
@@ -427,8 +429,6 @@ $user->setGeboortedatum($gegevens['NEWbirthday']);*/
     if($gegevens['NEWtelefoonnummer'] != ""){
         executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
     }
-
-
 
 }
 
