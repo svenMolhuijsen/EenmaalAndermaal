@@ -162,7 +162,7 @@ class User
     public
     function setEmail($email)
     {
-        $this::update("gebruikersnaam", $this->geberuikersnaam, $gebruikersnaam);
+        $this::update("gebruikersnaam", $this->gebruikersnaam, $gebruikersnaam);
         $this->gebruikersnaam = $gebruikersnaam;
     }
 
