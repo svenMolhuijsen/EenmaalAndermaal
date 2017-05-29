@@ -403,22 +403,35 @@ function checkVeilingenInCategorie($categorieId){
         var_dump($veiling);
     }
 }
-
 function pasgegevensaan($gegevens){
-$gebruikersnaam = "admul";/*
+    $gebruikersnaam = "admul";/*
 $user = new User($gebruikersnaam);
 $user->setWachtwoord($gegevens['NEWpassword']);
 $user->setVoornaam($gegevens['NEWname']);
 $user->setGeboortedatum($gegevens['NEWbirthday']);*/
-executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?",[$gegevens['NEWpassword'] ,$gebruikersnaam]);
-executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $gegevens['NEWname'] ,$gebruikersnaam] );
-    executeQuery("UPDATE gebruikers SET geboortedatum ? WHERE gebruikersNaam = ?",[$gegevens['NEWgeboortedatum'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?",[$gegevens['NEWprovincie'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWplaats'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWstraat'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?",[$gegevens['NEWhuisnummer'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    if($gegevens['NEWpassword'] != ""){
+        executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam  = ?", [[$gegevens['NEWpassword'], $gebruikersnaam]]);
+    }
+    if($gegevens['NEWprovincie'] != "") {
+        executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$gegevens['NEWprovincie'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWplaats'] != "") {
+        executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$gegevens['NEWplaats'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWstraat'] != "") {
+        executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?", [$gegevens['NEWstraat'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWhuisnummer'] != "") {
+        executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?", [$gegevens['NEWhuisnummer'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWtelefoonnummer'] != ""){
+        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    }
+
+
+
 }
+
 
 function nieuweCategorieToevoegen($categorie){
     if(checkVeilingenInCategorie($categorie["superId"])){
