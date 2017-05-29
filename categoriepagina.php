@@ -46,7 +46,7 @@ include("php/layout/breadcrumbs.php");
             </a></div>
     </div>
 </div>
-<?php include("php/layout/footer.php") ?>
+<?php include("php/layout/footer.html") ?>
 <!-- script>
     function updateSubCategorie(){
         var activeCategorie = $('.side-nav a[aria-expanded="true"]').attr('rel');

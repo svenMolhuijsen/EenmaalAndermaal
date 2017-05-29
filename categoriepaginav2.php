@@ -87,4 +87,4 @@ include("php/layout/breadcrumbs.php");
     </div>
 </main>
 
-<?php include("php/layout/footer.php") ?>
+<?php include("php/layout/footer.html") ?>

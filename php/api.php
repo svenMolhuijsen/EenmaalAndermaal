@@ -113,7 +113,7 @@ function search()
     $minprice = (float)$_POST['minprice'];
     $maxprice = (float)$_POST['maxprice'];
     $category = (int)$_POST['category'];
-    if ($category == null) {
+    if ($category == 'null') {
         $result = executeQuery(
             ";with category_tree as 
 (
@@ -126,7 +126,7 @@ function search()
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP 100 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -138,7 +138,7 @@ FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY hoogsteBieding DESC LIMIT 10
+ORDER BY hoogsteBieding
 ", [$searchterm, $category, $minprice, $maxprice]);
 
     } else {
@@ -295,7 +295,6 @@ function getVeilingInfo($data)
 function aanmakenveiling($veiling){
     $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
     $veiling['koperGebruikersnaam'] = null;
-    $veiling['beginDatum'] = date("Y-m-d H:m:s");
     $veiling['categorieId'] = intval($veiling['categorieId']);
     $veiling['startPrijs'] = intval($veiling['startPrijs']);
     $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
@@ -324,25 +323,61 @@ function aanmakenveiling($veiling){
 
 function uploadFile()
 {
+
     $data = array();
     $error = false;
     $files = array();
+    $feedbacks = array();
 
-    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/img/uploads/';
+    $uploadOk = true;
+
+    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/upload/';
+
+    $prefix = date("ymdhms").rand(0, 999);
 
     foreach($_FILES as $file)
     {
-        if(move_uploaded_file($file['tmp_name'], $uploaddir.basename($file['name'])))
-        {
-            $files[] = $uploaddir.$file['name'];
+        $feedback = array();
+        $target_file = $uploaddir.$prefix.basename($file['name']);
+        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif" ) {
+            array_push($feedback, "Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan.");
+            $uploadOk = false;
         }
-        else
-        {
-            $error = true;
+
+        if ($file["size"] > 500000) {
+            array_push($feedback, "Een bestand is te groot.");
+            $uploadOk = false;
+        }
+
+        if(!empty($feedback)){
+            array_push($feedbacks, $feedback);
         }
     }
 
-    $data = ($error) ? array('error' => 'There was an error uploading your files') : array('file' => basename($files[0]));
+    if($uploadOk) {
+        foreach ($_FILES as $file) {
+            if (move_uploaded_file($file['tmp_name'], $uploaddir.$prefix.basename($file['name']))) {
+                array_push($files, $prefix.basename($file['name']));
+            } else {
+                $error = true;
+            }
+        }
+    }
+
+    if($error){
+        $data = array('status' => 'error', 'message' => 'There was an error uploading your files');
+    }
+    else{
+        if(!empty($feedbacks)){
+            $data = array('status' => 'userError', 'feedback' => $feedbacks);
+        }
+        else {
+            $data = array('status' => 'success', 'prefix' => $prefix);
+        }
+    }
 
     echo json_encode($data);
 }
@@ -352,6 +387,7 @@ function getLanden()
     $Land = executeQuery("SELECT  * FROM landen", null);
     return $Land;
 }
+
 function checkVeilingenInCategorie($categorieId){
     $veiling = executeQuery("SELECT count(*)  AS aantal FROM veiling WHERE categorieId = ?", [$categorieId]);
 
@@ -368,22 +404,35 @@ function checkVeilingenInCategorie($categorieId){
         var_dump($veiling);
     }
 }
-
 function pasgegevensaan($gegevens){
-$gebruikersnaam = "admul";/*
+    $gebruikersnaam = "admul";/*
 $user = new User($gebruikersnaam);
 $user->setWachtwoord($gegevens['NEWpassword']);
 $user->setVoornaam($gegevens['NEWname']);
 $user->setGeboortedatum($gegevens['NEWbirthday']);*/
-executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?",[$gegevens['NEWpassword'] ,$gebruikersnaam]);
-executeQuery("UPDATE gebruikers SET voornaam = ? WHERE gebruikersNaam = ?", [ $gegevens['NEWname'] ,$gebruikersnaam] );
-    executeQuery("UPDATE gebruikers SET geboortedatum ? WHERE gebruikersNaam = ?",[$gegevens['NEWgeboortedatum'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?",[$gegevens['NEWprovincie'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWplaats'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?",[$gegevens['NEWstraat'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?",[$gegevens['NEWhuisnummer'] ,$gebruikersnaam]);
-    executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    if($gegevens['NEWpassword'] != ""){
+        executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam  = ?", [[$gegevens['NEWpassword'], $gebruikersnaam]]);
+    }
+    if($gegevens['NEWprovincie'] != "") {
+        executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$gegevens['NEWprovincie'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWplaats'] != "") {
+        executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$gegevens['NEWplaats'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWstraat'] != "") {
+        executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?", [$gegevens['NEWstraat'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWhuisnummer'] != "") {
+        executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?", [$gegevens['NEWhuisnummer'], $gebruikersnaam]);
+    }
+    if($gegevens['NEWtelefoonnummer'] != ""){
+        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    }
+
+
+
 }
+
 
 function nieuweCategorieToevoegen($categorie){
     if(checkVeilingenInCategorie($categorie["superId"])){

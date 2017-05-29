@@ -6,31 +6,6 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //    login Modal
 /////////////////////////////////////////////
-
-//Modal afsluiten
-    $(".signin-register-modal").click(function () {
-        $('.signin-register-modal').fadeOut(300);
-    }).children().click(function (e) {
-        return false;
-    });
-
-//inlog-pop modal openen
-    $('.login_button, .signin').on('click', function () {
-        showModal();
-        showSignIn();
-    });
-
-//registreer modal openen
-    $('.signup_button, .register').on('click', function () {
-
-        showModal();
-        showRegister();
-    });
-//reset modal openen
-    $('.reset').on('click', function () {
-        showReset();
-    });
-
 //achtergrond en venster openen
     function showModal() {
         $('.signin-register-modal').fadeIn(300);
@@ -58,6 +33,32 @@ $(document).ready(function () {
         $('.switcher').children().removeClass("active");
         $('#reset').show();
     }
+
+//Modal afsluiten
+    $(".signin-register-modal").click(function () {
+        $('.signin-register-modal').fadeOut(300);
+    }).children().click(function (e) {
+        return false;
+    });
+
+//inlog-pop modal openen
+    $('.login_button, .signin').on('click', function () {
+        showModal();
+        showSignIn();
+    });
+
+//registreer modal openen
+    $('.signup_button, .register').on('click', function () {
+
+        showModal();
+        showRegister();
+    });
+//reset modal openen
+    $('.reset').on('click', function () {
+        showReset();
+    });
+
+
 
 //////////////////////////////////////////////
 //  Image gallery
@@ -252,6 +253,33 @@ $(document).ready(function () {
 //  Functions
 /////////////////////////////////////////////
 
+function generateCategorySelect($childtarget, $target, category, selected) {
+    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+        if (res.code == 0) {
+            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
+            $($select).append("<option value='" + category + "' selected>Categorie selecteren</option>");
+
+            $.each(res.data, function (index, item) {
+                if (selected == item["categorieId"]) {
+                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                } else {
+                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                }
+            });
+            $childtarget.append($select);
+        }
+
+        $($childtarget).change(function () {
+            var value = $($childtarget).find(":selected").val();
+            currCategory = value;
+            generateParentCategories(value, $target);
+            zoeken();
+        });
+    });
+}
+
 function generateParentCategories(category, target) {
     target.empty();
     $(target).unbind("change");
@@ -285,32 +313,6 @@ function generateParentCategories(category, target) {
     });
 }
 
-function generateCategorySelect($childtarget, $target, category, selected) {
-    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-        if (res.code == 0) {
-            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='"+category+"' required></select>");
-            $($select).append("<option value='" + category + "' selected disabled>Categorie selecteren</option>");
-
-            $.each(res.data, function (index, item) {
-                if (selected == item["categorieId"]) {
-                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
-                } else {
-                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
-                }
-            });
-            $childtarget.append($select);
-        }
-
-        $($childtarget).change(function () {
-            var value = $($childtarget).find(":selected").val();
-            currCategory = value;
-            generateParentCategories(value, $target);
-            zoeken();
-        });
-    });
-}
 function zoeken() {
     var minBedrag = $('#sliderOutput1').val();
     var maxBedrag = $('#sliderOutput2').val();
@@ -360,7 +362,6 @@ function createCountdown($target, countDownDate) {
 
         // Get todays date and time
         var now = new Date().getTime();
-        console.log(now);
         // Find the distance between now an the count down date
         var distance = new Date(countDownDate).getTime() - now;
 
@@ -377,9 +378,8 @@ function createCountdown($target, countDownDate) {
         // If the count down is over, write some text
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("timer").innerHTML = "VERLOPEN";
-            document.getElementById("expired").innerHTML = "";
-            sentEmail();
+            $("#timer").html("VERLOPEN");
+            $("#expired").html("");
         }
     }, 1000)
 }

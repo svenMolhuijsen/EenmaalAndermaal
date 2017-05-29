@@ -23,6 +23,7 @@ class Veiling
     private $categorieId;
     private $code;
     private $veilingGestopt;
+    private $prefix;
 
     public function __construct(){}
 
@@ -46,6 +47,7 @@ class Veiling
         $this->huisnummer = $veiling["huisnummer"];
         $this->categorieId = $veiling["categorieId"];
         $this->veilingGestopt = $veiling["veilingGestopt"];
+        $this->prefix = $veiling["prefix"];
     }
 
     public static function existingVeiling($veilingId) {
@@ -76,6 +78,17 @@ class Veiling
     function update($column, $oldVal, $newVal)
     {
         return executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
+    }
+
+    public
+    function getPrefix(){
+        return $this->prefix;
+    }
+
+    public
+    function setPrefix($prefix){
+        $this::update("prefix", $this->prefix, $prefix);
+        $this->prefix = $prefix;
     }
 
     public
