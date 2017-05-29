@@ -295,7 +295,6 @@ function getVeilingInfo($data)
 function aanmakenveiling($veiling){
     $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
     $veiling['koperGebruikersnaam'] = null;
-    $veiling['beginDatum'] = date("Y-m-d H:m:s");
     $veiling['categorieId'] = intval($veiling['categorieId']);
     $veiling['startPrijs'] = intval($veiling['startPrijs']);
     $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
@@ -324,26 +323,60 @@ function aanmakenveiling($veiling){
 
 function uploadFile()
 {
-    $data = array();
-
     $error = false;
     $files = array();
+    $fileStatus = array();
+    $feedbacks = array();
 
-    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/img/uploads/';
+    $uploadOk = true;
+
+    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/img/upload/';
+
+    $prefix = date("ymdhms").rand(0, 999);
 
     foreach($_FILES as $file)
     {
-        if(move_uploaded_file($file['tmp_name'], $uploaddir.basename($file['name'])))
-        {
-            $files[] = $uploaddir.$file['name'];
+        $feedback = array();
+        $target_file = $uploaddir.$prefix.basename($file['name']);
+        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif" ) {
+            array_push($feedback, "Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan.");
+            $uploadOk = false;
         }
-        else
-        {
-            $error = true;
+
+        if ($file["size"] > 500000) {
+            array_push($feedback, "Een bestand is te groot.");
+            $uploadOk = false;
+        }
+
+        if(!empty($feedback)){
+            array_push($feedbacks, $feedback);
         }
     }
 
-    $data = ($error) ? array('error' => 'There was an error uploading your files') : array('file' => basename($files[0]));
+    if($uploadOk) {
+        foreach ($_FILES as $file) {
+            if (move_uploaded_file($file['tmp_name'], $uploaddir.$prefix.basename($file['name']))) {
+                array_push($files, $prefix.basename($file['name']));
+            } else {
+                $error = true;
+            }
+        }
+    }
+
+    if($error){
+        $data = array('status' => 'error', 'message' => 'There was an error uploading your files');
+    }
+    else{
+        if(!empty($feedbacks)){
+            $data = array('status' => 'userError', 'feedback' => $feedbacks);
+        }
+        else {
+            $data = array('status' => 'success', 'prefix' => $prefix);
+        }
+    }
 
     echo json_encode($data);
 }
@@ -353,6 +386,7 @@ function getLanden()
     $Land = executeQuery("SELECT  * FROM landen", null);
     return $Land;
 }
+
 function checkVeilingenInCategorie($categorieId){
     $veiling = executeQuery("SELECT count(*)  AS aantal FROM veiling WHERE categorieId = ?", [$categorieId]);
 

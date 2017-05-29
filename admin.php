@@ -45,7 +45,7 @@ include("php/layout/breadcrumbs.php");
     
 
 <?php
-include("php/layout/footer.php")
+include("php/layout/footer.html")
 ?>
 <script>
     $('#addCategorieToDatabase').click(function () {

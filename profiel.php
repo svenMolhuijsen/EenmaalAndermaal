@@ -238,7 +238,7 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
 
 
 <?php
-include("php/layout/footer.php")
+include("php/layout/footer.html")
 ?>
 </body>
 </html>

@@ -161,4 +161,4 @@ echo serialize($categorieArray);
       </div>
     </div>
 
-<?php include("php/layout/footer.php") ?>
+<?php include("php/layout/footer.html") ?>
