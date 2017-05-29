@@ -31,12 +31,15 @@ if(checkForEmpty($veilingId)){
         return 0.5;
     }
 };
+
 //verzenden Email
 function verzendEmail(){
+
     $to = "dewildtluuk@gmail.com";
-    $subject = "verzendEmail";
-    $txt = "Beste iConcept medeweker,</br> </br>
-            ";
+    $subject = "Gewonnen veiling";
+    $txt = "Beste iConcept medeweker,
+    
+    De veiling met veilingId: is gewonnen door ";
     $headers = "From: info@EenmaalAndermaal.nl";
     mail($to,$subject,$txt,$headers);
 }
@@ -44,19 +47,17 @@ function verzendEmail(){
 function sluitVeiling($data){
     $today = date("Y-m-d");
     if($data->getVeilingGestopt()){
-        echo("veiling is al gesloten");
         return;
     }else{
         if($data->getEindDatum() < $today){
             $data->setVeilingGestopt(1);
             verzendEmail();
-            echo("veiling is beeindigd");
         }else{
-            echo("veiling is nog niet afgelopen");
             return;
         }
     }
 }
+
 sluitVeiling($veiling);
 
 $pagename = 'veilingPagina - '.$veiling->getTitel();

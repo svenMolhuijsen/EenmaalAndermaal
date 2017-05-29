@@ -59,8 +59,8 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
                         <input type="number" id="sliderOutput2">
                     </div>
                 </div>
-                <input type="submit" class="button primary" value="Zoekresultaten Ophalen!"/>
-                <a href="filterpagina.php" class="button secondary">reset</a>
+                <a class="button primary" onclick="zoeken()" value="Zoekresultaten Ophalen!">Zoeken!</a>
+                <a href="filterpagina.php" class="button secondary-light">Reset</a>
 
             </form>
         </aside>
