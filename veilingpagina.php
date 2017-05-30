@@ -57,7 +57,12 @@ function sluitVeiling($data){
         }
     }
 }
+function updateHistory($veiling){
+    $persoon = "0815nooob";
+    executeQueryNoFetch("INSERT INTO history VALUES(?, ?, GETDATE())", [$veiling->getVeilingId(), $persoon]);
+}
 
+updateHistory($veiling);
 sluitVeiling($veiling);
 
 $pagename = 'veilingPagina - '.$veiling->getTitel();
