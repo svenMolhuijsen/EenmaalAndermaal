@@ -404,30 +404,42 @@ function checkVeilingenInCategorie($categorieId){
     }
 }
 
-function pasgegevensaan($gegevens)
+function pasgegevensaan($_gegevens)
 {
-    $gebruikersnaam = "admul";
-    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]);
-    if ($gegevens['NEWpassword'] != "") {
-       if(password_verify($gegevens['OLDpassword'], $fetchPassword['data'])) {
-        $password = password_hash($gegevens['NEWpassword'], PASSWORD_BCRYPT);
-        executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$password, $gebruikersnaam]);
+    $gebruikersnaam = "*mortis*";
+    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]); // hashed wachtwoord uit de database
+    if($_gegevens['NEWprovincie'] != "") {
+        executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWprovincie'], $gebruikersnaam]);
     }
-}
-    if($gegevens['NEWprovincie'] != "") {
-        executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$gegevens['NEWprovincie'], $gebruikersnaam]);
+    if ($_gegevens['NEWpassword'] != "") {
+        if (password_verify($_gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) { // vergelijk ingevuld met database wachtwoord
+            $passwordnew = password_hash($_gegevens['NEWpassword'], PASSWORD_BCRYPT); // hash het nieuwe wachtwoord
+            executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$passwordnew, $gebruikersnaam]); // Flikker het nieuwe wachtwoord in de database
+        }
     }
-    if($gegevens['NEWplaats'] != "") {
-        executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$gegevens['NEWplaats'], $gebruikersnaam]);
+//wachtwoord alleen dan hashed = Luke
+
+/* Stappenplan:
+ * Nieuwe wachtwoord hashen, check
+ * Vergelijken met wachtwoord uit db, check
+ * nieuwe wachtwoord in de database flikkeren -> huidig check
+ */
+
+    if($_gegevens['NEWplaats'] != "") {
+        executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWplaats'], $gebruikersnaam]);
     }
-    if($gegevens['NEWstraat'] != "") {
-        executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?", [$gegevens['NEWstraat'], $gebruikersnaam]);
+    if($_gegevens['NEWstraat'] != "") {
+        executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWstraat'], $gebruikersnaam]);
     }
-    if($gegevens['NEWhuisnummer'] != "") {
-        executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?", [$gegevens['NEWhuisnummer'], $gebruikersnaam]);
+    if($_gegevens['NEWhuisnummer'] != "") {
+        executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWhuisnummer'], $gebruikersnaam]);
     }
-    if($gegevens['NEWtelefoonnummer'] != ""){
-        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    if($_gegevens['NEWtelefoonnummer'] != ""){
+        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$_gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    }
+
+    if($_gegevens['NEWpostcode'] != ""){
+        executeQuery("UPDATE gebruikers SET postcode = ? WHERE gebruikersNaam = ?",[$_gegevens['NEWpostcode'] ,$gebruikersnaam]);
     }
 
 }

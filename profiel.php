@@ -5,7 +5,7 @@ $pagename = 'Persoongegevens';
 include("php/layout/breadcrumbs.php");
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-$gebruikersnaam = "admul";
+$gebruikersnaam = "*mortis*";
 $user  = new User($gebruikersnaam);
 
 $alleVerlopenVeilingen = executeQuery("SELECT veilingid FROM veiling where veilingGestopt = ?", [1]);
@@ -23,7 +23,6 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
 
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
 <main class="row columns">
     <ul class="tabs" id="profieltabs" data-tabs>
         <li class="tabs-title is-active"><a href="#overzicht">Overzicht</a></li>
@@ -39,8 +38,10 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
                 <div class="columns small-6">
                     <h5>Gebruikersnaam en wachtwoord</h5><hr>
                     <button  id="showInlogGegevens"  type="button" class = "button hollow tiny">Edit</button>
-                    <?php echo('<p>Gebruikersnaam: '.$user->getGebruikersnaam().'</p>'); echo('<p>Wachtwoord:'.$user->getWachtwoord().'<p>');?>
-                    <input class="editInlogGegevens" id="editWachtwoord" type="password" placeholder="New Password" style="width: 300px; display:none;">
+                    <?php echo('<p>Gebruikersnaam: '.$user->getGebruikersnaam().'</p>');
+                    echo('<p>Wachtwoord: '.$user->getWachtwoord().' <p>');?>
+                    <input class="editInlogGegevens" id="oudWachtwoord" type="password" placeholder="Old Password" style="width: 300px; display:none;">
+                    <input class="editInlogGegevens" id="editWachtwoord" type="text" placeholder="New Password" style="width: 300px; display:none;">
                 </div>
 
                 <div class="columns small-6">
@@ -56,11 +57,13 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
                     <?php echo('<p>Provincie: '.$user->getProvincie().'</p>');
                     echo('<p>Plaats: '.$user->getPlaatsNaam().'</p>');
                     echo('<p>Straat :'.$user->getStraatnaam().' '.$user->getHuisnummer().'</p>');
+                    echo('<p>Postcode: '.$user->getPostcode().'</p>');
                     ?>
                     <input class="editAdres" id="editProvincie" type="text" placeholder = "Provincie" style = "width: 300px;display:none;">
                     <input class="editAdres" id = "editPlaats" type="text" placeholder = "Plaats"  style = "width: 300px;display:none;">
                     <input class="editAdres" id = "editStraat" type="text" placeholder = "Straat"  style = "width: 300px;display:none;">
                     <input class="editAdres" id = "editHuisnummer" type="text" placeholder = "Huisnummer" style = "width: 300px;display:none;">
+                    <input class="editAdres" id="editPostcode" type="text" placeholder = "Postcode" style = "width: 300px;display:none;">
                 </div>
 
                 <div class="columns small-6">
@@ -193,6 +196,7 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
     </div>
 </main>
 
+
 <script>
     /* $("#showEditFormUser").click(function () {
      $('#editWachtwoord').show());
@@ -212,12 +216,14 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
 
 
         var userInfo = {
+            OLDpassword: $('#oudWachtwoord').val(),
             NEWpassword: $('#editWachtwoord').val(),
             NEWprovincie: $('#editProvincie').val(),
             NEWplaats: $('#editPlaats').val(),
             NEWstraat: $('#editStraat').val(),
             NEWhuisnummer: $('#editHuisnummer').val(),
-            NEWtelefoonnummer: $('#editTelefoonnummer').val()
+            NEWtelefoonnummer: $('#editTelefoonnummer').val(),
+            NEWpostcode: $('#editPostcode').val()
         };
 
         console.log(userInfo);
@@ -225,7 +231,7 @@ $aantalVerlopenVeilingen = count($verlopenveilingen['data']);
             type: 'POST',
             url: 'php/api.php?action=AanpassenGegevens',
             data: userInfo,
-
+            succes: alert("Je gegevens zijn succesvol verandert")
         });
 
 
