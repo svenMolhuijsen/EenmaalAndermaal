@@ -58,30 +58,6 @@ $(document).ready(function () {
         showReset();
     });
 
-
-
-//////////////////////////////////////////////
-//  Image gallery
-/////////////////////////////////////////////
-
-//Grote image van het product
-    $bigImage = $('.veilingImage #image');
-
-//Wisselt de grote image met een alt image via fades
-    $('.altImages .column img').on('click', function () {
-        var imageToShow = $(this).attr('src');
-        var fadeLength = 300;
-
-        $(this).fadeOut(fadeLength, function () {
-            $(this).attr('src', $bigImage.attr('src'));
-            $bigImage.attr('src', imageToShow);
-            $(this).fadeIn(fadeLength);
-        });
-
-        $bigImage.fadeOut(fadeLength, function () {
-            $(this).fadeIn(fadeLength);
-        });
-    });
 //////////////////////////////////////////////
 //  Navbar
 /////////////////////////////////////////////

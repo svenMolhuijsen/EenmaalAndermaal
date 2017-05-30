@@ -124,7 +124,7 @@ include("php/layout/footer.html");
         unhighlight: function(element){
             $(element).removeClass('is-invalid-input validationError');
         },
-        submitHandler: submitFiles,
+        submitHandler: submit,
         messages: {
             land: "Dit is een verplicht veld.",
             eindDatum: {
@@ -168,67 +168,54 @@ include("php/layout/footer.html");
         files = event.target.files;
     }
 
-    function submitFiles(event) {
+    function submit(){
         var data = new FormData();
+
         $.each(files, function (key, value) {
             data.append(key, value);
         });
 
+        data.append('titel', $('#titel').val());
+        data.append('beschrijving', $('#omschrijving').val());
+        data.append('categorieId', $('#categorie').children().last().prev().find(":selected").val());
+        data.append('postcode', $('#postcode').val());
+        data.append('land', $('#land').val());
+        data.append('startPrijs', $('#prijs').val());
+        data.append('provincie', $('#provincie').val());
+        data.append('plaatsnaam', $('#plaats').val());
+        data.append('straatnaam', $('#straat').val());
+        data.append('huisnummer', $('#huisnummer').val());
+        data.append('beginDatum', now);
+        data.append('eindDatum', $('#einddatum').val());
+        data.append('conditie', $('#conditie').val());
+
         $.ajax({
-            url: 'php/api.php?action=uploadFile',
             type: 'POST',
+            url: 'php/api.php?action=MaakVeilingAan',
             data: data,
             cache: false,
             dataType: 'json',
             processData: false,
             contentType: false,
-            success: function (data, textStatus, jqXHR) {
-                switch(data.status){
+            success: function(result){
+                console.log(result);
+                switch(result.status){
                     case 'success':
                         $imageUploader.removeClass('is-invalid-input');
-                        submit(data.prefix);
+                        alert(result.message);
                         break;
                     case 'error':
-                        console.log(data.message);
+                        console.log(result.message);
                         break;
                     case 'userError':
                         $imageUploader.addClass('is-invalid-input');
-                        alert(data.feedback);
+                        alert(result.feedback);
                         break;
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log('ERRORS: ' + textStatus);
-            }
-        });
-    }
-
-    function submit(filename){
-        var veiling = {
-            titel: $('#titel').val(),
-            beschrijving: $('#omschrijving').val(),
-            categorieId: $('#categorie').children().last().prev().find(":selected").val(),
-            postcode: $('#postcode').val(),
-            land: $('#land').val(),
-            startPrijs: $('#prijs').val(),
-            verkoopPrijs: null,
-            provincie: $('#provincie').val(),
-            plaatsnaam: $('#plaats').val(),
-            straatnaam: $('#straat').val(),
-            huisnummer: $('#huisnummer').val(),
-            beginDatum: now,
-            eindDatum: $('#einddatum').val(),
-            conditie: $('#conditie').val(),
-            thumbNail: filename
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=MaakVeilingAan',
-            data: veiling,
-            dataType: 'json',
-            complete: function(){
-                alert('Veiling toevoegen geslaagd!');
+            error: function(result){
+                console.log('error');
+                console.log(result);
             }
         });
     }

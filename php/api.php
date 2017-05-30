@@ -47,7 +47,7 @@ if (!empty($_GET['action'])) {
             sluitVeiling($_POST);
             break;
         case 'MaakVeilingAan':
-            aanmakenveiling($_POST);
+            checkFiles();
             break;
         case 'addCategorieToDatabase':
             nieuweCategorieToevoegen($_POST);
@@ -292,63 +292,25 @@ function getVeilingInfo($data)
 }
 
 //registreren van veiling
-function aanmakenveiling($veiling){
-    $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
-    $veiling['koperGebruikersnaam'] = null;
-    $veiling['categorieId'] = intval($veiling['categorieId']);
-    $veiling['startPrijs'] = intval($veiling['startPrijs']);
-    $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
-    $veiling['betalingswijze'] = 'IDEAL';
-    $veiling['verzendwijze'] = 'POSTNL';
-    foreach($veiling as $key){
-        if(empty($veiling[$key])){
-            $veiling[$key] = null;
-        }
-    }
-    $veiling['veilingGestopt'] = false;
-
-    var_dump($veiling);
-
-    $superVeiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
-        $veiling['titel'], $veiling['beschrijving'], $veiling['categorieId'], $veiling['postcode'],
-        $veiling['land'], $veiling['verkoperGebruikersnaam'], $veiling['koperGebruikersnaam'],
-        $veiling['startPrijs'], $veiling['verkoopPrijs'], $veiling['provincie'],
-        $veiling['plaatsnaam'], $veiling['straatnaam'], $veiling['huisnummer'],
-        $veiling['betalingswijze'], $veiling['verzendwijze'], $veiling['beginDatum'],
-        $veiling['eindDatum'], $veiling['conditie'], $veiling['thumbNail'], $veiling['veilingGestopt']
-    ]);
-
-    var_dump($superVeiling);
-}
-
-function uploadFile()
-{
-
-    $data = array();
-    $error = false;
-    $files = array();
+function checkFiles(){
     $feedbacks = array();
-
     $uploadOk = true;
 
-    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/upload/';
-
-    $prefix = date("ymdhms").rand(0, 999);
+    $result = array();
 
     foreach($_FILES as $file)
     {
         $feedback = array();
-        $target_file = $uploaddir.$prefix.basename($file['name']);
-        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+        $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
 
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif" ) {
-            array_push($feedback, "Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan.");
+            array_push($feedback, $file['name'].": Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan");
             $uploadOk = false;
         }
 
         if ($file["size"] > 500000) {
-            array_push($feedback, "Een bestand is te groot.");
+            array_push($feedback, $file['name'].": Bestand is te groot");
             $uploadOk = false;
         }
 
@@ -358,28 +320,81 @@ function uploadFile()
     }
 
     if($uploadOk) {
-        foreach ($_FILES as $file) {
-            if (move_uploaded_file($file['tmp_name'], $uploaddir.$prefix.basename($file['name']))) {
-                array_push($files, $prefix.basename($file['name']));
-            } else {
-                $error = true;
-            }
+        $response = aanmakenveiling($_POST);
+    }
+    else{
+        $response = array('status' => 'userError', 'feedback' => $feedbacks);
+    }
+
+    echo json_encode($response);
+}
+
+function aanmakenveiling($veilingInfo){
+    $veilingInfo['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
+    $veilingInfo['categorieId'] = intval($veilingInfo['categorieId']);
+    $veilingInfo['startPrijs'] = intval($veilingInfo['startPrijs']);
+    $veilingInfo['verkoopPrijs'] = null;
+    $veilingInfo['koperGebruikersnaam'] = null;
+    $veilingInfo['betalingswijze'] = 'IDEAL';
+    $veilingInfo['verzendwijze'] = 'POSTNL';
+    foreach($veilingInfo as $key => $value){
+        if(empty($veilingInfo[$key])) {
+            $veilingInfo[$key] = null;
+        }
+    }
+    $veilingInfo['thumbNail'] = "";
+    $veilingInfo['veilingGestopt'] = false;
+
+    $veiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        $veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['categorieId'], $veilingInfo['postcode'],
+        $veilingInfo['land'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['koperGebruikersnaam'],
+        $veilingInfo['startPrijs'], $veilingInfo['verkoopPrijs'], $veilingInfo['provincie'],
+        $veilingInfo['plaatsnaam'], $veilingInfo['straatnaam'], $veilingInfo['huisnummer'],
+        $veilingInfo['betalingswijze'], $veilingInfo['verzendwijze'], $veilingInfo['beginDatum'],
+        $veilingInfo['eindDatum'], $veilingInfo['conditie'], $veilingInfo['thumbNail'], $veilingInfo['veilingGestopt']
+    ]);
+
+    if($veiling['code'] == 0){
+        $veilingId = executeQuery("SELECT veilingId FROM veiling WHERE titel = ? AND beschrijving = ? AND verkoperGebruikersnaam = ? AND beginDatum = ?",
+            [$veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['beginDatum']]);
+        if($veilingId['code'] == 0){
+            return uploadFiles($veilingId['data'][0]['veilingId']);
+        }
+        else{
+            var_dump($veilingId);
+        }
+    }
+    else{
+        var_dump($veiling);
+        return array('status' => 'error', 'message' => 'Er was een error met het aanmaken van de veiling.');
+    }
+}
+
+function uploadFiles($veilingId)
+{
+    $prefix = date('Ymdhms').rand(0, 999);
+    $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'].'/';
+    $uploaddir = 'upload/';
+    $error = false;
+    $files = array();
+
+    foreach ($_FILES as $file) {
+        $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
+
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
+            array_push($files, $prefix.basename($file['name']));
+        } else {
+            $error = true;
         }
     }
 
     if($error){
-        $data = array('status' => 'error', 'message' => 'There was an error uploading your files');
+        return array('status' => 'error', 'message' => 'Er ging iets fout met het uploaden van de files.');
     }
     else{
-        if(!empty($feedbacks)){
-            $data = array('status' => 'userError', 'feedback' => $feedbacks);
-        }
-        else {
-            $data = array('status' => 'success', 'prefix' => $prefix);
-        }
+        return array('status' => 'success', 'message' => 'Uw veiling is aangemaakt.');
     }
-
-    echo json_encode($data);
 }
 
 function getLanden()
@@ -428,9 +443,6 @@ $user->setGeboortedatum($gegevens['NEWbirthday']);*/
     if($gegevens['NEWtelefoonnummer'] != ""){
         executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
     }
-
-
-
 }
 
 
