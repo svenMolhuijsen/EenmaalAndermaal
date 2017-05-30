@@ -210,7 +210,7 @@ $(document).ready(function(){
             var searchterm = $('#navigatie-menu .menu input').val();
             var categorie = $('#navigatie-menu .categorie select').val();
             document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
-        })
+        });
     }
 //////////////////////////////////////////////
 //  Forms versturen
