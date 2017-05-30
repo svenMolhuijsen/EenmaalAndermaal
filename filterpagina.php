@@ -23,10 +23,11 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
         <form method="get" class="float-right" action="filterpagina.php">
             <label for="sortering">Filter op: </label>
             <select id="sortering" style="width: 100%" name="sorterenOp" style="width:20%">
-                <option value="Date ASC">Datum Aflopend:</option>
-                <option value="verkoopPrijs ASC">Prijs Oplopend:</option>
-                <option value="verkoopPrijs DESC">Prijs Aflopend:</option>
-                <option value="Date DECS">Meest Recente:</option>
+                <option value="Date ASC">Datum Aflopend</option>
+                <option value="Date DECS">Datum Oplopend</option>
+                <option value="startPrijs ASC">Startprijs Oplopend</option>
+                <option value="startPrijs DESC">Startprijs Aflopend</option>
+                <option value="Title ASC">Alphabet</option>
             </select>
         </form>
     </div>

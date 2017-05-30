@@ -2,7 +2,6 @@
 
 function executeQuery($query, $data = []){
     global $pdo;
-
     try {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $pdo->prepare("$query");

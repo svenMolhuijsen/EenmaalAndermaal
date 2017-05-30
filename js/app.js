@@ -356,6 +356,9 @@ $(document).ready(function(){
         $('#searchterm').on('keyup', function () {
             zoeken();
         });
+        $("#sortering").change(function () {
+            zoeken();
+        });
     }
 
 

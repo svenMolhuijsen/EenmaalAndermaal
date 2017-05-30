@@ -119,19 +119,23 @@ function search()
     $sortering = $_POST['sortering'];
 
     switch ($sortering) {
-        case 'verkoopPrijs ASC':
-            $order = '';
-            break;
-        case 'verkoopPrijs DESC':
-            break;
         case 'Date ASC':
             $order = 'V.eindDatum ASC';
             Break;
         case 'Date DESC':
             $order = 'V.eindDatum DESC';
             break;
+        case 'Title ASC':
+            $order = 'V.titel ASC';
+            break;
+        case 'startPrijs ASC':
+            $order = 'V.startPrijs ASC';
+            break;
+        case 'startPrijs DESC':
+            $order = 'V.startPrijs DESC';
+            break;
         default:
-
+            $order = 'V.titel ASC';
     }
 
     if ($category == 'null') {
@@ -159,8 +163,7 @@ FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY hoogsteBieding
-", [$searchterm, $category, $minprice, $maxprice]);
+ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice]);
 
     } else {
 
@@ -188,8 +191,7 @@ FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY hoogsteBieding DESC
-", [$category, $searchterm, $category, $minprice, $maxprice]);
+ORDER BY " . $order, [$category, $searchterm, $category, $minprice, $maxprice]);
     }
     stuurTerug($result);
 }
@@ -314,7 +316,8 @@ function getVeilingInfo($data)
 }
 
 //registreren van veiling
-function checkFiles(){
+function checkFiles()
+{
     $feedbacks = array();
     $uploadOk = true;
 
@@ -323,18 +326,19 @@ function checkFiles(){
         $feedback = array();
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
 
-        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "gif" ) {
-            array_push($feedback, $file['name'].": Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan");
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif"
+        ) {
+            array_push($feedback, $file['name'] . ": Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan");
             $uploadOk = false;
         }
 
         if ($file["size"] > 500000) {
-            array_push($feedback, $file['name'].": Bestand is te groot");
+            array_push($feedback, $file['name'] . ": Bestand is te groot");
             $uploadOk = false;
         }
 
-        if(!empty($feedback)){
+        if (!empty($feedback)) {
             array_push($feedbacks, $feedback);
         }
     }
@@ -374,17 +378,15 @@ function aanmakenveiling($veilingInfo){
         $veilingInfo['eindDatum'], $veilingInfo['conditie'], $veilingInfo['thumbNail'], $veilingInfo['veilingGestopt']
     ]);
 
-    if($veiling['code'] == 0){
+    if ($veiling['code'] == 0) {
         $veilingId = executeQuery("SELECT veilingId FROM veiling WHERE titel = ? AND beschrijving = ? AND verkoperGebruikersnaam = ? AND beginDatum = ?",
             [$veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['beginDatum']]);
-        if($veilingId['code'] == 0){
+        if ($veilingId['code'] == 0) {
             return uploadFiles($veilingId['data'][0]['veilingId']);
-        }
-        else{
+        } else {
             var_dump($veilingId);
         }
-    }
-    else{
+    } else {
         var_dump($veiling);
         return array('status' => 'error', 'message' => 'Er was een error met het aanmaken van de veiling.');
     }
@@ -412,10 +414,9 @@ function uploadFiles($veilingId)
         }
     }
 
-    if($error){
+    if ($error) {
         return array('status' => 'error', 'message' => 'Er ging iets fout met het uploaden van de files.');
-    }
-    else{
+    } else {
         return array('status' => 'success', 'message' => 'Uw veiling is aangemaakt.');
     }
 }
@@ -446,7 +447,7 @@ function pasgegevensaan($_gegevens)
 {
     $gebruikersnaam = "admul";
     $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]);
-    if($_gegevens['NEWprovincie'] != "") {
+    if ($_gegevens['NEWprovincie'] != "") {
         executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWprovincie'], $gebruikersnaam]);
     }
     if ($_gegevens['NEWpassword'] != "") {
@@ -455,6 +456,13 @@ function pasgegevensaan($_gegevens)
             executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$passwordnew, $gebruikersnaam]);
         }
     }
+//wachtwoord alleen dan hashed = Luke
+
+    /* Stappenplan:
+     * Nieuwe wachtwoord hashen, check
+     * Vergelijken met wachtwoord uit db, check
+     * nieuwe wachtwoord in de database flikkeren -> huidig check
+     */
 
     if ($_gegevens['NEWplaats'] != "") {
         executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWplaats'], $gebruikersnaam]);
@@ -502,7 +510,8 @@ function voegCategorieToe($categorie)
     ]);
 }
 
-function trending(){
+function trending()
+{
     stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
 }
 
