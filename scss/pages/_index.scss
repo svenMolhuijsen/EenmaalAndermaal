@@ -22,3 +22,9 @@ div#blocks{
 #trending{
     font-weight: 500;
 }
+
+.veilingen {
+    .trendingData{
+        @import 'components/veiling';
+    }
+  }

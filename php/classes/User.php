@@ -1,6 +1,6 @@
 <?php
 
-class User
+class User extends Locatie
 {
 
     private $wachtwoord;
@@ -10,12 +10,6 @@ class User
     private $gebruikersnaam;
     private $telefoonnmr;
     private $verkoper;
-    private $land;
-    private $provincie;
-    private $postcode;
-    private $plaatsnaam;
-    private $straatnaam;
-    private $huisnummer;
 
     function __construct($gebruikersnaam)
     {
@@ -30,12 +24,8 @@ class User
             $this->geboortedatum = $gebruiker["geboortedatum"];
             $this->telefoonnmr = $gebruiker["telefoonnmr"];
             $this->verkoper = $gebruiker["verkoper"];
-            $this->land = $gebruiker["land"];
-            $this->provincie = $gebruiker["provincie"];
-            $this->postcode = $gebruiker["postcode"];
-            $this->plaatsnaam = $gebruiker["plaatsnaam"];
-            $this->straatnaam = $gebruiker["straatnaam"];
-            $this->huisnummer = $gebruiker["huisnummer"];
+
+            
         }
     }
 
@@ -68,10 +58,9 @@ class User
      * @param $oldVal Oud val
      * @param $newVal Nieuw val
      */
-    private
-    function update($column, $oldVal, $newVal)
+    protected function update($column, $oldVal, $newVal)
     {
-        executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
+         executeQuery("UPDATE gebruiker SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
     }
 
     public
@@ -192,120 +181,6 @@ class User
     {
         $this::update("verkoper", $this->verkoper, $verkoper);
         $this->verkoper = $verkoper;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getLand()
-    {
-        return $this->land;
-    }
-
-    /**
-     * @param mixed $land
-     */
-    public
-    function setLand($land)
-    {
-        $this::update("land", $this->land, $land);
-        $this->land = $land;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getProvincie()
-    {
-        return $this->provincie;
-    }
-
-    /**
-     * @param mixed $provincie
-     */
-    public
-    function setProvincie($provincie)
-    {
-        $this::update("provincie", $this->provincie, $provincie);
-        $this->provincie = $provincie;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getPostcode()
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param mixed $postcode
-     */
-    public
-    function setPostcode($postcode)
-    {
-        $this::update("postcode", $this->postcode, $postcode);
-        $this->postcode = $postcode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getPlaatsnaam()
-    {
-        return $this->plaatsnaam;
-    }
-
-    /**
-     * @param mixed $plaatsnaam
-     */
-    public
-    function setPlaatsnaam($plaatsnaam)
-    {
-        $this::update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
-        $this->plaatsnaam = $plaatsnaam;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getStraatnaam()
-    {
-        return $this->straatnaam;
-    }
-
-    /**
-     * @param mixed $straatnaam
-     */
-    public
-    function setStraatnaam($straatnaam)
-    {
-        $this::update("straatnaam", $this->straatnaam, $straatnaam);
-        $this->straatnaam = $straatnaam;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getHuisnummer()
-    {
-        return $this->huisnummer;
-    }
-
-    /**
-     * @param mixed $huisnummer
-     */
-    public
-    function setHuisnummer($huisnummer)
-    {
-        $this::update("huisnummer", $this->huisnummer, $huisnummer);
-        $this->huisnummer = $huisnummer;
     }
 }
 

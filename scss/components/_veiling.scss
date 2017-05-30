@@ -1,0 +1,57 @@
+.veiling {
+    .inner {
+        position: relative;
+        border-bottom: 30px solid white;
+        background: lighten($secondary-light, 10%);
+    }
+    .button {
+        transition: 200ms;
+        position: absolute;
+        overflow: hidden;
+        padding: 0;
+        height: 0;
+        margin: 0;
+        border: none;
+        top: -50px;
+        left: 0;
+    }
+    .image {
+        width: 100%;
+        height: 150px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+
+    }
+    .omschrijving {
+        position: relative;
+        padding: 10px;
+        .titel {
+        color: $secondary;
+        font-weight: bold;
+        margin-bottom: 10px;
+        }
+        .bod {
+        font-weight: bolder;
+        font-size: 25px;
+        }
+
+    }
+    &:hover {
+        .button {
+        overflow: visible;
+        padding: 15px;
+        height: 50px;
+        color: white;
+        }
+    }
+    .clock {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        text-align: center;
+        font-size: 30px;
+        color: $secondary;
+        height: 35px
+    }
+}

@@ -1,5 +1,6 @@
 <?php
 include("DBCon.php");
+include("classes/Locatie.php");
 include("classes/User.php");
 include("classes/Veiling.php");
 include("classes/Categorie.php");
