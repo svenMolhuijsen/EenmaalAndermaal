@@ -96,7 +96,7 @@ include("php/layout/breadcrumbs.php");
             <?php
             echo('<img id="image" src="');
             if(!is_null($images[0])){
-                echo($images[0]);
+                echo($images[0]['fotoPath']);
             }
             else{
                 echo('http://placehold.it/450x450');
@@ -109,7 +109,7 @@ include("php/layout/breadcrumbs.php");
             <?php
             for($i = 1; $i < count($images) && $i < 5; $i++){
                 echo('<div class="column">');
-                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$images[$i].'" alt="altImage">');
+                echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$images[$i]['fotoPath'].'" alt="altImage">');
                 echo('</div>');
             }
             ?>

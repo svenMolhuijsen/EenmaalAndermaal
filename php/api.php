@@ -318,8 +318,6 @@ function checkFiles(){
     $feedbacks = array();
     $uploadOk = true;
 
-    $result = array();
-
     foreach($_FILES as $file)
     {
         $feedback = array();
@@ -342,7 +340,7 @@ function checkFiles(){
     }
 
     if($uploadOk) {
-        $response = aanmakenveiling($_POST);
+        $response = aanmakenveiling($_POST, $_FILES['thumbnail']);
     }
     else{
         $response = array('status' => 'userError', 'feedback' => $feedbacks);
@@ -396,16 +394,19 @@ function uploadFiles($veilingId)
 {
     $prefix = date('Ymdhms').rand(0, 999);
     $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'].'/';
-    $uploaddir = 'upload/';
+    $uploaddir = '/upload/';
     $error = false;
-    $files = array();
 
-    foreach ($_FILES as $file) {
+    foreach ($_FILES as $key => $file) {
         $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
 
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
-            array_push($files, $prefix.basename($file['name']));
+            if($key != 'thumbnail') {
+                executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
+            }
+            else{
+                executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
+            }
         } else {
             $error = true;
         }
