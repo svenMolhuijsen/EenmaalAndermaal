@@ -384,8 +384,7 @@ function uploadFile()
 
 function getLanden()
 {
-    $Land = executeQuery("SELECT  * FROM landen", null);
-    return $Land;
+    return executeQuery("SELECT  * FROM landen", null);
 }
 
 function checkVeilingenInCategorie($categorieId){
