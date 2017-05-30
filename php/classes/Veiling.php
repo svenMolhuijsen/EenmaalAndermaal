@@ -1,6 +1,6 @@
 <?php
 
-class Veiling
+class Veiling extends Locatie
 {
     private $veilingId;
     private $titel;
@@ -14,18 +14,13 @@ class Veiling
     private $verzendwijze;
     private $beginDatum;
     private $eindDatum;
-    private $land;
-    private $provincie;
-    private $postcode;
-    private $plaatsnaam;
-    private $straatnaam;
-    private $huisnummer;
     private $categorieId;
     private $code;
     private $veilingGestopt;
-    private $prefix;
+    private $thumbNail;
 
-    public function __construct(){}
+    public function __construct(){
+    }
 
     public function fill($veiling){
         $this->veilingId = $veiling["veilingId"];
@@ -39,15 +34,9 @@ class Veiling
         $this->verzendwijze = $veiling["verzendwijze"];
         $this->beginDatum = $veiling["beginDatum"];
         $this->eindDatum = $veiling["eindDatum"];
-        $this->land = $veiling["land"];
-        $this->provincie = $veiling["provincie"];
-        $this->postcode = $veiling["postcode"];
-        $this->plaatsnaam = $veiling["plaatsnaam"];
-        $this->straatnaam = $veiling["straatnaam"];
-        $this->huisnummer = $veiling["huisnummer"];
         $this->categorieId = $veiling["categorieId"];
         $this->veilingGestopt = $veiling["veilingGestopt"];
-        $this->prefix = $veiling["prefix"];
+        $this->thumbNail = $veiling["thumbNail"];
     }
 
     public static function existingVeiling($veilingId) {
@@ -74,21 +63,21 @@ class Veiling
      * @param $oldVal Doelwaarde om te veranderen
      * @param $newVal Nieuwe waarde
      */
-    private
+    protected
     function update($column, $oldVal, $newVal)
     {
-        return executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", array($column, $newVal, $column, $oldVal));
+         executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
     }
 
     public
-    function getPrefix(){
-        return $this->prefix;
+    function getThumbNail(){
+        return $this->thumbNail;
     }
 
     public
-    function setPrefix($prefix){
-        $this::update("prefix", $this->prefix, $prefix);
-        $this->prefix = $prefix;
+    function setThumbNail($thumbNail){
+        $this::update("thumbNail", $this->thumbNail, $thumbNail);
+        $this->prefix = $thumbNail;
     }
 
     public
@@ -114,7 +103,7 @@ class Veiling
             $this->veilingId
         ]);
 
-        return $result = executeQuery("UPDATE veiling SET veilingGestopt = ?, koperGebruikersnaam = ?, verkoopPrijs = ? WHERE veilingId = ? ",[
+        return executeQuery("UPDATE veiling SET veilingGestopt = ?, koperGebruikersnaam = ?, verkoopPrijs = ? WHERE veilingId = ? ",[
             $veilingGestopt,
             $hoogsteBod["data"][0]["gebruikersnaam"],
             $hoogsteBod["data"][0]["biedingsBedrag"],
@@ -349,120 +338,6 @@ class Veiling
     {
         $this::update("eindDatum", $this->eindDatum, $eindDatum);
         $this->eindDatum = $eindDatum;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getLand()
-    {
-        return $this->land;
-    }
-
-    /**
-     * @param mixed $land
-     */
-    public
-    function setLand($land)
-    {
-        $this::update("land", $this->land, $land);
-        $this->land = $land;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getProvincie()
-    {
-        return $this->provincie;
-    }
-
-    /**
-     * @param mixed $provincie
-     */
-    public
-    function setProvincie($provincie)
-    {
-        $this::update("provincie", $this->provincie, $provincie);
-        $this->provincie = $provincie;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getPostcode()
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param mixed $postcode
-     */
-    public
-    function setPostcode($postcode)
-    {
-        $this::update("postcode", $this->postcode, $postcode);
-        $this->postcode = $postcode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getPlaatsnaam()
-    {
-        return $this->plaatsnaam;
-    }
-
-    /**
-     * @param mixed $plaatsnaam
-     */
-    public
-    function setPlaatsnaam($plaatsnaam)
-    {
-        $this::update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
-        $this->plaatsnaam = $plaatsnaam;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getStraatnaam()
-    {
-        return $this->straatnaam;
-    }
-
-    /**
-     * @param mixed $straatnaam
-     */
-    public
-    function setStraatnaam($straatnaam)
-    {
-        $this::update("straatnaam", $this->straatnaam, $straatnaam);
-        $this->straatnaam = $straatnaam;
-    }
-
-    /**
-     * @return mixed
-     */
-    public
-    function getHuisnummer()
-    {
-        return $this->huisnummer;
-    }
-
-    /**
-     * @param mixed $huisnummer
-     */
-    public
-    function setHuisnummer($huisnummer)
-    {
-        $this::update("huisnummer", $this->huisnummer, $huisnummer);
-        $this->huisnummer = $huisnummer;
     }
 
     /**

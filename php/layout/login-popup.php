@@ -29,19 +29,19 @@
                     <!-- Voornaam -->
                     <div class="small-6 column">
                         <label class="register-first-name" for="register-first-name">Voornaam</label>
-                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z]+" required>
+                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z][a-z ]+" required>
                     </div>
 
                     <!-- Achternaam-->
                     <div class="small-6 column">
                         <label class="register-last-name" for="register-last-name">Achternaam</label>
-                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z]+" required>
+                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z][a-z ]+" required>
                     </div>
                 </div>
 
                 <!-- Geboortedatum -->
                 <label class="register-birth-date" for="register-birth-date">Geboortedatum</label>
-                <input id="register-birth-date" name="gebdate" type="date" value="2017-01-01" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" required>
+                <input id="register-birth-date" name="gebdate" type="date" placeholder="2017-01-01" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" required>
 
                 <div class="row">
 

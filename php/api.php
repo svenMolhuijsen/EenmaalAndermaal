@@ -47,7 +47,7 @@ if (!empty($_GET['action'])) {
             sluitVeiling($_POST);
             break;
         case 'MaakVeilingAan':
-            aanmakenveiling($_POST);
+            checkFiles();
             break;
         case 'addCategorieToDatabase':
             nieuweCategorieToevoegen($_POST);
@@ -57,6 +57,9 @@ if (!empty($_GET['action'])) {
             break;
         case 'uploadFile':
             uploadFile();
+            break;
+        case 'trending':
+            trending();
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -113,6 +116,24 @@ function search()
     $minprice = (float)$_POST['minprice'];
     $maxprice = (float)$_POST['maxprice'];
     $category = (int)$_POST['category'];
+    $sortering = $_POST['sortering'];
+
+    switch ($sortering) {
+        case 'verkoopPrijs ASC':
+            $order = '';
+            break;
+        case 'verkoopPrijs DESC':
+            break;
+        case 'Date ASC':
+            $order = 'V.eindDatum ASC';
+            Break;
+        case 'Date DESC':
+            $order = 'V.eindDatum DESC';
+            break;
+        default:
+
+    }
+
     if ($category == 'null') {
         $result = executeQuery(
             ";with category_tree as 
@@ -126,7 +147,7 @@ function search()
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, V.startPrijs, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -136,7 +157,7 @@ V.categorieId IN (
 SELECT categorieId
 FROM category_tree
 ))
-GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
+GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
 ORDER BY hoogsteBieding
 ", [$searchterm, $category, $minprice, $maxprice]);
@@ -155,7 +176,7 @@ ORDER BY hoogsteBieding
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam,V.startPrijs, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -165,7 +186,7 @@ V.categorieId IN (
 SELECT categorieId
 FROM category_tree
 ))
-GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail
+GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
 HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
 ORDER BY hoogsteBieding DESC
 ", [$category, $searchterm, $category, $minprice, $maxprice]);
@@ -196,6 +217,7 @@ OPTION (MAXRECURSION 0)
     stuurTerug($result);
 
 }
+
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
@@ -292,63 +314,25 @@ function getVeilingInfo($data)
 }
 
 //registreren van veiling
-function aanmakenveiling($veiling){
-    $veiling['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
-    $veiling['koperGebruikersnaam'] = null;
-    $veiling['categorieId'] = intval($veiling['categorieId']);
-    $veiling['startPrijs'] = intval($veiling['startPrijs']);
-    $veiling['verkoopPrijs'] = intval($veiling['verkoopPrijs']);
-    $veiling['betalingswijze'] = 'IDEAL';
-    $veiling['verzendwijze'] = 'POSTNL';
-    foreach($veiling as $key){
-        if(empty($veiling[$key])){
-            $veiling[$key] = null;
-        }
-    }
-    $veiling['veilingGestopt'] = false;
-
-    var_dump($veiling);
-
-    $superVeiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
-        $veiling['titel'], $veiling['beschrijving'], $veiling['categorieId'], $veiling['postcode'],
-        $veiling['land'], $veiling['verkoperGebruikersnaam'], $veiling['koperGebruikersnaam'],
-        $veiling['startPrijs'], $veiling['verkoopPrijs'], $veiling['provincie'],
-        $veiling['plaatsnaam'], $veiling['straatnaam'], $veiling['huisnummer'],
-        $veiling['betalingswijze'], $veiling['verzendwijze'], $veiling['beginDatum'],
-        $veiling['eindDatum'], $veiling['conditie'], $veiling['thumbNail'], $veiling['veilingGestopt']
-    ]);
-
-    var_dump($superVeiling);
-}
-
-function uploadFile()
-{
-
-    $data = array();
-    $error = false;
-    $files = array();
+function checkFiles(){
     $feedbacks = array();
-
     $uploadOk = true;
 
-    $uploaddir = $_SERVER["DOCUMENT_ROOT"].'/upload/';
-
-    $prefix = date("ymdhms").rand(0, 999);
+    $result = array();
 
     foreach($_FILES as $file)
     {
         $feedback = array();
-        $target_file = $uploaddir.$prefix.basename($file['name']);
-        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+        $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
 
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif" ) {
-            array_push($feedback, "Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan.");
+            array_push($feedback, $file['name'].": Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan");
             $uploadOk = false;
         }
 
         if ($file["size"] > 500000) {
-            array_push($feedback, "Een bestand is te groot.");
+            array_push($feedback, $file['name'].": Bestand is te groot");
             $uploadOk = false;
         }
 
@@ -358,40 +342,93 @@ function uploadFile()
     }
 
     if($uploadOk) {
-        foreach ($_FILES as $file) {
-            if (move_uploaded_file($file['tmp_name'], $uploaddir.$prefix.basename($file['name']))) {
-                array_push($files, $prefix.basename($file['name']));
-            } else {
-                $error = true;
-            }
+        $response = aanmakenveiling($_POST);
+    }
+    else{
+        $response = array('status' => 'userError', 'feedback' => $feedbacks);
+    }
+
+    echo json_encode($response);
+}
+
+function aanmakenveiling($veilingInfo){
+    $veilingInfo['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
+    $veilingInfo['categorieId'] = intval($veilingInfo['categorieId']);
+    $veilingInfo['startPrijs'] = intval($veilingInfo['startPrijs']);
+    $veilingInfo['verkoopPrijs'] = null;
+    $veilingInfo['koperGebruikersnaam'] = null;
+    $veilingInfo['betalingswijze'] = 'IDEAL';
+    $veilingInfo['verzendwijze'] = 'POSTNL';
+    foreach($veilingInfo as $key => $value){
+        if(empty($veilingInfo[$key])) {
+            $veilingInfo[$key] = null;
+        }
+    }
+    $veilingInfo['thumbNail'] = "";
+    $veilingInfo['veilingGestopt'] = false;
+
+    $veiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        $veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['categorieId'], $veilingInfo['postcode'],
+        $veilingInfo['land'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['koperGebruikersnaam'],
+        $veilingInfo['startPrijs'], $veilingInfo['verkoopPrijs'], $veilingInfo['provincie'],
+        $veilingInfo['plaatsnaam'], $veilingInfo['straatnaam'], $veilingInfo['huisnummer'],
+        $veilingInfo['betalingswijze'], $veilingInfo['verzendwijze'], $veilingInfo['beginDatum'],
+        $veilingInfo['eindDatum'], $veilingInfo['conditie'], $veilingInfo['thumbNail'], $veilingInfo['veilingGestopt']
+    ]);
+
+    if($veiling['code'] == 0){
+        $veilingId = executeQuery("SELECT veilingId FROM veiling WHERE titel = ? AND beschrijving = ? AND verkoperGebruikersnaam = ? AND beginDatum = ?",
+            [$veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['beginDatum']]);
+        if($veilingId['code'] == 0){
+            return uploadFiles($veilingId['data'][0]['veilingId']);
+        }
+        else{
+            var_dump($veilingId);
+        }
+    }
+    else{
+        var_dump($veiling);
+        return array('status' => 'error', 'message' => 'Er was een error met het aanmaken van de veiling.');
+    }
+}
+
+function uploadFiles($veilingId)
+{
+    $prefix = date('Ymdhms').rand(0, 999);
+    $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'].'/';
+    $uploaddir = 'upload/';
+    $error = false;
+    $files = array();
+
+    foreach ($_FILES as $file) {
+        $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
+
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
+            array_push($files, $prefix.basename($file['name']));
+        } else {
+            $error = true;
         }
     }
 
     if($error){
-        $data = array('status' => 'error', 'message' => 'There was an error uploading your files');
+        return array('status' => 'error', 'message' => 'Er ging iets fout met het uploaden van de files.');
     }
     else{
-        if(!empty($feedbacks)){
-            $data = array('status' => 'userError', 'feedback' => $feedbacks);
-        }
-        else {
-            $data = array('status' => 'success', 'prefix' => $prefix);
-        }
+        return array('status' => 'success', 'message' => 'Uw veiling is aangemaakt.');
     }
-
-    echo json_encode($data);
 }
 
 function getLanden()
 {
-    $Land = executeQuery("SELECT  * FROM landen", null);
-    return $Land;
+    return executeQuery("SELECT  * FROM landen", null);
 }
 
-function checkVeilingenInCategorie($categorieId){
+function checkVeilingenInCategorie($categorieId)
+{
     $veiling = executeQuery("SELECT count(*)  AS aantal FROM veiling WHERE categorieId = ?", [$categorieId]);
 
-    if($veiling['code'] == 0) {
+    if ($veiling['code'] == 0) {
         if ($veiling['data'][0]['aantal'] > 0) {
             print('Er zitten veilingen in deze categorie');
             return true;
@@ -399,8 +436,7 @@ function checkVeilingenInCategorie($categorieId){
             print('Er zitten GEEN veilingen in deze categorie');
             return false;
         }
-    }
-    else{
+    } else {
         var_dump($veiling);
     }
 }
@@ -419,31 +455,32 @@ function pasgegevensaan($_gegevens)
         }
     }
 
-    if($_gegevens['NEWplaats'] != "") {
+    if ($_gegevens['NEWplaats'] != "") {
         executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWplaats'], $gebruikersnaam]);
     }
-    if($_gegevens['NEWstraat'] != "") {
+    if ($_gegevens['NEWstraat'] != "") {
         executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWstraat'], $gebruikersnaam]);
     }
-    if($_gegevens['NEWhuisnummer'] != "") {
+    if ($_gegevens['NEWhuisnummer'] != "") {
         executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWhuisnummer'], $gebruikersnaam]);
     }
-    if($_gegevens['NEWtelefoonnummer'] != ""){
-        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?",[$_gegevens['NEWtelefoonnummer'] ,$gebruikersnaam]);
+    if ($_gegevens['NEWtelefoonnummer'] != "") {
+        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWtelefoonnummer'], $gebruikersnaam]);
     }
 
-    if($_gegevens['NEWpostcode'] != ""){
+
+    if ($_gegevens['NEWpostcode'] != "") {
         executeQuery("UPDATE gebruikers SET postcode = ? WHERE gebruikersNaam = ?",[$_gegevens['NEWpostcode'] ,$gebruikersnaam]);
     }
-
 }
 
 
-function nieuweCategorieToevoegen($categorie){
-    if(checkVeilingenInCategorie($categorie["superId"])){
+function nieuweCategorieToevoegen($categorie)
+{
+    if (checkVeilingenInCategorie($categorie["superId"])) {
         executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES('Overige', ?)", [$categorie["superId"]]);
 
-        $overigCategorieId = executeQuery("SELECT categorieId FROM categorie WHERE superId = ? AND categorieNaam = 'Overige'",[$categorie["superId"]]);
+        $overigCategorieId = executeQuery("SELECT categorieId FROM categorie WHERE superId = ? AND categorieNaam = 'Overige'", [$categorie["superId"]]);
 
         executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE categorieId = ?", [$overigCategorieId['data'][0]['categorieId'], $categorie["superId"]]);
 
@@ -451,16 +488,21 @@ function nieuweCategorieToevoegen($categorie){
 
         echo $overigCategorieId['data'][0]['categorieId'];
         var_dump($categorie["superId"]);
-    }
-    else {
+    } else {
         voegCategorieToe($categorie);
     }
 }
 
-function voegCategorieToe($categorie){
+function voegCategorieToe($categorie)
+{
     executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES (?, ?)", [
         $categorie["categorieNaam"],
         $categorie["superId"]
     ]);
 }
+
+function trending(){
+    stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
+}
+
 ?>
