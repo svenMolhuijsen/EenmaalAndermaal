@@ -126,12 +126,14 @@ function zoeken() {
     var maxBedrag = $('#sliderOutput2').val();
     var searchterm = $('#searchterm').val();
     var categorie = currCategory;
+    var sortering = $("#sortering").find(":selected").val();
 
     $.post("/php/api.php?action=search", {
         category: categorie,
         minprice: minBedrag,
         maxprice: maxBedrag,
-        searchterm: searchterm
+        searchterm: searchterm,
+        sortering: sortering
     }, function (result) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
@@ -142,7 +144,7 @@ function zoeken() {
                     '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
                     '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
                     '<div class="titel">' + item["titel"] + '</div> ' +
-                    '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
+                    '<div class="bod">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div> ' +
                     '<br></div> ' +
                     '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
                 createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);
