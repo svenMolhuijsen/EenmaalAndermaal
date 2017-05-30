@@ -407,24 +407,17 @@ function checkVeilingenInCategorie($categorieId){
 
 function pasgegevensaan($_gegevens)
 {
-    $gebruikersnaam = "*mortis*";
-    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]); // hashed wachtwoord uit de database
+    $gebruikersnaam = "admul";
+    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]);
     if($_gegevens['NEWprovincie'] != "") {
         executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWprovincie'], $gebruikersnaam]);
     }
     if ($_gegevens['NEWpassword'] != "") {
-        if (password_verify($_gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) { // vergelijk ingevuld met database wachtwoord
-            $passwordnew = password_hash($_gegevens['NEWpassword'], PASSWORD_BCRYPT); // hash het nieuwe wachtwoord
-            executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$passwordnew, $gebruikersnaam]); // Flikker het nieuwe wachtwoord in de database
+        if (password_verify($_gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) {
+            $passwordnew = password_hash($_gegevens['NEWpassword'], PASSWORD_BCRYPT);
+            executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$passwordnew, $gebruikersnaam]);
         }
     }
-//wachtwoord alleen dan hashed = Luke
-
-/* Stappenplan:
- * Nieuwe wachtwoord hashen, check
- * Vergelijken met wachtwoord uit db, check
- * nieuwe wachtwoord in de database flikkeren -> huidig check
- */
 
     if($_gegevens['NEWplaats'] != "") {
         executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWplaats'], $gebruikersnaam]);
