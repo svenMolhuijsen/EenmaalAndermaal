@@ -99,16 +99,15 @@ function generateParentCategories(category, target) {
         if (res.code == 0) {
             var parents = res["data"];
             var inverse = 0;
-            console.log(parents);
             for (var i = parents.length - 1; i >= 0; i--) {
                 //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
                 target.append("<div class='" + inverse + "'></div>");
                 var childtarget = $('.' + inverse, target);
 
                 generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
+
                 inverse++;
                 if (i == 0) {
-                    console.log("0");
                     target.append("<div class='" + inverse + "'></div>")
                     var childtarget = $('.' + inverse, target);
                     generateCategorySelect(childtarget, target, category, null);
@@ -253,9 +252,6 @@ function getURLParameter(name) {
             'tel': {pattern: "Foutief patroon."},
             'postcode': {pattern: "Foutief patroon."}
         }
-    });
-    $('#registerForm').validate({
-        errorClass: 'validationError'
     });
 
     $('#loginForm').validate({

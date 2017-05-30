@@ -41,12 +41,16 @@ $_SESSION['gebruiker'] = new User("((marion))");
                 <div id="categorie">
                 </div>
             </div>
-            <div-- class="large-6 columns float-right">
+            <div class="large-6 columns float-right">
                 <h4><strong>Omschrijving</strong></h4>
                 <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text" required></textarea>
 
-                <input type="file" name="fileToUpload" id="fileToUpload" required multiple>
-            </div>
+                <h4><strong>Thumbnail</strong></h4>
+                <input type="file" name="thumbnailUpload" id="thumbnailUpload" required>
+
+                <h4><strong>Foto's</strong></h4>
+                <input type="file" name="imageUpload" id="imageUpload" multiple>
+        </div>
         </div>
         <hr>
         <div class="row">
@@ -94,11 +98,12 @@ $_SESSION['gebruiker'] = new User("((marion))");
 include("php/layout/footer.html");
 ?>
 <script>
+$(document).ready(function() {
     var date = new Date();
-    now = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+":"+date.getMilliseconds();
+    now = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds();
 
     jQuery.validator.addMethod("greaterThanDate",
-        function(value, element, params) {
+        function (value, element, params) {
 
             if (!/Invalid|NaN/.test(new Date(value))) {
                 return new Date(value) > params;
@@ -111,17 +116,18 @@ include("php/layout/footer.html");
     );
 
     $veilingForm = $('#veilingForm');
-    $imageUploader = $('#fileToUpload');
+    $imageUploader = $('#imageUpload');
+    $thumbnailUploader = $('#thumbnailUpload');
 
     $veilingForm.validate({
         errorClass: 'validationError',
         errorElement: 'strong',
         focusCleanup: true,
         focusInvalid: false,
-        highlight: function(element){
+        highlight: function (element) {
             $(element).addClass('is-invalid-input validationError');
         },
-        unhighlight: function(element){
+        unhighlight: function (element) {
             $(element).removeClass('is-invalid-input validationError');
         },
         submitHandler: submit,
@@ -131,12 +137,12 @@ include("php/layout/footer.html");
                 greaterThanDate: "Voer een latere datum in."
             }
         },
-        errorPlacement: function(error, element) {
-            if(element.hasClass('categorieLijst')){
-                if(element.parent().prev().is('h4')){
+        errorPlacement: function (error, element) {
+            if (element.hasClass('categorieLijst')) {
+                if (element.parent().prev().is('h4')) {
                     error.appendTo(element.parent().prev());
                 }
-                else{
+                else {
                     error.appendTo(element.parent().parent().prev());
                 }
             }
@@ -159,20 +165,26 @@ include("php/layout/footer.html");
         }
     });
 
-    var files;
+    var thumbnail;
+    var images;
 
-    $('input[type=file]').on('change', prepareUpload);
+    $imageUploader.on('change', function (event) {
+        images = event.target.files;
+    });
 
-    function prepareUpload(event)
-    {
-        files = event.target.files;
-    }
+    $thumbnailUploader.on('change', function (event) {
+        thumbnail = event.target.files;
+    });
 
-    function submit(){
+    function submit() {
         var data = new FormData();
 
-        $.each(files, function (key, value) {
+        $.each(images, function (key, value) {
             data.append(key, value);
+        });
+
+        $.each(thumbnail, function (key, value) {
+            data.append('thumbnail', value);
         });
 
         data.append('titel', $('#titel').val());
@@ -197,9 +209,8 @@ include("php/layout/footer.html");
             dataType: 'json',
             processData: false,
             contentType: false,
-            success: function(result){
-                console.log(result);
-                switch(result.status){
+            success: function (result) {
+                switch (result.status) {
                     case 'success':
                         $imageUploader.removeClass('is-invalid-input');
                         alert(result.message);
@@ -213,12 +224,13 @@ include("php/layout/footer.html");
                         break;
                 }
             },
-            error: function(result){
+            error: function (result) {
                 console.log('error');
                 console.log(result);
             }
         });
     }
+});
 </script>
 </body>
 </html>
