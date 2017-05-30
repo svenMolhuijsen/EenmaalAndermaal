@@ -57,6 +57,7 @@ $(document).ready(function () {
     $('.reset').on('click', function () {
         showReset();
     });
+});
 
 //////////////////////////////////////////////
 //  Functions
@@ -121,6 +122,32 @@ function generateParentCategories(category, target) {
     });
 }
 
+function veiling(target, result){
+    var res = JSON.parse(result);
+    $(target).empty();
+    if(res.code === 0){
+        $.each(res.data, function(index, item){
+            console.log(target);
+            $(target).append('<div class="column small-6 medium-4 veiling" data-equalizer-watch><div class="inner">' +
+            '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
+            '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
+            '<div class="titel">' + item["titel"] + '</div> ' +
+            '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
+            '<br></div> ' +
+            '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
+            createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);    
+        });
+
+        //$(target).foundation('destroy');
+        new Foundation.Equalizer($(target)).getHeightsByRow();
+    }
+     $(target).append('<div class="column veiling" data-equalizer-watch>' +
+                "<div class='callout warning'> " +
+                "<h5>Niets gevonden</h5> " +
+                "<p>Er is waarschijnlijk een database probleem</p> " +
+                "</div></div></div>");
+}
+
 function zoeken() {
     var minBedrag = $('#sliderOutput1').val();
     var maxBedrag = $('#sliderOutput2').val();
@@ -133,37 +160,11 @@ function zoeken() {
         maxprice: maxBedrag,
         searchterm: searchterm
     }, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-        $(".veilingen  .row").empty();
-        if (res.code == 0) {
-            $.each(res.data, function (index, item) {
-                $(".veilingen .row").append('<div class="column small-6 medium-4 veiling" data-equalizer-watch><div class="inner">' +
-                    '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
-                    '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
-                    '<div class="titel">' + item["titel"] + '</div> ' +
-                    '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
-                    '<br></div> ' +
-                    '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
-                createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);
-
-            });
-
-
-            $('.veilingen  .row').foundation('destroy');
-            new Foundation.Equalizer($('.veilingen  .row')).getHeightsByRow();
-
-
-        } else {
-            $(".veilingen .row").append('<div class="column veiling" data-equalizer-watch>' +
-                "<div class='callout warning'> " +
-                "<h5>Niets gevonden</h5> " +
-                "<p>Probeer met andere zoekcriteria te vinden wat u wilt</p> " +
-                "</div></div></div>");
-
-        }
-    });
+        var target = ".veilingen .row";
+        veiling(target, result);
+       });
 }
+
 function createCountdown($target, countDownDate) {
 
     setInterval(function () {
@@ -196,6 +197,7 @@ function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
 
+$(document).ready(function(){
 //////////////////////////////////////////////
 //  Image gallery
 /////////////////////////////////////////////

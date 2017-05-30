@@ -58,6 +58,9 @@ if (!empty($_GET['action'])) {
         case 'uploadFile':
             uploadFile();
             break;
+        case 'trending':
+            trending();
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -468,5 +471,9 @@ function voegCategorieToe($categorie){
         $categorie["categorieNaam"],
         $categorie["superId"]
     ]);
+}
+
+function trending(){
+    stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
 }
 ?>
