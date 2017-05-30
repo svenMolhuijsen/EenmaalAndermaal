@@ -23,7 +23,7 @@ class Veiling
     private $categorieId;
     private $code;
     private $veilingGestopt;
-    private $prefix;
+    private $thumbNail;
 
     public function __construct(){}
 
@@ -47,7 +47,7 @@ class Veiling
         $this->huisnummer = $veiling["huisnummer"];
         $this->categorieId = $veiling["categorieId"];
         $this->veilingGestopt = $veiling["veilingGestopt"];
-        $this->prefix = $veiling["prefix"];
+        $this->thumbNail = $veiling["thumbNail"];
     }
 
     public static function existingVeiling($veilingId) {
@@ -81,14 +81,14 @@ class Veiling
     }
 
     public
-    function getPrefix(){
-        return $this->prefix;
+    function getThumbNail(){
+        return $this->thumbNail;
     }
 
     public
-    function setPrefix($prefix){
-        $this::update("prefix", $this->prefix, $prefix);
-        $this->prefix = $prefix;
+    function setThumbNail($thumbNail){
+        $this::update("thumbNail", $this->thumbNail, $thumbNail);
+        $this->prefix = $thumbNail;
     }
 
     public

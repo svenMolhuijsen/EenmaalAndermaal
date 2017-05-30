@@ -132,7 +132,7 @@ function veiling(target, result){
             '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
             '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
             '<div class="titel">' + item["titel"] + '</div> ' +
-            '<div class="bod">' + (item["hoogsteBieding"] == null ? "Nog niet geboden!" : "&euro;" + item["hoogsteBieding"]) + '</div> ' +
+            '<div class="bod">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div> ' +
             '<br></div> ' +
             '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
             createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);    
@@ -153,12 +153,14 @@ function zoeken() {
     var maxBedrag = $('#sliderOutput2').val();
     var searchterm = $('#searchterm').val();
     var categorie = currCategory;
+    var sortering = $("#sortering").find(":selected").val();
 
     $.post("/php/api.php?action=search", {
         category: categorie,
         minprice: minBedrag,
         maxprice: maxBedrag,
-        searchterm: searchterm
+        searchterm: searchterm,
+        sortering: sortering
     }, function (result) {
         var target = ".veilingen .row";
         veiling(target, result);
@@ -198,28 +200,6 @@ function getURLParameter(name) {
 }
 
 $(document).ready(function(){
-//////////////////////////////////////////////
-//  Image gallery
-/////////////////////////////////////////////
-
-//Grote image van het product
-    $bigImage = $('.veilingImage #image');
-
-//Wisselt de grote image met een alt image via fades
-    $('.altImages .column img').on('click', function () {
-        var imageToShow = $(this).attr('src');
-        var fadeLength = 300;
-
-        $(this).fadeOut(fadeLength, function () {
-            $(this).attr('src', $bigImage.attr('src'));
-            $bigImage.attr('src', imageToShow);
-            $(this).fadeIn(fadeLength);
-        });
-
-        $bigImage.fadeOut(fadeLength, function () {
-            $(this).fadeIn(fadeLength);
-        });
-    });
 //////////////////////////////////////////////
 //  Navbar
 /////////////////////////////////////////////

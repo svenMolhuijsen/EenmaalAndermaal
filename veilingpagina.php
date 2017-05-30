@@ -16,7 +16,16 @@ if(checkForEmpty($veilingId)){
     session_start();
     //$_SESSION['gebruiker'] = new User('test1@test1.nl');
 
-    $images = glob("upload/".$veiling->getPrefix()."*", GLOB_NOSORT);
+    $images = executeQuery("SELECT fotoPath FROM veilingFoto WHERE veilingId = ?", [$veiling->getVeilingId()]);
+
+    if($images['code'] == 0) {
+        $images = $images["data"];
+    }
+    else{
+        var_dump($images);
+    }
+
+    //$images = glob("upload/".$veiling->getPrefix()."*", GLOB_NOSORT);
 
     function bepaalBiedStap($hoogsteBedrag){
         if($hoogsteBedrag > 50){
@@ -92,7 +101,7 @@ include("php/layout/breadcrumbs.php");
             else{
                 echo('http://placehold.it/450x450');
             }
-            echo('" alt="Image">');
+            echo('"alt="Image">');
             ?>
         </div>
 
