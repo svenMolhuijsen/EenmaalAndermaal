@@ -59,10 +59,10 @@ $_SESSION['gebruiker'] = new User("((marion))");
                 <div class="row">
                     <div class="large-6 columns">
                         <h5>Straat</h5>
-                        <input id="straat" name="straat" type="text" placeholder="Straat" pattern="[A-Za-z]+"/>
+                        <input id="straat" name="straat" type="text" placeholder="Straat" pattern="[A-Za-z- ]+"/>
 
                         <h5 class="titel">Plaats</h5>
-                        <input id="plaats" name="plaats" type="text" placeholder="Plaats" pattern="[A-Za-z]+"/>
+                        <input id="plaats" name="plaats" type="text" placeholder="Plaats" pattern="[A-Za-z- ]+"/>
 
                         <h5 class="titel">Land</h5>
                         <select title="land" name="land" id="land" required>
@@ -78,13 +78,13 @@ $_SESSION['gebruiker'] = new User("((marion))");
                     </div>
                     <div class="large-6 columns">
                         <h5>Huisnummer</h5>
-                        <input id="huisnummer" name="huisnummer" type="number" placeholder="Huisnummer"/>
+                        <input id="huisnummer" name="huisnummer" type="text" placeholder="Huisnummer" pattern="[1-9]{1}[0-9a-z]+"/>
 
                         <h5 class="titel">Provincie</h5>
-                        <input id="provincie" name="provincie" type="text" placeholder="Provincie" pattern="[A-Za-z]+"/>
+                        <input id="provincie" name="provincie" type="text" placeholder="Provincie" pattern="[A-Za-z-]+"/>
 
                         <h5 class="titel">Postcode</h5>
-                        <input id="postcode" name="postcode" type="text" placeholder="Postcode" pattern="[0-9a-zA-Z]+"/>
+                        <input id="postcode" name="postcode" type="text" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}"/>
                     </div>
                 </div>
             </div>
@@ -102,34 +102,11 @@ $(document).ready(function() {
     var date = new Date();
     now = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds();
 
-    jQuery.validator.addMethod("greaterThanDate",
-        function (value, element, params) {
-
-            if (!/Invalid|NaN/.test(new Date(value))) {
-                return new Date(value) > params;
-            }
-
-            return isNaN(value) && isNaN(params)
-                || (Number(value) > Number(params));
-        },
-        'Voer een latere datum in.'
-    );
-
     $veilingForm = $('#veilingForm');
     $imageUploader = $('#imageUpload');
     $thumbnailUploader = $('#thumbnailUpload');
 
     $veilingForm.validate({
-        errorClass: 'validationError',
-        errorElement: 'strong',
-        focusCleanup: true,
-        focusInvalid: false,
-        highlight: function (element) {
-            $(element).addClass('is-invalid-input validationError');
-        },
-        unhighlight: function (element) {
-            $(element).removeClass('is-invalid-input validationError');
-        },
         submitHandler: submit,
         messages: {
             land: "Dit is een verplicht veld.",

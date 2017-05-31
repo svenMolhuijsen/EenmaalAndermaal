@@ -8,13 +8,13 @@
         <!-- log in form -->
         <div id="login">
             <form id="loginForm" class="form small-12 column">
-                <label class="email" for="signin-email">E-mail</label>
-                <input class="full-width has-padding has-border" name="email" id="signin-email" type="email" placeholder="a@b.com">
+                <label class="signin-username" for="signin-username">Gebruikersnaam</label>
+                <input class="full-width has-padding has-border signin-username" name="email" id="signin-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" required>
 
                 <!-- Password -->
-                <label class=" password" for="signin-password">Password</label>
-                <input class="full-width has-padding has-border" id="signin-password" name="password" type="password"
-                       placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$">
+                <label class="signin-password" for="signin-password">Password</label>
+                <input class="full-width has-padding has-border signin-password" id="signin-password" name="password" type="password"
+                       placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
                 <button class="button hollow float-left reset">Wachtwoord vergeten?</button>
                 <input class="button float-right" type="submit" value="Login">
@@ -23,75 +23,85 @@
 
         <!-- sign up form -->
         <div id="register">
-            <form id="registerForm" class="form small-12 column" action="php/formtest.php" method="post">
+            <form id="registerForm" class="form small-12 column" method="post">
                 <div class="row">
 
                     <!-- Voornaam -->
                     <div class="small-6 column">
                         <label class="register-first-name" for="register-first-name">Voornaam</label>
-                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z][a-z ]+" required>
+                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z][a-z ]+">
                     </div>
 
                     <!-- Achternaam-->
                     <div class="small-6 column">
                         <label class="register-last-name" for="register-last-name">Achternaam</label>
-                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z][a-z ]+" required>
+                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z][a-z ]+">
                     </div>
                 </div>
 
                 <!-- Geboortedatum -->
                 <label class="register-birth-date" for="register-birth-date">Geboortedatum</label>
-                <input id="register-birth-date" name="gebdate" type="date" placeholder="2017-01-01" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" required>
+                <input id="register-birth-date" name="gebdate" type="date" placeholder="2017-01-01" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
 
                 <div class="row">
 
                     <!-- Straatnaam -->
                     <div class="small-4 column">
                         <label class="register-streetname" for="register-streetname">Straatnaam</label>
-                        <input id="register-streetname" name="straatnaam" type="text" placeholder="Lindenlaan" pattern="[a-zA-Z]+" required>
+                        <input id="register-streetname" name="straatnaam" type="text" placeholder="Lindenlaan" pattern="[a-zA-Z- ]+">
                     </div>
 
                     <!-- Huisnummer -->
-                    <div class="small-2 column">
+                    <div class="small-4 column">
                         <label class="register-nr" for="register-nr">Huisnummer</label>
-                        <input id="register-no" name="huisnummer" type="number" placeholder="1" min="1" pattern="[0-9]+" required>
+                        <input id="register-no" name="huisnummer" type="text" placeholder="1" min="1" pattern="[1-9]{1}[0-9a-z]+">
                     </div>
 
                     <!-- Postcode -->
-                    <div class="small-2 column">
-                        <label class="register-zip" for="register-zip">Postcode</label>
-                        <input id="register-zip" name="postcode" type="text" placeholder="1234 AB" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" required>
-                    </div>
-
-                    <!-- Plaatsnaam -->
                     <div class="small-4 column">
-                        <label class="register-city" for="register-city">Plaatsnaam</label>
-                        <input id="register-city" name="plaats" type="text" placeholder="Deurne" pattern="[a-zA-Z]+" required>
+                        <label class="register-zip" for="register-zip">Postcode</label>
+                        <input id="register-zip" name="postcode" type="text" placeholder="1234 AB" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                     </div>
-                </div>
 
+                </div>
                 <div class="row">
 
                     <!-- Land -->
                     <div class="small-6 column">
                         <label class="register-country" for="register-country">Land</label>
                         <select name="land" id="register-country" required>
+                            <option selected disabled value="">Kies een land</option>
                             <option value="NL">Nederland</option>
                             <option value="BE">België/Belgique</option>
                             <option value="DE">Deutschland</option>
                         </select>
                     </div>
 
-                    <!-- Telefoonnummer -->
+                    <!-- Provincie -->
                     <div class="small-6 column">
-                        <label class="register-tel" for="register-tel">Telefoonnr</label>
-                        <input id="register-tel" name="tel" type="text" placeholder="+31012345678" pattern="[\+][0-9()]+" required>
+                        <label class="register-province" for="register-province">Provincie</label>
+                        <input id="register-province" name="provincie" type="text" placeholder="Noord-Brabant" pattern="[a-zA-Z-]+">
                     </div>
                 </div>
 
-                <!-- Email-->
-                <label class="register-email" for="register-email">E-mail</label>
-                <input id="register-email" type="email" name="email" placeholder="a@b.com" required>
+                <div class="row">
+
+                    <!-- Plaatsnaam -->
+                    <div class="small-6 column">
+                        <label class="register-city" for="register-city">Plaatsnaam</label>
+                        <input id="register-city" name="plaats" type="text" placeholder="Deurne" pattern="[a-zA-Z- ]+">
+                    </div>
+
+                    <!-- Telefoonnummer -->
+                    <div class="small-6 column">
+                        <label class="register-tel" for="register-tel">Telefoonnr</label>
+                        <input id="register-tel" name="tel" type="text" placeholder="+31012345678" pattern="[\+][0-9()]+">
+                    </div>
+                </div>
+
+                <!-- Gebruikersnaam -->
+                <label class="register-username" for="register-email">Gebruikersnaam</label>
+                <input id="register-username" type="text" name="gebruikersnaam" placeholder="xX_JoHn.DoE1337_Xx" required>
 
                 <!-- Wachtwoord-->
                 <label class="password" for="register-password">Wachtwoord</label>
@@ -112,11 +122,11 @@
         <div id="reset">
             <form id="resetForm" class="form small-12 column">
                 <br>
-                <p>Voer je mail in en we zullen een herstellink toesturen</p>
+                <p>Voer je gebruikersnaam in en we zullen een herstellink toesturen</p>
 
                 <!-- Email-->
-                <label class="reset-email" name="email" for="reset-email">E-mail</label>
-                <input id="reset-email" type="email" placeholder="wachtwoord@vergeten.com" required>
+                <label class="reset-username" for="reset-username">Gebruikersnaam</label>
+                <input id="reset-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" required>
                 <br>
 
                 <input class="button float-right" type="submit" value="Verstuur">
