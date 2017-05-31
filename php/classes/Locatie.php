@@ -5,12 +5,12 @@
  */
 abstract class Locatie
 {
-    private $land;
-    private $provincie;
-    private $postcode;
-    private $plaatsnaam;
-    private $straatnaam;
-    private $huisnummer;
+    protected $land;
+    protected $provincie;
+    protected $postcode;
+    protected $plaatsnaam;
+    protected $straatnaam;
+    protected $huisnummer;
 
      /**
      * @param $column Kolomnaam

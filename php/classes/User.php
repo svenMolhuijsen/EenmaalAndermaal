@@ -2,7 +2,6 @@
 
 class User extends Locatie
 {
-
     private $wachtwoord;
     private $voornaam;
     private $achternaam;
@@ -25,6 +24,12 @@ class User extends Locatie
             $this->telefoonnmr = $gebruiker["telefoonnmr"];
             $this->verkoper = $gebruiker["verkoper"];
 
+            $this->land = $gebruiker['land'];
+            $this->provincie = $gebruiker['provincie'];
+            $this->postcode = $gebruiker['postcode'];
+            $this->plaatsnaam = $gebruiker['plaatsnaam'];
+            $this->straatnaam = $gebruiker['straatnaam'];
+            $this->huisnummer = $gebruiker['huisnummer'];
             
         }
     }
@@ -60,7 +65,7 @@ class User extends Locatie
      */
     protected function update($column, $oldVal, $newVal)
     {
-         executeQuery("UPDATE gebruiker SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
+        executeQueryNoFetch("UPDATE gebruiker SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
     }
 
     public

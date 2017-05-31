@@ -15,6 +15,13 @@ class Bieding {
             $this->email = $bieding["email"];
             $this->biedingsTijd = $bieding["biedingsTijd"];
             $this->biedingsBedrag = $bieding["biedingsBedrag"];
+
+            $this->land = $bieding['land'];
+            $this->provincie = $bieding['provincie'];
+            $this->postcode = $bieding['postcode'];
+            $this->plaatsnaam = $bieding['plaatsnaam'];
+            $this->straatnaam = $bieding['straatnaam'];
+            $this->huisnummer = $bieding['huisnummer'];
         }
     }
 
