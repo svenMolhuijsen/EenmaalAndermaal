@@ -69,7 +69,7 @@ include("php/layout/header.php");
                 <div class="row">
                     <h4 class="columns">Contact: </h4>
                         <p class="columns">Heeft u een vraag, opmerking of suggestie? U kunt ten alle tijden mailen naar:
-                            EenmaalAndermaal@klantenservice.nl
+                            <a href =# style="color:#f2552c;"> EenmaalAndermaal@klantenservice.nl</a>
                             <br>
                             Onze klantenservice zit elke dag tussen 8-21 uur voor u klaar.
                         </p>
