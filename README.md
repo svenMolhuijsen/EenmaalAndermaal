@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/690efd10fc134a18b6ccd7262667a4de)](https://www.codacy.com/app/scsinke/EenmaalAndermaal?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=svenMolhuijsen/EenmaalAndermaal&amp;utm_campaign=Badge_Grade)
+
 # Foundation for Sites Template
 
 **Please open all issues with this template on the main [Foundation for Sites](https://github.com/zurb/foundation-sites/issues) repo.**
