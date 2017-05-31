@@ -518,7 +518,7 @@ function trending()
 }
 
 function beindigveiling($veiling){
-    executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE() WHERE veilingId = ?",[$veiling["veilingId"]]);
+    executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), veilingGestopt = 1 WHERE veilingId = ?",[$veiling["veilingId"]]);
 }
 
 function verwijderVeiling($veiling){
