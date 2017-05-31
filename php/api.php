@@ -15,20 +15,16 @@ if (!empty($_GET['action'])) {
         case 'logout':
             logout();
             break;
-
         case 'getCategories' :
             $hoofdCategory = null;
             $hoofdCategory = trim($_POST['hoofdCategory']);
-
             $params = array(
                 'hoofdCategory' => $hoofdCategory
             );
-
             getSubCategories($params);
             break;
         case 'search':
             search($_POST);
-
             break;
         case'getParentCategories':
             $category = trim($_POST['category']);
@@ -60,6 +56,12 @@ if (!empty($_GET['action'])) {
             break;
         case 'trending':
             trending();
+            break;
+        case 'beindigveiling':
+            beindigveiling($_POST);
+            break;
+        case 'verwijderVeiling':
+            verwijderVeiling($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -162,8 +164,8 @@ SELECT categorieId
 FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
-HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice]);
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
 
     } else {
 
@@ -190,8 +192,8 @@ SELECT categorieId
 FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
-HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY " . $order, [$category, $searchterm, $category, $minprice, $maxprice]);
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+ORDER BY " . $order, [$category, $searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
     }
     stuurTerug($result);
 }
@@ -500,6 +502,16 @@ function voegCategorieToe($categorie)
 function trending()
 {
     stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
+}
+
+function beindigveiling($veiling){
+    executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE() WHERE veilingId = ?",[$veiling["veilingId"]]);
+}
+
+function verwijderVeiling($veiling){
+    executeQueryNoFetch("DELETE FROM biedingen WHERE veilingId = ?", [$veiling["veilingId"]]);
+    executeQueryNoFetch("DELETE FROM history WHERE veilingId = ?", [$veiling["veilingId"]]);
+    executeQueryNoFetch("DELETE FROM veiling WHERE veilingId = ?", [$veiling["veilingId"]]);
 }
 
 ?>
