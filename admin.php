@@ -13,17 +13,8 @@ include("php/layout/breadcrumbs.php");
 
     <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
         <div class="tabs-panel" id="overzicht">
-            <div class="row expanded">
-                <h4><strong>Verkoop gegevens</strong></h4>
-                <hr>
-                <h5><strong>Vestiging</strong></h5>
-                <p>Technovium<br>vergertlaan 10<br>9421BS<br>Nijmegen</p>
-            </div>
-            <div class="row expanded">
-                <h4><strong>Betaal gegevens</strong></h4>
-                <hr>
-                <h5>Creditcard</h5>
-                <p>NL 35 INGB 0004 5712 32</p>
+            <div class="row expanded show-for-large">
+                <iframe style="width:100%; height:600px;" src="https://app.powerbi.com/view?r=eyJrIjoiMzAxNzVlODktMDEyZC00NWZiLWJiYjUtNDY0ZjBjMzFjMzUyIiwidCI6ImI2N2RjOTdiLTNlZTAtNDAyZi1iNjJkLWFmY2QwMTBlMzA1YiIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
             </div>
         </div>
         <div class="tabs-panel" id="betalingen">
