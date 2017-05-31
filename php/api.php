@@ -164,8 +164,8 @@ SELECT categorieId
 FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
-HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice]);
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
 
     } else {
 
@@ -192,8 +192,8 @@ SELECT categorieId
 FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
-HAVING (MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL
-ORDER BY " . $order, [$category, $searchterm, $category, $minprice, $maxprice]);
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+ORDER BY " . $order, [$category, $searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
     }
     stuurTerug($result);
 }

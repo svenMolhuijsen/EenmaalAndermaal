@@ -147,13 +147,15 @@ function veiling(target, result){
                 "</div></div></div>");
 }
 
+var searchRequestcounter = 0;
 function zoeken() {
     var minBedrag = $('#sliderOutput1').val();
     var maxBedrag = $('#sliderOutput2').val();
     var searchterm = $('#searchterm').val();
     var categorie = currCategory;
     var sortering = $("#sortering").find(":selected").val();
-
+    searchRequestcounter++;
+    requestNumber = searchRequestcounter;
     $.post("/php/api.php?action=search", {
         category: categorie,
         minprice: minBedrag,
@@ -161,8 +163,11 @@ function zoeken() {
         searchterm: searchterm,
         sortering: sortering
     }, function (result) {
-        var target = ".veilingen .row";
-        veiling(target, result);
+        if (requestNumber == searchRequestcounter) {
+            //to make sure only the last query is displayed
+            var target = ".veilingen .row";
+            veiling(target, result);
+        }
        });
 }
 
