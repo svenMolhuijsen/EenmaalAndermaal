@@ -1,5 +1,6 @@
 <?php
 $pagename = "admin panel";
+include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 ?>
@@ -33,51 +34,69 @@ include("php/layout/breadcrumbs.php");
             ?>
         </div>
         <div class="tabs-panel" id="veiling">
-            <div class="row">Zoek functie</div>
+        <?php
+        $veilingId = '380468258025';
+        $veiling = Veiling::existingVeiling($veilingId);
+        ?>
+            <div class="column row">
+                <div class="input-group">
+                    <input type="number" class="input-group-field" placeholder="veilingId">
+                    <div class="input-group-button"><button class="button">Zoek</button></div>
+                </div>
+            </div>
             <hr>
             <div class="column row">
                 <div class="float-right">
-                <ul class="titel breadcrumbs">
-                    <li><a href="#" style="color:#e2c30c;">Verplaatsen</a></li>
-                    <li><a href="#" style="color:#e2c30c;">Beïndigen</a></li>
-                    <li><a href="#"style="color:#E2222C;">Verwijderen</a></li>
-                </ul>
+                    <button class="button secondary" data-open="verplaatsVeiling">Verplaatsen</button>
+                    <button class="button warning" id="beindigd">Beïndigen</button>
+                    <button class="button alert" data-open"verwijderVeiling">Verwijderen</button>
                 </div>
+                <div class="large reveal" id="verplaatsVeiling" data-reveal>
+                    <h4>Selecteer categorie</h4>
+                    <div id="categorie">
+                        <div id="categorieToevoegen">
+                            <div class="categorien"></div>
+                        </div>
+                    </div>
+                    <button class="button alert">Verplaats</button>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="reveal" id="verwijderVeiling" data-reveal>
+                    <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
+                    <button class="button alert" id="verwijderVeiling">Verwijder</button>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
             </div>
+
             <div class="row">
                 <div class="columns large-8">
-                    <div>
-                        <h1>Dikke BMW</h1>
-                        <h5 class="subheader">John Regard - Gelderland - Netherlands</h5>
-                    </div>
-                    <div>
-                        <img src="http://placehold.it/600x400" alt="img">
-                    </div>
-                    <div>
-                        <h4>Beschrijving:</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.</p>
-                    </div>
+                    <?php
+                    echo('  <div>
+                                <h1>'.$veiling->getTitel().'</h1>
+                                <h5>'.$veiling->getVerkoperGebruikersnaam().'</h5>
+                            </div>');
+                    echo('  <div>
+                                <img src="http://iproject34.icasites.nl/thumbnails/'.$veiling->getThumbNail().'" alt="img">
+                            </div>');
+                    echo('  <div>
+                                <h4>Beschrijving:</h4>
+                                <p>'.$veiling->getBeschrijving().'</p>
+                            </div>')
+                    ?>
                 </div>
                 <div class="columns large-4">
-                    <div>
-                    <h4>Veiling eindigd over:</h4>
-                    <span>29d 12h 5m 46s</span>
-
-                    </div>
-
-                    <table class="card-section biedingen">
-                        <tr>
-                            <td>Carsten</td>
-                            <td>€50.00</td>
-                            <td>Wed 31 May 11:51:41</td>
-                        </tr>
-                        <tr>
-                            <td>Henri</td>
-                            <td>€40.00</td>
-                            <td>Wed 31 May 11:20:54</td>
-                        </tr>
-                    </table>
-                    
+                <?php
+                echo('  <div>
+                            <h4>Veiling eindigd op:</h4>
+                            <span>'.$veiling->getEindDatum().'</span>
+                        </div>')
+                ?>                     
                 </div>
             </div>
         </div>
@@ -105,6 +124,39 @@ include("php/layout/footer.html")
             }
         });
     });
+
+    $('#beindigd').click(function(){
+        var veiling = {
+            veilingId: '<?php echo($veilingId); ?>'
+        };
+         $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=beindigveiling',
+            data: veiling,
+            dataType: 'json',
+            complete: function(){
+                alert('Veiling beïndigen geslaagd!');
+            }
+        });
+    });
+
+    $('#verwijderVeiling').click(function(){
+        var veiling = {
+            veilingId: '<?php echo($veilingId); ?>'
+        };
+         $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=verwijderVeiling',
+            data: veiling,
+            dataType: 'json',
+            complete: function(){
+                alert('Veiling verwijderen geslaagd!');
+            }
+        });
+    })
+
+
+
 </script>
 </body>
 </html>
