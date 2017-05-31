@@ -60,7 +60,7 @@ if (!empty($_GET['action'])) {
         case 'beindigveiling':
             beindigveiling($_POST);
             break;
-        case 'verwijderVeiling'
+        case 'verwijderVeiling':
             verwijderVeiling($_POST);
             break;
         default:
