@@ -438,51 +438,38 @@ function checkVeilingenInCategorie($categorieId)
             print('Er zitten GEEN veilingen in deze categorie');
             return false;
         }
-    } else {
+    }
+    else {
         var_dump($veiling);
     }
 }
 
-function pasgegevensaan($_gegevens)
-{
-    $gebruikersnaam = "admul";
-    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$gebruikersnaam]);
-    if ($_gegevens['NEWprovincie'] != "") {
-        executeQuery("UPDATE gebruikers SET provincie = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWprovincie'], $gebruikersnaam]);
-    }
-    if ($_gegevens['NEWpassword'] != "") {
-        if (password_verify($_gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) {
-            $passwordnew = password_hash($_gegevens['NEWpassword'], PASSWORD_BCRYPT);
-            executeQuery("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersNaam = ?", [$passwordnew, $gebruikersnaam]);
+function pasgegevensaan($gegevens) {
+    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$_SESSION['gebruiker']->getGebruikersnaam()]);
+
+    if (!empty($gegevens['NEWpassword'])) {
+        if (password_verify($gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) {
+            $passwordnew = password_hash($gegevens['NEWpassword'], PASSWORD_BCRYPT);
+            $_SESSION['gebruiker']->setWachtwoord($passwordnew);
         }
     }
-//wachtwoord alleen dan hashed = Luke
-
-    /* Stappenplan:
-     * Nieuwe wachtwoord hashen, check
-     * Vergelijken met wachtwoord uit db, check
-     * nieuwe wachtwoord in de database flikkeren -> huidig check
-     */
-
-    if ($_gegevens['NEWplaats'] != "") {
-        executeQuery("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWplaats'], $gebruikersnaam]);
+    if (!empty($gegevens['NEWplaats'])) {
+        $_SESSION['gebruiker']->setPlaatsnaam($gegevens['NEWplaats']);
     }
-    if ($_gegevens['NEWstraat'] != "") {
-        executeQuery("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWstraat'], $gebruikersnaam]);
+    if (!empty($gegevens['NEWprovincie'])) {
+        $_SESSION['gebruiker']->setProvincie($gegevens['NEWprovincie']);
     }
-    if ($_gegevens['NEWhuisnummer'] != "") {
-        executeQuery("UPDATE gebruikers SET huisnummer = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWhuisnummer'], $gebruikersnaam]);
+    if (!empty($gegevens['NEWstraat'])) {
+        $_SESSION['gebruiker']->setStraatnaam($gegevens['NEWstraat']);
     }
-    if ($_gegevens['NEWtelefoonnummer'] != "") {
-        executeQuery("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersNaam = ?", [$_gegevens['NEWtelefoonnummer'], $gebruikersnaam]);
+    if (!empty($gegevens['NEWpostcode'])) {
+        $_SESSION['gebruiker']->setPostcode($gegevens['NEWpostcode']);
     }
 
-
-    if ($_gegevens['NEWpostcode'] != "") {
-        executeQuery("UPDATE gebruikers SET postcode = ? WHERE gebruikersNaam = ?",[$_gegevens['NEWpostcode'] ,$gebruikersnaam]);
+    if (!empty($gegevens['NEWtelefoonnummer'])) {
+        $_SESSION['gebruiker']->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
     }
 }
-
 
 function nieuweCategorieToevoegen($categorie)
 {
