@@ -191,7 +191,7 @@ function createCountdown($target, countDownDate) {
             $("#timer").html("VERLOPEN");
             $("#expired").html("");
         }
-    }, 1000)
+    }, 1000);
 }
 
 function getURLParameter(name) {
@@ -245,25 +245,84 @@ $(document).ready(function(){
 //////////////////////////////////////////////
 //  Validation
 /////////////////////////////////////////////
+    jQuery.validator.addMethod("greaterThanDate",
+        function (value, element, params) {
+
+            if (!/Invalid|NaN/.test(new Date(value))) {
+                return new Date(value) > params;
+            }
+
+            return isNaN(value) && isNaN(params)
+                || (Number(value) > Number(params));
+        },
+        'Voer een latere datum in.'
+    );
+
+    jQuery.validator.setDefaults({
+        errorClass: 'validationError',
+        errorElement: 'strong',
+        focusCleanup: true,
+        focusInvalid: false,
+        highlight: function (element) {
+            $(element).addClass('is-invalid-input validationError');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid-input validationError');
+        }
+    });
+
+    var eighteenYearsAgo = new Date();
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear()-18);
 
     $('#registerForm').validate({
-        errorClass: 'validationError',
         rules: {
+            'gebdate': {greaterThanDate: eighteenYearsAgo},
             'repeat-password': {equalTo: "#register-password"}
         },
         messages: {
             'repeat-password': {equalTo: "Vul hetzelfde wachtwoord in."},
             'tel': {pattern: "Foutief patroon."},
-            'postcode': {pattern: "Foutief patroon."}
+            'postcode': {pattern: "Foutief patroon."},
+        },
+        errorPlacement: function (error, element) {
+            error.appendTo(element.prev());
+            error.addClass('hide-for-small show-for-large');
+
+            error.css('font-size', '70%');
+            error.css('margin-bottom', '0');
+            error.css('position', 'absolute');
+            error.parent().css('position', 'relative');
+            error.css('bottom', '0');
+            error.css('right', '0');
         }
     });
 
     $('#loginForm').validate({
-        errorClass: 'validationError'
+        errorPlacement: function (error, element) {
+            error.appendTo(element.prev());
+            error.addClass('hide-for-small show-for-large');
+
+            error.css('font-size', '70%');
+            error.css('margin-bottom', '0');
+            error.css('position', 'absolute');
+            error.parent().css('position', 'relative');
+            error.css('bottom', '0');
+            error.css('right', '0');
+        }
     });
 
     $('#resetForm').validate({
-        errorClass: 'validationError'
+        errorPlacement: function (error, element) {
+            error.appendTo(element.prev());
+            error.addClass('hide-for-small show-for-large');
+
+            error.css('font-size', '70%');
+            error.css('margin-bottom', '0');
+            error.css('position', 'absolute');
+            error.parent().css('position', 'relative');
+            error.css('bottom', '0');
+            error.css('right', '0');
+        }
     });
 
 
