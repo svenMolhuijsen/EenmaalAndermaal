@@ -128,7 +128,7 @@ function veiling(target, result){
         $.each(res.data, function(index, item){
             console.log(target);
             $(target).append('<div class="column small-6 medium-4 veiling" data-equalizer-watch><div class="inner">' +
-            '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
+            '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/' + item["thumbNail"] + ')"></div>' +
             '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
             '<div class="titel">' + item["titel"] + '</div> ' +
             '<div class="bod">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div> ' +
@@ -217,15 +217,15 @@ $(document).ready(function(){
         });
     }
 //////////////////////////////////////////////
-//  Forms versturen
+//  Inloggen/registreren
 /////////////////////////////////////////////
     $('#login input[type="submit"]').on('click', function () {
-        var basisurl = "/php/api.php?action=login"; // the script where you handle the form input.
+        var url = "/php/api.php?action=login";
 
-        var password = $('#login #signin-password').val();
-        var email = $('#login #signin-email').val();
+        var wachtwoord = $('#login #signin-password').val();
+        var gebruikersnaam = $('#login #signin-username').val();
 
-        $.post(url, {email: email, password: password}, function (result) {
+        $.post(url, {gebruikersnaam: gebruikersnaam, wachtwoord: wachtwoord}, function (result) {
             // JSON result omzetten naar var
             var res = JSON.parse(result);
             console.log(res);
@@ -237,12 +237,27 @@ $(document).ready(function(){
                 $('#login input:not([type=\"submit\"])').val('');
                 $('.signin-register-modal,.signin-register-modal .callout').fadeOut(300);
 
-                //TODO: functie aanroepen die header doet veranderen
+                location.reload();
             }
             else {
                 //oude foutmeldingen verwijderen, en laatste foutmelding weergeven
                 $('.signin-register-modal .callout').remove();
-                $('#login form').append("<div data-alert class='callout alert'>" + res.message + "</div>");
+                $('#loginForm').append("<div class='column callout alert'>" + res.message + "</div>");
+            }
+        });
+    });
+
+    $('#logoutButton').on('click', function(){
+        $.ajax({
+            dataType: 'json',
+            url: 'php/api.php?action=logout',
+            success: function(data){
+                if(data.loggedOut) {
+                    window.location.replace("http://iproject34.icasites.nl");
+                }
+                else{
+                    alert('Logout failed!');
+                }
             }
         });
     });
@@ -319,10 +334,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#loginForm').validate();
-
     $('#resetForm').validate();
-
 
 //////////////////////////////////////////////
 //  Categoriepagina

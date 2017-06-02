@@ -33,7 +33,7 @@
     </div>
     <div class="top-bar-right">
         <div class="menu">
-            <div class="categorie">
+            <div id="categorie">
 
             </div>
             <div><input type="search" placeholder="Zoekterm"></div>
@@ -41,39 +41,26 @@
                 <button type="button" class="button submit"><span class="fi-magnifying-glass"></span> Zoeken</button>
             </div>
             <div>
-            <?php $login = false;
-            if ($login) { ?>
                 <ul class="account dropdown vertical medium-horizontal menu" data-dropdown-menu>
                     <li>
                         <a href="#"><span class="fi-torso"></a>
                         <ul class="menu">
-                        <?php $admin = false;
-                        if($admin){?>
-                            <li><a href="admin.php">admin</a></li>
-                        <?php } else{ ?>
-                            <li><a href="profile.php">Informatie</a></li>
-                        <?php } ?>
-                            <li><a href="#">Nieuwe verkoop</a></li>
-                            <li><a href="#">Aankopen</a></li>
-                            <li><a class="button" href="#">Uitloggen</a></li>
+                            <?php if(isset($_SESSION['gebruiker'])) { ?>
+                            <?php $admin = false; if($admin){?>
+                                    <li><a href="admin.php">Admin</a></li>
+                            <?php } ?>
+                            <li><a href="profiel.php">Mijn profiel</a></li>
+                            <li><a href="aanmakenveiling.php">Nieuwe veiling</a></li>
+                            <li><a href="#" id="logoutButton">Uitloggen</a></li>
+                            <?php } else { ?>
+                            <li><a href="#" class="login_button">Log in</a></li>
+                            <li><a href="#" class="signup_button">Aanmelden</a></li>
+                            <?php } ?>
                         </ul>
                     </li>
                 </ul>
-
-            <?php } else { ?>
-                <ul class=" account dropdown vertical medium-horizontal menu" data-dropdown-menu>
-                    <li>
-                        <a href="#"><span class="fi-torso"></a>
-                        <ul class="menu">
-                            <li><a href="#" class="login_button hollow">Log in</a></li>
-                            <li><a href="#" class="signup_button button">Aanmelden</a></li>
-                        </ul>
-                    </li>
-                </ul>
-        <?php } ?>
             </div>
         </div>
-
     </div>
 </div>
 
