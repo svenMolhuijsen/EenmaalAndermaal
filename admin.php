@@ -3,6 +3,7 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
+
 ?>
 
 <main class="row">
@@ -38,22 +39,24 @@ include("php/layout/breadcrumbs.php");
             <div class="column row">
                 <div class="float-right">
                     <button class="button secondary" data-open="verplaatsVeiling">Verplaatsen</button>
-                    <button class="button warning" id="beindigd">Beïndigen</button>
-                    <button class="button alert" data-open"verwijderVeiling">Verwijderen</button>
+                    <?php
+                    if($veiling->getVeilingGestopt() == 0){
+                        echo('<button class="button warning" id="beindigd">Beïndigen</button>');
+                    }?>
+                    <button class="button alert" data-open="verwijderVeiling">Verwijderen</button>
                 </div>
                 <div class="large reveal" id="verplaatsVeiling" data-reveal>
                     <h4>Selecteer categorie</h4>
-                    <div id="categorieTwee">
-                    </div>
-                    <button class="button alert">Verplaats</button>
+                    <div id="categorieTwee"></div>
+                    <button class="button alert" id="verplaats">Verplaats</button>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <div class="reveal" id="verwijderVeiling" data-reveal>
+                <div class="large reveal" id="verwijderVeiling" data-reveal>
                     <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
-                    <button class="button alert" id="verwijderVeiling">Verwijder</button>
+                    <button class="button alert" id="verwijder">Verwijder</button>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -74,7 +77,7 @@ include("php/layout/breadcrumbs.php");
                     echo('  <div>
                                 <h4>Beschrijving:</h4>
                                 <p>'.$veiling->getBeschrijving().'</p>
-                            </div>')
+                            </div>');
                     ?>
                 </div>
                 <div class="columns large-4">
@@ -82,7 +85,7 @@ include("php/layout/breadcrumbs.php");
                 echo('  <div>
                             <h4>Veiling eindigd op:</h4>
                             <span>'.$veiling->getEindDatum().'</span>
-                        </div>')
+                        </div>');
                 ?>                     
                 </div>
             </div>
@@ -127,7 +130,7 @@ include("php/layout/footer.html")
         });
     });
 
-    $('#verwijderVeiling').click(function(){
+    $('#verwijder').click(function(){
         var veiling = {
             veilingId: '<?php echo($veilingId); ?>'
         };
@@ -140,7 +143,23 @@ include("php/layout/footer.html")
                 alert('Veiling verwijderen geslaagd!');
             }
         });
-    })
+    });
+
+    $('#verplaats').click(function(){
+        var veiling = {
+            veilingId: '<?php echo($veilingId);?>',
+            categorieId: $('#categorieTwee').children().last().prev().find(":selected").val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=verplaatsVeiling',
+            data: veiling,
+            dataType: 'json',
+            complete: function(){
+                alert('Veiling verplaatsen geslaagd!');
+            }
+        });
+    });
 
 
 
