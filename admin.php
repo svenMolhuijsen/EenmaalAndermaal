@@ -43,17 +43,16 @@ include("php/layout/breadcrumbs.php");
                 </div>
                 <div class="large reveal" id="verplaatsVeiling" data-reveal>
                     <h4>Selecteer categorie</h4>
-                    <div id="categorieTwee">
-                    </div>
-                    <button class="button alert">Verplaats</button>
+                    <div id="categorieTwee"></div>
+                    <button class="button alert" id="verplaats">Verplaats</button>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <div class="reveal" id="verwijderVeiling" data-reveal>
+                <div class="large reveal" id="verwijderVeiling" data-reveal>
                     <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
-                    <button class="button alert" id="verwijderVeiling">Verwijder</button>
+                    <button class="button alert" id="verwijder">Verwijder</button>
                     <button class="close-button" data-close aria-label="Close modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -127,7 +126,7 @@ include("php/layout/footer.html")
         });
     });
 
-    $('#verwijderVeiling').click(function(){
+    $('#verwijder').click(function(){
         var veiling = {
             veilingId: '<?php echo($veilingId); ?>'
         };
@@ -140,7 +139,23 @@ include("php/layout/footer.html")
                 alert('Veiling verwijderen geslaagd!');
             }
         });
-    })
+    });
+
+    $('#verplaats').click(function(){
+        var veiling = {
+            veilingId: '<?php echo($veilingId);?>',
+            categorieId: $('#categorieTwee').children().last().prev().find(":selected").val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=verplaatsVeiling',
+            data: veiling,
+            dataType: 'json',
+            complete: function(){
+                alert('Veiling verplaatsen geslaagd!');
+            }
+        });
+    });
 
 
 

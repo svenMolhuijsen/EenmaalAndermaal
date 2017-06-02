@@ -63,6 +63,9 @@ if (!empty($_GET['action'])) {
         case 'verwijderVeiling':
             verwijderVeiling($_POST);
             break;
+        case 'verplaatsVeiling':
+            verplaatsVeiling($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -512,6 +515,11 @@ function verwijderVeiling($veiling){
     executeQueryNoFetch("DELETE FROM biedingen WHERE veilingId = ?", [$veiling["veilingId"]]);
     executeQueryNoFetch("DELETE FROM history WHERE veilingId = ?", [$veiling["veilingId"]]);
     executeQueryNoFetch("DELETE FROM veiling WHERE veilingId = ?", [$veiling["veilingId"]]);
+}
+
+function verplaatsVeiling($veiling){
+    var_dump($veiling);
+    executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE veilingId = ?", [$veiling["categorieId"], $veiling["veilingId"]]);
 }
 
 ?>
