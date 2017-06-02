@@ -3,11 +3,7 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
-if(isset($_SESSION['gebruiker'])) {//isset() geeft false als niet ingelogd
-    if($_SESSION['gebruiker']->getVerkoper() == 1) { //getVerkoper() staat op 1 als admin is
-        include("geentoegang.php");
-    }
-}else {
+
 ?>
 
 <main class="row">
@@ -43,7 +39,10 @@ if(isset($_SESSION['gebruiker'])) {//isset() geeft false als niet ingelogd
             <div class="column row">
                 <div class="float-right">
                     <button class="button secondary" data-open="verplaatsVeiling">Verplaatsen</button>
-                    <button class="button warning" id="beindigd">Beïndigen</button>
+                    <?php
+                    if($veiling->getVeilingGestopt() == 0){
+                        echo('<button class="button warning" id="beindigd">Beïndigen</button>');
+                    }?>
                     <button class="button alert" data-open"verwijderVeiling">Verwijderen</button>
                 </div>
                 <div class="large reveal" id="verplaatsVeiling" data-reveal>
@@ -54,6 +53,16 @@ if(isset($_SESSION['gebruiker'])) {//isset() geeft false als niet ingelogd
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                
+                <div class="large reveal" id="verplaatsVeiling" data-reveal>
+                    <h4>Selecteer categorie</h4>
+                    <div id="categorieTwee"></div>
+                    <button class="button alert" id="verplaats">Verplaats</button>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
 
                 <div class="large reveal" id="verwijderVeiling" data-reveal>
                     <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
@@ -78,7 +87,7 @@ if(isset($_SESSION['gebruiker'])) {//isset() geeft false als niet ingelogd
                     echo('  <div>
                                 <h4>Beschrijving:</h4>
                                 <p>'.$veiling->getBeschrijving().'</p>
-                            </div>')
+                            </div>');
                     ?>
                 </div>
                 <div class="columns large-4">
@@ -86,7 +95,7 @@ if(isset($_SESSION['gebruiker'])) {//isset() geeft false als niet ingelogd
                 echo('  <div>
                             <h4>Veiling eindigd op:</h4>
                             <span>'.$veiling->getEindDatum().'</span>
-                        </div>')
+                        </div>');
                 ?>                     
                 </div>
             </div>
@@ -167,7 +176,3 @@ include("php/layout/footer.html")
 </script>
 </body>
 </html>
-    <?php
-}
-include("php/layout/footer.html");
-?>
