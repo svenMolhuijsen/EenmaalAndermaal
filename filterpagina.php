@@ -17,7 +17,7 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
 
 ?>
 
-<div class="row" id="filterpagina">
+<main class="row" id="filterpagina">
     <div class="column">
         <h2 class="float-left">Uw Zoekresultaten: </h2>
         <form method="get" class="float-right" action="filterpagina.php">
@@ -65,12 +65,12 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
         </form>
     </aside>
 
-    <main class="veilingen column small-9">
+    <div class="veilingen column small-9">
         <div class="row" data-equalizer>
             <!--de rest wordt gegenereet met javascript-->
         </div>
-    </main>
-</div>
+    </div>
+</main>
 
 
 <?php include("php/layout/footer.html") ?>
