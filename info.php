@@ -41,7 +41,7 @@ include("php/layout/header.php");
                         <h5 class="columns"><a data-toggle="panelGegevens">Persoonsgegevens</a></h5>
                         <div class="callout is-hidden columns" id="panelGegevens" data-toggler="is-hidden" data-animate>
                         <p class="columns">Hoe kan ik mijn persoonsgegevens wijzigen?</p>
-                        <p class="columns" style="color: #f2552c">Op de <a href = profiel.php" style="color: #0a0a0a;" >Profiel</a> pagina kunt u uw gegevens inzien en wijzigen. </p>
+                        <p class="columns" style="color: #f2552c">Op de <a href = "profiel.php" style="color: #0a0a0a;" >Profiel</a> pagina kunt u uw gegevens inzien en wijzigen. </p>
                         <p class="columns">Hoe gaat EenmaalAndermaal om met mijn persoongegevens?</p>
                         <p class="columns" style="color: #f2552c">EenmaalAndermaal gaat zeer vertrouwelijk om met uw gegevens. 		Slechts een beperkte selectie van ons bedrijf heeft toegang tot uw 		gegevens. Voor meer informatie kunt u onze terms of service lezen of 	mail naar  EenmaalAndermaal@klantenservice.nl </p>
                     </div>

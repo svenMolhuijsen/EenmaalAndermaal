@@ -51,6 +51,12 @@
       .is-invalid-input {
         background-color: #fbe8e9 !important;
       }
+      #register-password {
+        margin-bottom: 0;
+      }
+      #passwordWarning {
+        margin-bottom: 16px;
+      }
     }
 
   }

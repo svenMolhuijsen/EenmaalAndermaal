@@ -263,6 +263,27 @@ $(document).ready(function(){
         'Voer een latere datum in.'
     );
 
+    jQuery.validator.addMethod("lessThanDate",
+        function (value, element, params) {
+
+            if (!/Invalid|NaN/.test(new Date(value))) {
+                return new Date(value) < params;
+            }
+
+            return isNaN(value) && isNaN(params)
+                || (Number(value) < Number(params));
+        },
+        'Voer een eerdere datum in.'
+    );
+
+    var errorCSS = {
+        'position': 'absolute',
+        'font-size': '70%',
+        'margin-bottom': '0',
+        'bottom': '0',
+        'right': '0'
+    };
+
     jQuery.validator.setDefaults({
         errorClass: 'validationError',
         errorElement: 'strong',
@@ -273,6 +294,13 @@ $(document).ready(function(){
         },
         unhighlight: function (element) {
             $(element).removeClass('is-invalid-input validationError');
+        },
+        errorPlacement: function(error, element) {
+            error.appendTo(element.prev());
+            error.addClass('hide-for-small show-for-large');
+
+            error.css(errorCSS);
+            error.parent().css('position', 'relative');
         }
     });
 
@@ -281,54 +309,19 @@ $(document).ready(function(){
 
     $('#registerForm').validate({
         rules: {
-            'gebdate': {greaterThanDate: eighteenYearsAgo},
+            'gebdate': {lessThanDate: eighteenYearsAgo},
             'repeat-password': {equalTo: "#register-password"}
         },
         messages: {
             'repeat-password': {equalTo: "Vul hetzelfde wachtwoord in."},
             'tel': {pattern: "Foutief patroon."},
-            'postcode': {pattern: "Foutief patroon."},
-        },
-        errorPlacement: function (error, element) {
-            error.appendTo(element.prev());
-            error.addClass('hide-for-small show-for-large');
-
-            error.css('font-size', '70%');
-            error.css('margin-bottom', '0');
-            error.css('position', 'absolute');
-            error.parent().css('position', 'relative');
-            error.css('bottom', '0');
-            error.css('right', '0');
+            'postcode': {pattern: "Foutief patroon."}
         }
     });
 
-    $('#loginForm').validate({
-        errorPlacement: function (error, element) {
-            error.appendTo(element.prev());
-            error.addClass('hide-for-small show-for-large');
+    $('#loginForm').validate();
 
-            error.css('font-size', '70%');
-            error.css('margin-bottom', '0');
-            error.css('position', 'absolute');
-            error.parent().css('position', 'relative');
-            error.css('bottom', '0');
-            error.css('right', '0');
-        }
-    });
-
-    $('#resetForm').validate({
-        errorPlacement: function (error, element) {
-            error.appendTo(element.prev());
-            error.addClass('hide-for-small show-for-large');
-
-            error.css('font-size', '70%');
-            error.css('margin-bottom', '0');
-            error.css('position', 'absolute');
-            error.parent().css('position', 'relative');
-            error.css('bottom', '0');
-            error.css('right', '0');
-        }
-    });
+    $('#resetForm').validate();
 
 
 //////////////////////////////////////////////
@@ -425,7 +418,8 @@ $(document).ready(function(){
         });
     }
 
-
-    generateParentCategories(null, $('.aanmakenveiling #categorie'));
+    generateParentCategories(null, $('#categorie'));
     generateParentCategories(null, $('#categorieToevoegen form .categorien'));
+    generateParentCategories(null, $('#categorieTwee'));
+
 });

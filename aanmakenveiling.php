@@ -93,6 +93,7 @@ $_SESSION['gebruiker'] = new User("((marion))");
             <input id="add-Veiling" class = "button large" type="submit" value="Start je veiling">
         </div>
     </form>
+</div>
 </main>
 <?php
 include("php/layout/footer.html");
@@ -105,6 +106,14 @@ $(document).ready(function() {
     $veilingForm = $('#veilingForm');
     $imageUploader = $('#imageUpload');
     $thumbnailUploader = $('#thumbnailUpload');
+
+    var errorCSS = {
+        'position': 'absolute',
+        'font-size': '70%',
+        'margin-bottom': '0',
+        'bottom': '0',
+        'right': '0'
+    };
 
     $veilingForm.validate({
         submitHandler: submit,
@@ -127,12 +136,8 @@ $(document).ready(function() {
                 error.appendTo(element.prev());
             }
 
-            error.css('font-size', '70%');
-            error.css('margin-bottom', '0');
-            error.css('position', 'absolute');
             error.parent().css('position', 'relative');
-            error.css('bottom', '0');
-            error.css('right', '0');
+            error.css(errorCSS);
         },
         rules: {
             einddatum: {
@@ -193,7 +198,7 @@ $(document).ready(function() {
                         alert(result.message);
                         break;
                     case 'error':
-                        console.log(result.message);
+                        alert(result.message);
                         break;
                     case 'userError':
                         $imageUploader.addClass('is-invalid-input');
