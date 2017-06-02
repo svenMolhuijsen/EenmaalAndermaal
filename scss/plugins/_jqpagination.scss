@@ -1,14 +1,17 @@
+$height: 35px;
+$width: 30px;
 .pagination {
   display: inline-block;
   border: 1px solid #CDCDCD;
   border-radius: 3px;
+  margin: 0 15px 0 0;
 }
 
 .pagination a {
   display: block;
   float: left;
-  width: 20px;
-  height: 20px;
+  width: $width;
+  height: $height;
   outline: none;
   border-right: 1px solid #CDCDCD;
   border-left: 1px solid #CDCDCD;
@@ -19,25 +22,15 @@
   font-weight: bold;
   font-size: 16px;
   font-family: Times, 'Times New Roman', Georgia, Palatino;
-  /* ATTN: need a better font stack */
-  background-color: #f3f3f3;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
-  background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
-  background-image: linear-gradient(#f3f3f3, lightgrey);
+
 }
 
 .pagination a:hover, .pagination a:focus, .pagination a:active {
-  background-color: #cecece;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e4e4e4), color-stop(100%, #cecece));
-  background-image: -webkit-linear-gradient(#e4e4e4, #cecece);
-  background-image: linear-gradient(#e4e4e4, #cecece);
+
 }
 
 .pagination a.disabled, .pagination a.disabled:hover, .pagination a.disabled:focus, .pagination a.disabled:active {
   background-color: #f3f3f3;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
-  background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
-  background-image: linear-gradient(#f3f3f3, lightgrey);
   color: #A8A8A8;
   cursor: default;
 }
@@ -57,7 +50,7 @@
   margin: 0;
   padding: 0;
   width: 120px;
-  height: 20px;
+  height: $height;
   outline: none;
   border: none;
   vertical-align: middle;

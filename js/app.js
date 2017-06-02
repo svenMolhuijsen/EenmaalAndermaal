@@ -170,9 +170,9 @@ function zoeken(page = 0, newIndex = false) {
             var target = ".veilingen .row";
             veiling(target, result);
         }
+
     });
     if (newIndex) {
-        console.log("geactiveerd")
         createPageIndex();
     }
 }
@@ -194,10 +194,17 @@ function createPageIndex() {
         sortering: sortering
     }, function (result) {
         var res = JSON.parse(result);
-        console.log(res);
-        if (pageIndexCounter == requestNumber) {
+        console.log(pageIndexCounter);
+        if (requestNumber == pageIndexCounter && res.data["0"]['numRows'] > 0) {
+            $('.pagination').fadeIn(300);
             pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
             $('.pagination').jqPagination('option', 'max_page', pages);
+        } else if (res.data["0"]['numRows'] == 0) {
+            $('.pagination').fadeOut(300);
+            $('.pagination').jqPagination('option', 'current_page', 1);
+
+            $('.pagination').jqPagination('option', 'max_page', 1);
+
         }
     });
 }
@@ -445,17 +452,22 @@ $(document).ready(function () {
         });
 
         $('.filter .slider').on('changed.zf.slider', function () {
-            createPageIndex();
             $('.pagination').jqPagination('option', 'current_page', 1);
             zoeken(0, true);
         });
-        $('#searchterm').on('keyup', function () {
-            createPageIndex();
-            $('.pagination').jqPagination('option', 'current_page', 1);
-            zoeken(0, true);
+
+        var typingTimer;                //timer identifier
+        var doneTypingInterval = 1000;  //time in ms, 5 second for example
+
+        $('#searchterm').keyup(function () {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(function () {
+                $('.pagination').jqPagination('option', 'current_page', 1);
+                zoeken(0, true);
+            }, doneTypingInterval);
         });
+
         $("#sortering").change(function () {
-            createPageIndex();
             $('.pagination').jqPagination('option', 'current_page', 1);
             zoeken(0, true);
         });
