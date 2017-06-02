@@ -1,7 +1,7 @@
 <?php
 class Bieding {
     private $veilingId;
-    private $email;
+    private $gebruikersnaam;
     private $biedingsTijd;
     private $biedingsBedrag;
 
@@ -12,7 +12,7 @@ class Bieding {
             $bieding = $biedingen["data"][0];
 
             $this->veilingId = $bieding["veilingId"];
-            $this->email = $bieding["email"];
+            $this->gebruikersnaam = $bieding["gebruikersnaam"];
             $this->biedingsTijd = $bieding["biedingsTijd"];
             $this->biedingsBedrag = $bieding["biedingsBedrag"];
 
@@ -29,7 +29,7 @@ class Bieding {
     {
         return [
             'veilingId' => $this->veilingId,
-            'email' => $this->email,
+            'email' => $this->gebruikersnaam,
             'biedingsTijd' => $this->biedingsTijd,
             'biedingsBedrag' => $this->biedingsBedrag
         ];
@@ -61,18 +61,18 @@ class Bieding {
     /**
      * @return mixed
      */
-    public function getEmail()
+    public function getGebruikersnaam()
     {
-        return $this->email;
+        return $this->gebruikersnaam;
     }
 
     /**
      * @param mixed $email
      */
-    public function setEmail($email)
+    public function setGebruikersnaam($gebruikersnaam)
     {
-        $this::update("email", $this->email, $email);
-        $this->email = $email;
+        $this::update("gebruikersnaam", $this->gebruikersnaam, $gebruikersnaam);
+        $this->gebruikersnaam = $gebruikersnaam;
     }
 
     /**

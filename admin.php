@@ -8,7 +8,6 @@ include("php/layout/breadcrumbs.php");
 <main class="row">
     <ul class="tabs" id="admintabs" data-tabs>
         <li class="tabs-title"><a href="#overzicht">overzicht</a></li>
-        <li class="tabs-title"><a href="#betalingen">betaalgegevens</a></li>
         <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
         <li class="tabs-title is-active"><a href="#veiling">Veiling</a></li>
     </ul>
@@ -18,15 +17,6 @@ include("php/layout/breadcrumbs.php");
             <div class="row expanded show-for-large">
                 <iframe style="width:100%; height:600px;" src="https://app.powerbi.com/view?r=eyJrIjoiMzAxNzVlODktMDEyZC00NWZiLWJiYjUtNDY0ZjBjMzFjMzUyIiwidCI6ImI2N2RjOTdiLTNlZTAtNDAyZi1iNjJkLWFmY2QwMTBlMzA1YiIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
             </div>
-        </div>
-        <div class="tabs-panel" id="betalingen">
-            <select name="" id="">
-                <option value="">Paypal</option>
-                <option value="">Creditcard</option>
-                <option value="">Vooruitbetaling</option>
-            </select>
-            <input type="text" placeholder="cardnumber">
-            <div class="button" type="submit" value="Submit">Submit</div>
         </div>
         <div class="tabs-panel categoriemanager" id="categorie">
             <?php
@@ -53,10 +43,7 @@ include("php/layout/breadcrumbs.php");
                 </div>
                 <div class="large reveal" id="verplaatsVeiling" data-reveal>
                     <h4>Selecteer categorie</h4>
-                    <div id="categorie">
-                        <div id="categorieToevoegen">
-                            <div class="categorien"></div>
-                        </div>
+                    <div id="categorieTwee">
                     </div>
                     <button class="button alert">Verplaats</button>
                     <button class="close-button" data-close aria-label="Close modal" type="button">

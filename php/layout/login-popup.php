@@ -29,13 +29,13 @@
                     <!-- Voornaam -->
                     <div class="small-6 column">
                         <label class="register-first-name" for="register-first-name">Voornaam</label>
-                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z][a-z ]+">
+                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z- ]+">
                     </div>
 
                     <!-- Achternaam-->
                     <div class="small-6 column">
                         <label class="register-last-name" for="register-last-name">Achternaam</label>
-                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z][a-z ]+">
+                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z- ]+">
                     </div>
                 </div>
 
@@ -53,14 +53,14 @@
 
                     <!-- Huisnummer -->
                     <div class="small-4 column">
-                        <label class="register-nr" for="register-nr">Huisnummer</label>
-                        <input id="register-no" name="huisnummer" type="text" placeholder="1" min="1" pattern="[1-9]{1}[0-9a-z]+">
+                        <label class="register-no" for="register-no">Huisnummer</label>
+                        <input id="register-no" name="huisnummer" type="text" placeholder="1" pattern="^[1-9][0-9]*[a-zA-Z]?">
                     </div>
 
                     <!-- Postcode -->
                     <div class="small-4 column">
                         <label class="register-zip" for="register-zip">Postcode</label>
-                        <input id="register-zip" name="postcode" type="text" placeholder="1234 AB" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
+                        <input id="register-zip" name="postcode" type="text" placeholder="1234 AB" pattern="^[1-9][0-9]*[a-zA-z- ]*">
                     </div>
 
                 </div>
@@ -71,9 +71,14 @@
                         <label class="register-country" for="register-country">Land</label>
                         <select name="land" id="register-country" required>
                             <option selected disabled value="">Kies een land</option>
-                            <option value="NL">Nederland</option>
-                            <option value="BE">België/Belgique</option>
-                            <option value="DE">Deutschland</option>
+                            <?php
+                            $landen = executeQuery("SELECT * FROM landen");
+                            if($landen['code'] == 0){
+                                foreach($landen['data'] as $land){
+                                    echo('<option value="'.$land['gba_code'].'">'.$land['land'].'</option>');
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -107,6 +112,7 @@
                 <label class="password" for="register-password">Wachtwoord</label>
                 <input id="register-password" name="register-password" type="password" placeholder="*******"
                 pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
+                <label id="passwordWarning">Minimaal 1 letter, hoofdletter en cijfer.</label>
 
                 <!-- Wachtwoord herhalen-->
                 <label class="password" for="register-repeat-password">Herhaal wachtwoord</label>
