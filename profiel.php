@@ -45,8 +45,7 @@ function pasteStatus($typeStatus, $soort) {
     }
 }
 ?>
-<div class="profiel">
-<main class="row">
+<main class="row profiel">
     <ul class="tabs" id="profieltabs" data-tabs>
         <li class="tabs-title is-active"><a href="#overzicht">Account instellingen</a></li>
         <li class="tabs-title"><a href="#biedingen">Mijn biedingen</a></li>
@@ -64,8 +63,8 @@ function pasteStatus($typeStatus, $soort) {
 
                         <?php
                         echo('<p id="gebruikersnaam"><strong>Gebruikersnaam: </strong>' . $_SESSION['gebruiker']->getGebruikersnaam() . '</p>');
-                        echo('<p id="wachtwoord"><strong>Wachtwoord: </strong>********</p>');
                         ?>
+                        <p id="wachtwoord"><strong>Wachtwoord: </strong>********</p>
 
                         <div class="field editInlogGegevens">
                             <input id="oudWachtwoord" type="password" placeholder="Old Password">
@@ -164,9 +163,8 @@ function pasteStatus($typeStatus, $soort) {
         </div>
     </div>
 </main>
-</div>
 <?php
-include("php/layout/footer.html")
+include("php/layout/footer.html");
 ?>
 <script>
     $('#showInlogGegevens').click(function () {
