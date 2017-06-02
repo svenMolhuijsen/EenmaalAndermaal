@@ -11,11 +11,6 @@ if(checkForEmpty($veilingId)){
 
     $boden = executeQuery("SELECT * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$veiling->getVeilingId()]);
 
-    //temp
-    session_destroy();
-    session_start();
-    //$_SESSION['gebruiker'] = new User('test1@test1.nl');
-
     $images = executeQuery("SELECT fotoPath FROM veilingFoto WHERE veilingId = ?", [$veiling->getVeilingId()]);
 
     if($images['code'] == 0) {
@@ -337,11 +332,10 @@ $(document).ready(function(){
         var now = new Date($.now());
         var biedingsTijd = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
 
-        var bod = { veilingId: veiling["veilingId"], email: gebruiker.email,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
+        var bod = { veilingId: veiling["veilingId"], gebruikersnaam: gebruiker,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
 
-        if(hoogsteBod.code == 1 || bod['email'] != hoogsteBod.data[0]["email"]) {
+        if(hoogsteBod.code == 1 || bod['gebruikersnaam'] != hoogsteBod.data[0]["gebruikersnaam"]) {
             $biedenError.hide();
-            console.log(gebruiker);
             if (bod.biedingsBedrag > biedDrempel) {
 
                 $.post("php/api.php?action=bieden", bod);
@@ -350,7 +344,7 @@ $(document).ready(function(){
                 biedDrempel = Number(hoogsteBod.biedingsBedrag) + bepaalBiedStap(hoogsteBod.biedingsBedrag);
 
                 var dateString = ("0"+(now.getDate().toString())).slice(-2)+'-'+("0"+(now.getMonth()+1)).toString().slice(-2)+'-'+now.getFullYear().toString().substring(2);
-                $biedingen.prepend('<tr><td>'+bod.email+'</td><td>€'+bod.biedingsBedrag+'</td><td>'+dateString+'</td></tr>');
+                $biedingen.prepend('<tr><td>'+bod.gebruikersnaam+'</td><td>€'+bod.biedingsBedrag+'</td><td>'+dateString+'</td></tr>');
                 $bedragError.html('U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €' + biedDrempel);
                 $bedragError.hide();
                 $bedrag.removeClass('is-invalid-input');

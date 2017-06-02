@@ -105,7 +105,7 @@ if(!isset($_SESSION['gebruiker'])) {
             </form>
         </div>
     </main>
-
+<?php include('php/layout/footer.html'); ?>
     <script>
         $(document).ready(function () {
             var date = new Date();
@@ -226,5 +226,3 @@ if(!isset($_SESSION['gebruiker'])) {
     </html>
     <?php
 }
-include("php/layout/footer.html");
-    ?>
