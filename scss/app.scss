@@ -52,6 +52,7 @@
 
 @include motion-ui-transitions;
 @include motion-ui-animations;
+@import 'plugins/jqpagination';
 
 @import 'components/header';
 @import 'components/login-popup';
