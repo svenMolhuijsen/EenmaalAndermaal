@@ -3,6 +3,11 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
+if(isset($_SESSION['gebruiker'])) {//isset() geeft false als niet ingelogd
+    if($_SESSION['gebruiker']->getVerkoper() == 1) { //getVerkoper() staat op 1 als admin is
+        include("geentoegang.php");
+    }
+}else {
 ?>
 
 <main class="row">
@@ -147,3 +152,7 @@ include("php/layout/footer.html")
 </script>
 </body>
 </html>
+    <?php
+}
+include("php/layout/footer.html");
+?>
