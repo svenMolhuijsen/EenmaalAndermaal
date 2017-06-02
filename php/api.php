@@ -15,7 +15,12 @@ if (!empty($_GET['action'])) {
         case 'logout':
             logout();
             break;
+        case 'getNumRows':
+            getNumRows();
+            break;
+
         case 'getCategories' :
+
             $hoofdCategory = null;
             $hoofdCategory = trim($_POST['hoofdCategory']);
             $params = array(
@@ -115,13 +120,14 @@ function logout()
 //    echo json_encode($a_result);
 }
 
-function search()
+function getNumRows()
 {
     $searchterm = $_POST['searchterm'];
     $minprice = (float)$_POST['minprice'];
     $maxprice = (float)$_POST['maxprice'];
     $category = (int)$_POST['category'];
     $sortering = $_POST['sortering'];
+
 
     switch ($sortering) {
         case 'Date ASC':
@@ -145,7 +151,10 @@ function search()
 
     if ($category == 'null') {
         $result = executeQuery(
-            ";with category_tree as 
+            "
+
+
+;with category_tree as 
 (
    select categorieId
    from categorie
@@ -156,7 +165,7 @@ function search()
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, V.startPrijs, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT  COUNT(*) AS numRows
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -166,14 +175,15 @@ V.categorieId IN (
 SELECT categorieId
 FROM category_tree
 ))
-GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
-HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
-ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
+AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL)"
+            , [$searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
 
     } else {
 
         $result = executeQuery(
-            ";with category_tree as 
+            "
+;with category_tree as 
 (
    select categorieId
    from categorie
@@ -184,7 +194,71 @@ ORDER BY " . $order, [$searchterm, $category, $minprice, $maxprice, $minprice, $
    join category_tree p on C.superId = P.categorieId 
 ) 
 
-SELECT DISTINCT TOP 12 V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam,V.startPrijs, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+SELECT COUNT(*) AS numRows
+FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
+WHERE V.titel LIKE '%'+?+'%' AND 
+V.eindDatum >= GETDATE()  AND
+V.beginDatum <= GETDATE() AND
+(V.categorieId = ? OR
+V.categorieId IN (
+SELECT categorieId
+FROM category_tree
+))
+AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL)"
+            , [$category, $searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
+    }
+    stuurTerug($result);
+}
+
+function search()
+{
+    $searchterm = $_POST['searchterm'];
+    $minprice = (float)$_POST['minprice'];
+    $maxprice = (float)$_POST['maxprice'];
+    $category = (int)$_POST['category'];
+    $sortering = $_POST['sortering'];
+    $numrows = (int)$_POST['numrows'];
+    $page = (int)$_POST['page'];
+
+    switch ($sortering) {
+        case 'Date ASC':
+            $order = 'V.eindDatum ASC';
+            Break;
+        case 'Date DESC':
+            $order = 'V.eindDatum DESC';
+            break;
+        case 'Title ASC':
+            $order = 'V.titel ASC';
+            break;
+        case 'startPrijs ASC':
+            $order = 'V.startPrijs ASC';
+            break;
+        case 'startPrijs DESC':
+            $order = 'V.startPrijs DESC';
+            break;
+        default:
+            $order = 'V.titel ASC';
+    }
+
+    if ($category == 'null') {
+        $result = executeQuery(
+            "
+DECLARE @NUMROWS AS int = ?
+DECLARE @PAGE AS int = ?
+
+;with category_tree as 
+(
+   select categorieId
+   from categorie
+   where superId IS NULL
+   union all
+   select C.categorieId
+   from categorie c
+   join category_tree p on C.superId = P.categorieId 
+) 
+
+SELECT DISTINCT V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam, V.thumbNail, V.startPrijs, MAX(B.biedingsBedrag) AS hoogsteBieding
 FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
 WHERE V.titel LIKE '%'+?+'%' AND 
 V.eindDatum >= GETDATE()  AND
@@ -196,7 +270,43 @@ FROM category_tree
 ))
 GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
 HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
-ORDER BY " . $order, [$category, $searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
+ORDER BY " . $order . "
+OFFSET	 @PAGE*@NUMROWS	ROWS
+FETCH NEXT	@NUMROWS ROWS ONLY", [$numrows, $page, $searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
+
+    } else {
+
+        $result = executeQuery(
+            "
+DECLARE @NUMROWS AS int = ?
+DECLARE @PAGE AS int = ?
+
+;with category_tree as 
+(
+   select categorieId
+   from categorie
+   where superId =?
+   union all
+   select C.categorieId
+   from categorie c
+   join category_tree p on C.superId = P.categorieId 
+) 
+
+SELECT DISTINCT V.veilingId, V.titel, V.eindDatum,V.categorieId, C.categorieNaam,V.startPrijs, V.thumbNail, MAX(B.biedingsBedrag) AS hoogsteBieding
+FROM veiling V INNER JOIN categorie C ON V.categorieId = C.categorieId  LEFT JOIN biedingen B ON B.veilingId = V.veilingId
+WHERE V.titel LIKE '%'+?+'%' AND 
+V.eindDatum >= GETDATE()  AND
+V.beginDatum <= GETDATE() AND
+(V.categorieId = ? OR
+V.categorieId IN (
+SELECT categorieId
+FROM category_tree
+))
+GROUP BY V.veilingId, V.titel, V.eindDatum,V.categorieId,V.verkoopPrijs, C.categorieNaam, V.thumbNail, V.startPrijs
+HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedingsBedrag) IS NULL) AND ((V.startPrijs>=? AND V.startPrijs<=?)OR V.startPrijs IS NULL)
+ORDER BY " . $order . "
+OFFSET	 @PAGE*@NUMROWS	ROWS
+FETCH NEXT	@NUMROWS ROWS ONLY", [$numrows, $page, $category, $searchterm, $category, $minprice, $maxprice, $minprice, $maxprice]);
     }
     stuurTerug($result);
 }
@@ -326,8 +436,7 @@ function checkFiles()
     $feedbacks = array();
     $uploadOk = true;
 
-    foreach($_FILES as $file)
-    {
+    foreach ($_FILES as $file) {
         $feedback = array();
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
 
@@ -348,17 +457,17 @@ function checkFiles()
         }
     }
 
-    if($uploadOk) {
+    if ($uploadOk) {
         $response = aanmakenveiling($_POST, $_FILES['thumbnail']);
-    }
-    else{
+    } else {
         $response = array('status' => 'userError', 'feedback' => $feedbacks);
     }
 
     echo json_encode($response);
 }
 
-function aanmakenveiling($veilingInfo){
+function aanmakenveiling($veilingInfo)
+{
     $veilingInfo['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
     $veilingInfo['categorieId'] = intval($veilingInfo['categorieId']);
     $veilingInfo['startPrijs'] = intval($veilingInfo['startPrijs']);
@@ -366,8 +475,8 @@ function aanmakenveiling($veilingInfo){
     $veilingInfo['koperGebruikersnaam'] = null;
     $veilingInfo['betalingswijze'] = 'IDEAL';
     $veilingInfo['verzendwijze'] = 'POSTNL';
-    foreach($veilingInfo as $key => $value){
-        if(empty($veilingInfo[$key])) {
+    foreach ($veilingInfo as $key => $value) {
+        if (empty($veilingInfo[$key])) {
             $veilingInfo[$key] = null;
         }
     }
@@ -399,20 +508,19 @@ function aanmakenveiling($veilingInfo){
 
 function uploadFiles($veilingId)
 {
-    $prefix = date('Ymdhms').rand(0, 999);
-    $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'].'/';
+    $prefix = date('Ymdhms') . rand(0, 999);
+    $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'] . '/';
     $uploaddir = '/upload/';
     $error = false;
 
     foreach ($_FILES as $key => $file) {
-        $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
+        $targetFile = $uploaddirPrefix . $uploaddir . $prefix . basename($file['name']);
 
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            if($key != 'thumbnail') {
-                executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
-            }
-            else{
-                executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
+            if ($key != 'thumbnail') {
+                executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir . $prefix . basename($file['name'])]);
+            } else {
+                executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir . $prefix . basename($file['name']), $veilingId]);
             }
         } else {
             $error = true;
@@ -470,7 +578,6 @@ function pasgegevensaan($gegevens) {
     if (!empty($gegevens['NEWpostcode'])) {
         $_SESSION['gebruiker']->setPostcode($gegevens['NEWpostcode']);
     }
-
     if (!empty($gegevens['NEWtelefoonnummer'])) {
         $_SESSION['gebruiker']->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
     }

@@ -121,34 +121,34 @@ function generateParentCategories(category, target) {
     });
 }
 
-function veiling(target, result){
+function veiling(target, result) {
     var res = JSON.parse(result);
     $(target).empty();
-    if(res.code === 0){
-        $.each(res.data, function(index, item){
+    if (res.code === 0) {
+        $.each(res.data, function (index, item) {
             console.log(target);
             $(target).append('<div class="column small-6 medium-4 veiling" data-equalizer-watch><div class="inner">' +
-            '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
-            '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
-            '<div class="titel">' + item["titel"] + '</div> ' +
-            '<div class="bod">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div> ' +
-            '<br></div> ' +
-            '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
-            createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);    
+                '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/thumbnails/' + item["thumbNail"] + ')"></div>' +
+                '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
+                '<div class="titel">' + item["titel"] + '</div> ' +
+                '<div class="bod">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div> ' +
+                '<br></div> ' +
+                '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
+            createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);
         });
 
         //$(target).foundation('destroy');
         new Foundation.Equalizer($(target)).getHeightsByRow();
     }
-     $(target).append('<div class="column veiling" data-equalizer-watch>' +
-                "<div class='callout warning'> " +
-                "<h5>Niets gevonden</h5> " +
-                "<p>Er is waarschijnlijk een database probleem</p> " +
-                "</div></div></div>");
+    $(target).append('<div class="column veiling" data-equalizer-watch>' +
+        "<div class='callout warning'> " +
+        "<h5>Niets gevonden</h5> " +
+        "<p>Er is waarschijnlijk een database probleem</p> " +
+        "</div></div></div>");
 }
 
 var searchRequestcounter = 0;
-function zoeken() {
+function zoeken(page = 0, newIndex = false) {
     var minBedrag = $('#sliderOutput1').val();
     var maxBedrag = $('#sliderOutput2').val();
     var searchterm = $('#searchterm').val();
@@ -161,14 +161,45 @@ function zoeken() {
         minprice: minBedrag,
         maxprice: maxBedrag,
         searchterm: searchterm,
-        sortering: sortering
+        sortering: sortering,
+        page: page,
+        numrows: 12
     }, function (result) {
         if (requestNumber == searchRequestcounter) {
             //to make sure only the last query is displayed
             var target = ".veilingen .row";
             veiling(target, result);
         }
-       });
+    });
+    if (newIndex) {
+        console.log("geactiveerd")
+        createPageIndex();
+    }
+}
+
+var pageIndexCounter = 0;
+function createPageIndex() {
+    var minBedrag = $('#sliderOutput1').val();
+    var maxBedrag = $('#sliderOutput2').val();
+    var searchterm = $('#searchterm').val();
+    var categorie = currCategory;
+    var sortering = $("#sortering").find(":selected").val();
+    pageIndexCounter++;
+    requestNumber = pageIndexCounter;
+    $.post("/php/api.php?action=getNumRows", {
+        category: categorie,
+        minprice: minBedrag,
+        maxprice: maxBedrag,
+        searchterm: searchterm,
+        sortering: sortering
+    }, function (result) {
+        var res = JSON.parse(result);
+        console.log(res);
+        if (pageIndexCounter == requestNumber) {
+            pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
+            $('.pagination').jqPagination('option', 'max_page', pages);
+        }
+    });
 }
 
 function createCountdown($target, countDownDate) {
@@ -203,7 +234,7 @@ function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
 //////////////////////////////////////////////
 //  Navbar
 /////////////////////////////////////////////
@@ -305,7 +336,7 @@ $(document).ready(function(){
     });
 
     var eighteenYearsAgo = new Date();
-    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear()-18);
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
     $('#registerForm').validate({
         rules: {
@@ -407,15 +438,28 @@ $(document).ready(function(){
         generateParentCategories(category, target);
         currCategory = category;
 
+        $('.pagination').jqPagination({
+            paged: function (pages) {
+                zoeken(pages - 1);
+            }
+        });
+
         $('.filter .slider').on('changed.zf.slider', function () {
-            zoeken();
+            createPageIndex();
+            $('.pagination').jqPagination('option', 'current_page', 1);
+            zoeken(0, true);
         });
         $('#searchterm').on('keyup', function () {
-            zoeken();
+            createPageIndex();
+            $('.pagination').jqPagination('option', 'current_page', 1);
+            zoeken(0, true);
         });
         $("#sortering").change(function () {
-            zoeken();
+            createPageIndex();
+            $('.pagination').jqPagination('option', 'current_page', 1);
+            zoeken(0, true);
         });
+        zoeken(0, true);
     }
 
     generateParentCategories(null, $('#categorie'));
