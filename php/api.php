@@ -6,10 +6,7 @@ if (!empty($_GET['action'])) {
     switch ($action) {
         // Inloggen
         case 'login':
-            $params = array(
-                'email' => $_POST['email'],
-                'password' => $_POST['password']);
-            login($params);
+            login($_POST);
             break;
         // Uitloggen
         case 'logout':
@@ -56,9 +53,6 @@ if (!empty($_GET['action'])) {
         case 'AanpassenGegevens':
             pasgegevensaan($_POST);
             break;
-        case 'uploadFile':
-            uploadFile();
-            break;
         case 'trending':
             trending();
             break;
@@ -81,43 +75,38 @@ if (!empty($_GET['action'])) {
 // Inloggen
 function login($params)
 {
-    // Variabelen uit object halen
-    $mail = $params["email"];
-    $password = $params["password"];
-    global $user;
-    $response = null;
+    $gebruikersnaam = $params["gebruikersnaam"];
+    $wachtwoord = $params["wachtwoord"];
 
-    if (empty($mail) || empty($password)) {
+    if (empty($gebruikersnaam) || empty($wachtwoord)) {
         $response = ['status' => 'error', "message" => "Een van de velden is niet ingevuld"];
     } else {
-        $result = executeQuery("SELECT email, wachtwoord FROM gebruikers WHERE email = ?", [$mail]);
+        $result = executeQuery("SELECT TOP 1 gebruikersnaam, wachtwoord FROM gebruikers WHERE gebruikersnaam = ?", [$gebruikersnaam]);
         if ($result['code'] == 0) {
-            if (password_verify($password, $result['data'][0]["wachtwoord"])) {
-                //gebruiker gevonden en wachtwoord klopt
-                $_SESSION['email'] = $mail;
-                $user = new User($_SESSION['email']);
+            if ($wachtwoord == $result['data'][0]["wachtwoord"]) {
+                $_SESSION['gebruiker'] = $gebruikersnaam;
                 $response = ['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd'];
-            } else {
-                //wanneer gebruiker gevonden is, maar het wachtwoord niet klopt
-                $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
             }
-        } else {
-            $response = $result;
+        }
+        else {
+            $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
         }
     }
-    stuurTerug($response);
 
+    echo json_encode($response);
 }
 
-function logout()
-{
-//    session_destroy();
-//    if ($_SESSION != null) {
-//        $a_result = ['status' => 'unsuccessful'];
-//    } else {
-//        $a_result = ['status' => 'success'];
-//    }
-//    echo json_encode($a_result);
+function logout() {
+    session_unset();
+    session_destroy();
+    if ($_SESSION != null) {
+        $a_result = ['loggedOut' => false];
+    }
+    else {
+        $a_result = ['loggedOut' => true];
+    }
+
+    echo json_encode($a_result);
 }
 
 function getNumRows()
@@ -348,14 +337,7 @@ function getSubCategories($data)
 
 function stuurTerug($data)
 {
-    global $user;
-    if ($user == null) {
-        $response = array_merge(['login' => false], $data);
-    } else {
-        $response = array_merge(['login' => true, 'user' => $user->toArray()], $data);
-    }
-    echo json_encode($response);
-
+    echo json_encode($data);
 }
 
 //genereren categorie-accordion
@@ -409,10 +391,14 @@ function setSubcategorien($hoofdcategorie)
 //bieden
 function bieden($bieding)
 {
-    executeQuery(
-        "INSERT INTO biedingen(veilingId, email, biedingsTijd, biedingsBedrag) VALUES(?, ?, ?, ?)",
-        [$bieding["veilingId"], $_SESSION["gebruiker"]->getEmail(), $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
+    $bieding = executeQueryNoFetch(
+        "INSERT INTO biedingen(veilingId, gebruikersnaam, biedingsTijd, biedingsBedrag) VALUES(?, ?, ?, ?)",
+        [$bieding["veilingId"], $_SESSION["gebruiker"], $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
     );
+
+    if($bieding['code'] == 2) {
+        var_dump($bieding);
+    }
 }
 
 function getHoogsteBod($data)
@@ -427,7 +413,7 @@ function getHoogsteBod($data)
 
 function getVeilingInfo($data)
 {
-    echo json_encode(["gebruiker" => $_SESSION['gebruiker']->toArray(), "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
+    echo json_encode(["gebruiker" => $_SESSION['gebruiker'], "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
 
 //registreren van veiling
@@ -508,20 +494,19 @@ function aanmakenveiling($veilingInfo)
 
 function uploadFiles($veilingId)
 {
-    $prefix = date('Ymdhms') . rand(0, 999);
-    $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'] . '/';
-    $uploaddir = '/upload/';
+    $prefix = date('Ymdhms').rand(0, 999);
+    $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'].'/';
+    $uploaddir = 'upload/';
     $error = false;
 
     foreach ($_FILES as $key => $file) {
-        $targetFile = $uploaddirPrefix . $uploaddir . $prefix . basename($file['name']);
-
+        $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            if ($key != 'thumbnail') {
-                executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir . $prefix . basename($file['name'])]);
-            } else {
-                executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir . $prefix . basename($file['name']), $veilingId]);
+            if($key == 'thumbnail' && $key !== 0){
+                executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
+                continue;
             }
+                executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
         } else {
             $error = true;
         }

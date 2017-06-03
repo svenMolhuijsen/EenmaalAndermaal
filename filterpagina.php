@@ -21,14 +21,28 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
     <div class="column">
         <h2 class="float-left">Uw Zoekresultaten: </h2>
         <form method="get" class="float-right" action="filterpagina.php">
-            <label for="sortering">Filter op: </label>
-            <select id="sortering" style="width: 100%" name="sorterenOp" style="width:20%">
-                <option value="Date ASC">Datum Aflopend</option>
-                <option value="Date DECS">Datum Oplopend</option>
-                <option value="startPrijs ASC">Startprijs Oplopend</option>
-                <option value="startPrijs DESC">Startprijs Aflopend</option>
-                <option value="Title ASC">Alphabet</option>
-            </select>
+
+
+            <div class="float-right">
+                <label for="sortering">Filter op: </label>
+                <select id="sortering" style="width: 100%" name="sorterenOp" style="width:20%">
+                    <option value="Date ASC">Datum Aflopend</option>
+                    <option value="Date DECS">Datum Oplopend</option>
+                    <option value="startPrijs ASC">Startprijs Oplopend</option>
+                    <option value="startPrijs DESC">Startprijs Aflopend</option>
+                    <option value="Title ASC">Alphabet</option>
+                </select>
+            </div>
+            <div class="float-right">
+                <label for="pagination">Pagina</label>
+                <div id="pagination" class="pagination float-right">
+                    <a href="#" class="first" data-action="first">&laquo;</a>
+                    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+                    <input type="text" readonly="readonly" data-max-page="1"/>
+                    <a href="#" class="next" data-action="next">&rsaquo;</a>
+                    <a href="#" class="last" data-action="last">&raquo;</a>
+                </div>
+            </div>
         </form>
     </div>
     <aside class="column small-3">
@@ -69,14 +83,6 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
         <div class="row" data-equalizer>
             <!--de rest wordt gegenereet met javascript-->
 
-        </div>
-        <div class="pagination">
-            <a href="#" class="first" data-action="first">&laquo;</a>
-            <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-            <input type="text" readonly="readonly" data-max-page="1"/>
-            <a href="#" class="next" data-action="next">&rsaquo;</a>
-            <a href="#" class="last" data-action="last">&raquo;</a>
-        </div>
         </div>
     </div>
 </main>
