@@ -25,26 +25,15 @@ include("php/layout/breadcrumbs.php");
             ?>
         </div>
         <div class="tabs-panel" id="veiling">
-        <?php
-        $veilingId = '380468258025';
-        $veiling = Veiling::existingVeiling($veilingId);
-        ?>
             <div class="column row">
                 <div class="input-group">
-                    <input type="number" class="input-group-field" placeholder="veilingId">
-                    <div class="input-group-button"><button class="button">Zoek</button></div>
+                    <input type="number" class="input-group-field" placeholder="veilingId" id="veilingId">
+                    <div class="input-group-button"><button id="zoekVeiling" class="button">Zoek</button></div>
                 </div>
             </div>
             <hr>
             <div class="column row">
-                <div class="float-right">
-                    <button class="button secondary" data-open="verplaatsVeiling">Verplaatsen</button>
-                    <?php
-                    if($veiling->getVeilingGestopt() == 0){
-                        echo('<button class="button warning" id="beindigd">Beïndigen</button>');
-                    }?>
-                    <button class="button alert" data-open="verwijderVeiling">Verwijderen</button>
-                </div>
+                <div class="float-right" id="knoppen"></div>
                 <div class="large reveal" id="verplaatsVeiling" data-reveal>
                     <h4>Selecteer categorie</h4>
                     <div id="categorieTwee"></div>
@@ -65,29 +54,8 @@ include("php/layout/breadcrumbs.php");
             </div>
 
             <div class="row">
-                <div class="columns large-8">
-                    <?php
-                    echo('  <div>
-                                <h1>'.$veiling->getTitel().'</h1>
-                                <h5>'.$veiling->getVerkoperGebruikersnaam().'</h5>
-                            </div>');
-                    echo('  <div>
-                                <img src="http://iproject34.icasites.nl/thumbnails/'.$veiling->getThumbNail().'" alt="img">
-                            </div>');
-                    echo('  <div>
-                                <h4>Beschrijving:</h4>
-                                <p>'.$veiling->getBeschrijving().'</p>
-                            </div>');
-                    ?>
-                </div>
-                <div class="columns large-4">
-                <?php
-                echo('  <div>
-                            <h4>Veiling eindigd op:</h4>
-                            <span>'.$veiling->getEindDatum().'</span>
-                        </div>');
-                ?>                     
-                </div>
+                <div class="columns large-8" id="veilingInfo"></div>
+                <div class="columns large-4" id="veilingDatum"></div>
             </div>
         </div>
     </div>
@@ -113,6 +81,42 @@ include("php/layout/footer.html")
                 alert('Categorie toevoegen geslaagd!');
             }
         });
+    });
+
+    $('#zoekVeiling').click(function(){
+        var veilingId = $('#veilingId').val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=getVeilingInfo',
+            data: veiling,
+            dataType: 'json',
+            success: function(result){
+                veiling = result.veiling.data[0];
+            }
+        });
+        $('#veilingInfo').empty();
+        $('#veilingDatum').empty();
+        $('#knoppen').empty();
+        $('#veilingInfo').append('  <div>'+
+                                    '<h1>'veiling["titel"]'</h1>'+
+                                    '<h5>'veiling["verkoperGebruikersnaam"]'</h5>'+
+                                    '</div>'+
+                                    '<div>'+
+                                        '<img src="http://iproject34.icasites.nl/"'veiling["thumbnail"]'" alt="img">'+
+                                    '</div>'+
+                                    '<div>'+
+                                        '<h4>Beschrijving:</h4>'+
+                                        '<p>'veiling["beschrijving"]'</p>'+
+                                    '</div>' );
+
+        $('#veilingDatum').append('  <div>'+
+                                        '<h4>Veiling eindigd op:</h4>'+
+                                        '<span>'veiling["eindDatum"]'</span'+
+                                    '</div>');
+        $('#knoppen').append('<button class="button secondary" data-open="verplaatsVeiling">Verplaatsen</button>'+
+                                (eindDatum < huidigeDatum ? '<button class="button warning" id="beindigd">Beïndigen</button>')+
+                                '<button class="button alert" data-open="verwijderVeiling">Verwijderen</button>');
     });
 
     $('#beindigd').click(function(){
