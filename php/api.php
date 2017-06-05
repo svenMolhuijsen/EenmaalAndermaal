@@ -41,6 +41,9 @@ if (!empty($_GET['action'])) {
         case 'getVeilingInfo':
             getVeilingInfo($_POST);
             break;
+        case 'getBiedingInfo':
+            getBiedingInfo($_POST);
+            break;
         case 'sluitVeiling':
             sluitVeiling($_POST);
             break;
@@ -413,6 +416,10 @@ function getHoogsteBod($data)
 
 function getVeilingInfo($data)
 {
+   stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]));
+}
+
+function getBiedingInfo($data){
     echo json_encode(["gebruiker" => $_SESSION['gebruiker'], "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
 
@@ -599,8 +606,9 @@ function trending()
     stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
 }
 
-function beindigveiling($veiling){
+function beindigVeiling($veiling){
     executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), veilingGestopt = 1 WHERE veilingId = ?",[$veiling["veilingId"]]);
+    //verzend email functie toevoegen voor dit veilingId
 }
 
 function verwijderVeiling($veiling){
@@ -611,7 +619,6 @@ function verwijderVeiling($veiling){
 }
 
 function verplaatsVeiling($veiling){
-    var_dump($veiling);
     executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE veilingId = ?", [$veiling["categorieId"], $veiling["veilingId"]]);
 }
 

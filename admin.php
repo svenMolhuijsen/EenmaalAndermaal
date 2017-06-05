@@ -7,10 +7,10 @@ include("php/layout/breadcrumbs.php");
 ?>
 
 <main class="row">
-    <ul class="tabs" id="admintabs" data-tabs>
-        <li class="tabs-title"><a href="#overzicht">overzicht</a></li>
+    <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>
+        <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
         <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
-        <li class="tabs-title is-active"><a href="#veiling">Veiling</a></li>
+        <li class="tabs-title"><a href="#veiling">Veiling</a></li>
     </ul>
 
     <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
@@ -66,6 +66,8 @@ include("php/layout/breadcrumbs.php");
 include("php/layout/footer.html")
 ?>
 <script>
+var veilingId;
+
     $('#addCategorieToDatabase').click(function () {
         var categorie = {
             categorieNaam: $('#categorieNaam').val(),
@@ -83,60 +85,54 @@ include("php/layout/footer.html")
         });
     });
 
-    $('#zoekVeiling').click(function(){
-        var veilingId = $('#veilingId').val();
-
+    $("#zoekVeiling").click(function () {
+        veilingId = $('#veilingId').val();
+        var veiling = {
+            veilingId: veilingId
+        };
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=getVeilingInfo',
             data: veiling,
             dataType: 'json',
             success: function(result){
-                veiling = result.veiling.data[0];
+                veiling = result.data[0];
+                
+                $('#veilingInfo').empty();
+                $('#veilingDatum').empty();
+                $('#knoppen').empty();
+                $('#veilingInfo').append("<div>  <h1>"+veiling.titel+"</h1>"+
+                                                "<h5>"+veiling.verkoperGebruikersnaam+"</h5></div>"+
+                                        "<div><img src='http://iproject34.icasites.nl/"+veiling.thumbNail+"' alt='img'></div>"+
+                                        "<div><h4>Beschrijving:</h4><p>"+veiling.beschrijving+"</p></div>");
+
+                $('#veilingDatum').append("<div><h4>Veiling eindigd op:</h4><span>"+veiling.eindDatum+"</span></div>");
+                $('#knoppen').append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>"+
+                                    (veiling.veilingGestopt == false ? "<button class='button warning' id='beindigd' onclick='beindig()'>Beïndigen</button>": "")+
+                                    "<button class='button alert' data-open='verwijderVeiling'>Verwijderen</button");
             }
         });
-        $('#veilingInfo').empty();
-        $('#veilingDatum').empty();
-        $('#knoppen').empty();
-        $('#veilingInfo').append('  <div>'+
-                                    '<h1>'veiling["titel"]'</h1>'+
-                                    '<h5>'veiling["verkoperGebruikersnaam"]'</h5>'+
-                                    '</div>'+
-                                    '<div>'+
-                                        '<img src="http://iproject34.icasites.nl/"'veiling["thumbnail"]'" alt="img">'+
-                                    '</div>'+
-                                    '<div>'+
-                                        '<h4>Beschrijving:</h4>'+
-                                        '<p>'veiling["beschrijving"]'</p>'+
-                                    '</div>' );
-
-        $('#veilingDatum').append('  <div>'+
-                                        '<h4>Veiling eindigd op:</h4>'+
-                                        '<span>'veiling["eindDatum"]'</span'+
-                                    '</div>');
-        $('#knoppen').append('<button class="button secondary" data-open="verplaatsVeiling">Verplaatsen</button>'+
-                                (eindDatum < huidigeDatum ? '<button class="button warning" id="beindigd">Beïndigen</button>')+
-                                '<button class="button alert" data-open="verwijderVeiling">Verwijderen</button>');
     });
 
-    $('#beindigd').click(function(){
+    function beindig(){
         var veiling = {
-            veilingId: '<?php echo($veilingId); ?>'
+            veilingId: veilingId
         };
-         $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=beindigveiling',
-            data: veiling,
-            dataType: 'json',
-            complete: function(){
-                alert('Veiling beïndigen geslaagd!');
-            }
-        });
-    });
+        $.ajax({
+                type: 'POST',
+                url: 'php/api.php?action=beindigveiling',
+                data: veiling,
+                dataType: 'json',
+                complete: function(){
+                    alert('Veiling beïndigen geslaagd!');
+                }
+            });
+            $('#beindigd').remove();
+    }
 
     $('#verwijder').click(function(){
         var veiling = {
-            veilingId: '<?php echo($veilingId); ?>'
+            veilingId: veilingId
         };
          $.ajax({
             type: 'POST',
@@ -147,11 +143,15 @@ include("php/layout/footer.html")
                 alert('Veiling verwijderen geslaagd!');
             }
         });
+        $('#verwijderVeiling').foundation('close');
+        $('#veilingInfo').empty();
+        $('#veilingDatum').empty();
+        $('#knoppen').empty();
     });
 
     $('#verplaats').click(function(){
         var veiling = {
-            veilingId: '<?php echo($veilingId);?>',
+            veilingId: veilingId,
             categorieId: $('#categorieTwee').children().last().prev().find(":selected").val()
         };
         $.ajax({
@@ -160,6 +160,7 @@ include("php/layout/footer.html")
             data: veiling,
             dataType: 'json',
             complete: function(){
+                $('#verplaatsVeiling').foundation('close');
                 alert('Veiling verplaatsen geslaagd!');
             }
         });
