@@ -5,9 +5,8 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
-$_SESSION['gebruiker'] = new User("((marion))");
 if(!isset($_SESSION['gebruiker'])) {
-    include("geentoegang.php");
+    include("php/layout/geentoegang.html");
 }else {
     ?>
     <main>
@@ -42,7 +41,7 @@ if(!isset($_SESSION['gebruiker'])) {
                         </select>
 
                         <h4><strong>Categorie</strong></h4>
-                        <div id="categorie">
+                        <div id="categorieTwee">
                         </div>
                     </div>
                     <div class="large-6 columns float-right">
@@ -86,7 +85,7 @@ if(!isset($_SESSION['gebruiker'])) {
                             <div class="large-6 columns">
                                 <h5>Huisnummer</h5>
                                 <input id="huisnummer" name="huisnummer" type="text" placeholder="Huisnummer"
-                                       pattern="[1-9]{1}[0-9a-z]+"/>
+                                       pattern="^[1-9][0-9]*[a-zA-Z]?"/>
 
                                 <h5 class="titel">Provincie</h5>
                                 <input id="provincie" name="provincie" type="text" placeholder="Provincie"
@@ -94,7 +93,7 @@ if(!isset($_SESSION['gebruiker'])) {
 
                                 <h5 class="titel">Postcode</h5>
                                 <input id="postcode" name="postcode" type="text" placeholder="Postcode"
-                                       pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}"/>
+                                       pattern="^[1-9][0-9]*[a-zA-z- ]*"/>
                             </div>
                         </div>
                     </div>
@@ -105,7 +104,7 @@ if(!isset($_SESSION['gebruiker'])) {
             </form>
         </div>
     </main>
-<?php include('php/layout/footer.html'); ?>
+<?php } include('php/layout/footer.html'); ?>
     <script>
         $(document).ready(function () {
             var date = new Date();
@@ -179,7 +178,7 @@ if(!isset($_SESSION['gebruiker'])) {
 
                 data.append('titel', $('#titel').val());
                 data.append('beschrijving', $('#omschrijving').val());
-                data.append('categorieId', $('#categorie').children().last().prev().find(":selected").val());
+                data.append('categorieId', $('#categorieTwee').children().last().prev().find(":selected").val());
                 data.append('postcode', $('#postcode').val());
                 data.append('land', $('#land').val());
                 data.append('startPrijs', $('#prijs').val());
@@ -224,5 +223,3 @@ if(!isset($_SESSION['gebruiker'])) {
     </script>
     </body>
     </html>
-    <?php
-}

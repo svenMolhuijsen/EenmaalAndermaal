@@ -23,9 +23,8 @@
 
         <!-- sign up form -->
         <div id="register">
-            <form id="registerForm" class="form small-12 column" method="post">
+            <form id="registerForm" class="form small-12 column">
                 <div class="row">
-
                     <!-- Voornaam -->
                     <div class="small-6 column">
                         <label class="register-first-name" for="register-first-name">Voornaam</label>
@@ -120,7 +119,7 @@
                 placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
 
-                <input class="button float-right" type="submit" name="submit" value="Registreer" rel="registerForm">
+                <input id="registreer" class="button float-right" type="submit" value="Registreer">
             </form>
         </div>
 

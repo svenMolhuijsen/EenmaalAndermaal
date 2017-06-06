@@ -8,7 +8,7 @@ class User extends Locatie
     private $geboortedatum;
     private $gebruikersnaam;
     private $telefoonnmr;
-    private $verkoper;
+    private $admin;
 
     function __construct($gebruikersnaam)
     {
@@ -22,7 +22,7 @@ class User extends Locatie
             $this->achternaam = $gebruiker["achternaam"];
             $this->geboortedatum = $gebruiker["geboortedatum"];
             $this->telefoonnmr = $gebruiker["telefoonnmr"];
-            $this->verkoper = $gebruiker["verkoper"];
+            $this->admin = $gebruiker["admin"];
 
             $this->land = $gebruiker['land'];
             $this->provincie = $gebruiker['provincie'];
@@ -34,11 +34,11 @@ class User extends Locatie
         }
     }
 
-    public static function newUser($gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
+    public static function newUser($gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $admin, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
     {
-        executeQuery("INSERT INTO Gebruikers (gebruikersnaam, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, verkoper, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
+        executeQuery("INSERT INTO Gebruikers (gebruikersnaam, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, admin, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
                       VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [$gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $verkoper, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
+            [$gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $admin, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
     }
 
     public function toArray()
@@ -48,7 +48,7 @@ class User extends Locatie
             'achternaam' => $this->achternaam,
             'geboortedatum' => $this->geboortedatum,
             'telefoonmr' => $this->telefoonnmr,
-            'verkoper' => $this->verkoper,
+            'verkoper' => $this->admin,
             'land' => $this->land,
             'provincie' => $this->provincie,
             'postcode' => $this->postcode,
@@ -173,19 +173,19 @@ class User extends Locatie
      * @return mixed
      */
     public
-    function getVerkoper()
+    function getAdmin()
     {
-        return $this->verkoper;
+        return $this->admin;
     }
 
     /**
      * @param mixed $verkoper
      */
     public
-    function setVerkoper($verkoper)
+    function setAdmin($admin)
     {
-        $this::update("verkoper", $this->verkoper, $verkoper);
-        $this->verkoper = $verkoper;
+        $this::update("admin", $this->admin, $admin);
+        $this->verkoper = $admin;
     }
 }
 
