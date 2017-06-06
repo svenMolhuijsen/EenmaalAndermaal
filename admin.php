@@ -4,10 +4,9 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 $user = new User($_SESSION['gebruiker']);
-if(!isset($_SESSION['gebruiker'])){ //Geen ingelogde user krijt sws
+if (!isset($_SESSION['gebruiker'])){ //Geen ingelogde user krijt sws
       include("php/layout/geentoegang.html");
-    }
-else if($user ->getAdmin() == 1){
+} else if ($user ->getAdmin() == 1){
 ?>
 <main class="row">
     <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>

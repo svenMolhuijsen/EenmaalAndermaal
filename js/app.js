@@ -62,72 +62,11 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Functions
 /////////////////////////////////////////////
-function generateCategorySelect($childtarget, $target, category, selected) {
-    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-        if (res.code == 0) {
-            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
-            $($select).append("<option value='" + category + "'selected>Categorie selecteren</option>");
-
-            $.each(res.data, function (index, item) {
-                if (selected == item["categorieId"]) {
-                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
-                } else {
-                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
-                }
-            });
-            $childtarget.append($select);
-        }
-
-        $($childtarget).change(function () {
-            var value = $($childtarget).find(":selected").val();
-            currCategory = value;
-            generateParentCategories(value, $target);
-            zoeken();
-        });
-    });
-}
-
-
-function generateParentCategories(category, target) {
-    target.empty();
-    $(target).unbind("change");
-    $.post("/php/api.php?action=getParentCategories", {category: category}, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-
-        // Kijken of het result true is
-        if (res.code == 0) {
-            var parents = res["data"];
-            var inverse = 0;
-            for (var i = parents.length - 1; i >= 0; i--) {
-                //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
-                target.append("<div class='" + inverse + "'></div>");
-                var childtarget = $('.' + inverse, target);
-
-                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
-
-                inverse++;
-                if (i == 0) {
-                    target.append("<div class='" + inverse + "'></div>")
-                    var childtarget = $('.' + inverse, target);
-                    generateCategorySelect(childtarget, target, category, null);
-                }
-            }
-        } else {
-            generateCategorySelect(target, target, null, null);
-        }
-
-    });
-}
-
 function veiling(target, result) {
     var res = JSON.parse(result);
     $(target).empty();
     if (res.code === 0) {
         $.each(res.data, function (index, item) {
-            console.log(target);
             $(target).append('<div class="column small-6 medium-4 veiling"><div class="inner">' +
                 '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/' + item["thumbNail"] + ')"></div>' +
                 '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
@@ -153,36 +92,6 @@ function veiling(target, result) {
             "<h5>Niets gevonden</h5> " +
             "<p>Er is waarschijnlijk een database probleem</p> " +
             "</div></div></div>")
-    }
-}
-
-var searchRequestcounter = 0;
-function zoeken(page = 0, newIndex = false) {
-    var minBedrag = $('#sliderOutput1').val();
-    var maxBedrag = $('#sliderOutput2').val();
-    var searchterm = $('#searchterm').val();
-    var categorie = currCategory;
-    var sortering = $("#sortering").find(":selected").val();
-    searchRequestcounter++;
-    requestNumber = searchRequestcounter;
-    $.post("/php/api.php?action=search", {
-        category: categorie,
-        minprice: minBedrag,
-        maxprice: maxBedrag,
-        searchterm: searchterm,
-        sortering: sortering,
-        page: page,
-        numrows: 12
-    }, function (result) {
-        if (requestNumber == searchRequestcounter) {
-            //to make sure only the last query is displayed
-            var target = ".veilingen .row";
-            veiling(target, result);
-        }
-
-    });
-    if (newIndex) {
-        createPageIndex();
     }
 }
 
@@ -215,6 +124,96 @@ function createPageIndex() {
         }
     });
 }
+
+var searchRequestcounter = 0;
+function zoeken(page = 0, newIndex = false) {
+    var minBedrag = $('#sliderOutput1').val();
+    var maxBedrag = $('#sliderOutput2').val();
+    var searchterm = $('#searchterm').val();
+    var categorie = currCategory;
+    var sortering = $("#sortering").find(":selected").val();
+    searchRequestcounter++;
+    requestNumber = searchRequestcounter;
+    $.post("/php/api.php?action=search", {
+        category: categorie,
+        minprice: minBedrag,
+        maxprice: maxBedrag,
+        searchterm: searchterm,
+        sortering: sortering,
+        page: page,
+        numrows: 12
+    }, function (result) {
+        if (requestNumber == searchRequestcounter) {
+            //to make sure only the last query is displayed
+            var target = ".veilingen .row";
+            veiling(target, result);
+        }
+
+    });
+    if (newIndex) {
+        createPageIndex();
+    }
+}
+
+function generateParentCategories(category, target) {
+    target.empty();
+    $(target).unbind("change");
+    $.post("/php/api.php?action=getParentCategories", {category: category}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+
+        // Kijken of het result true is
+        if (res.code == 0) {
+            var parents = res["data"];
+            var inverse = 0;
+            for (var i = parents.length - 1; i >= 0; i--) {
+                //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
+                target.append("<div class='" + inverse + "'></div>");
+                var childtarget = $('.' + inverse, target);
+
+                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
+
+                inverse++;
+                if (i == 0) {
+                    target.append("<div class='" + inverse + "'></div>");
+                    var childtarget = $('.' + inverse, target);
+                    generateCategorySelect(childtarget, target, category, null);
+                }
+            }
+        } else {
+            generateCategorySelect(target, target, null, null);
+        }
+
+    });
+}
+
+function generateCategorySelect($childtarget, $target, category, selected) {
+    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+        if (res.code == 0) {
+            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
+            $($select).append("<option value='" + category + "'selected>Categorie selecteren</option>");
+
+            $.each(res.data, function (index, item) {
+                if (selected == item["categorieId"]) {
+                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                } else {
+                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                }
+            });
+            $childtarget.append($select);
+        }
+
+        $($childtarget).change(function () {
+            var value = $($childtarget).find(":selected").val();
+            currCategory = value;
+            generateParentCategories(value, $target);
+            zoeken();
+        });
+    });
+}
+
 function pad(n, width, z) {
     z = z || '0';
     n = n + '';

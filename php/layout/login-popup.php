@@ -72,8 +72,8 @@
                             <option selected disabled value="">Kies een land</option>
                             <?php
                             $landen = executeQuery("SELECT * FROM landen");
-                            if($landen['code'] == 0){
-                                foreach($landen['data'] as $land){
+                            if ($landen['code'] == 0){
+                                foreach ($landen['data'] as $land){
                                     echo('<option value="'.$land['gba_code'].'">'.$land['land'].'</option>');
                                 }
                             }

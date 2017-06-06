@@ -412,7 +412,7 @@ function bieden($bieding)
         [$bieding["veilingId"], $_SESSION["gebruiker"], $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
     );
 
-    if($bieding['code'] == 2) {
+    if ($bieding['code'] == 2) {
         var_dump($bieding);
     }
 }
@@ -522,7 +522,7 @@ function uploadFiles($veilingId)
     foreach ($_FILES as $key => $file) {
         $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            if($key == 'thumbnail' && $key !== 0){
+            if ($key == 'thumbnail' && $key !== 0){
                 executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
                 continue;
             }
@@ -556,8 +556,7 @@ function checkVeilingenInCategorie($categorieId)
             print('Er zitten GEEN veilingen in deze categorie');
             return false;
         }
-    }
-    else {
+    } else {
         var_dump($veiling);
     }
 }
@@ -588,7 +587,7 @@ function pasgegevensaan($gegevens) {
     if (!empty($gegevens['NEWtelefoonnummer'])) {
         $gebruiker->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
     }
-    if(!empty($gegevens['NEWadmin'])){
+    if (!empty($gegevens['NEWadmin'])){
         $gebruiker->setAdmin($gegevens['NEWadmin']);
     }
 }
@@ -627,7 +626,7 @@ function trending()
 function verzendEmail($data){
     $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?",[$data["veilingId"]]);
     $veiling = $veiling['data'][0];
-    $to = "sinke.carsten95@gmail.com";
+    $naar = "sinke.carsten95@gmail.com";
     $subject = "Gewonnen veiling";
     $txt = 'Veiling: '.$veiling["titel"].' is gewonnen door '.$veiling["koperGebruikersnaam"].'
         Veiling gegevens:
@@ -638,7 +637,7 @@ function verzendEmail($data){
         Verkoop prijs: '.$veiling["verkoopPrijs"].'';
 
     $headers = "From: info@EenmaalAndermaal.nl";
-    mail($to,$subject,$txt,$headers);
+    mail($naar,$subject,$txt,$headers);
 }
 
 function sluitVeilingen(){
@@ -668,24 +667,22 @@ function verplaatsVeiling($veiling){
 function registreer($userInfo){
     $gebruikersnaamCheck = executeQuery("SELECT gebruikersnaam FROM gebruikers WHERE gebruikersnaam = ?", [$userInfo['gebruikersnaam']]);
 
-    if($gebruikersnaamCheck['code'] == 0){
+    if ($gebruikersnaamCheck['code'] == 0){
         $responseCode = 0;
-    }
-    elseif($gebruikersnaamCheck['code'] == 1){
+    } elseif ($gebruikersnaamCheck['code'] == 1){
         $responseCode = 1;
 
-        foreach($userInfo as $key => $value){
-            if(empty($userInfo[$key])){
+        foreach ($userInfo as $key => $value){
+            if (empty($userInfo[$key])){
                 $userInfo[$key] = null;
             }
         }
 
         $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
-        if($registratie['code'] == 2){
+        if ($registratie['code'] == 2){
             $responseCode = $registratie;
         }
-    }
-    else{
+    } else {
         $responseCode = $gebruikersnaamCheck;
     }
 
@@ -695,13 +692,13 @@ function registreer($userInfo){
 function verzendResetEmail($data){
     $token = executeQuery("SELECT token from password_recovery WHERE id = ?", [$data["ID"]]);
 
-    $to = 'sinke.carsten95@gmail.com';
+    $naar = 'sinke.carsten95@gmail.com';
     $subject = 'Reset password';
     $txt = '<html><body><p>Click <a href="http://10.211.55.3/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= 'FROM: info@eenmaalandermaal.nl';
-    mail($to,$subject,$txt,$headers);
+    mail($naar,$subject,$txt,$headers);
 }
 
 function resetWachtwoord($data) {
