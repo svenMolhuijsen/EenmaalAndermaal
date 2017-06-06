@@ -369,7 +369,7 @@ $('#resetPassword').click(function(){
         success: function(result){
             alert(result);
         }
-    })
+    });
 });
 
 //////////////////////////////////////////////

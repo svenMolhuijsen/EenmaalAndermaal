@@ -5,11 +5,11 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
-if(!isset($_GET['t'])){
+if(!isset($_GET['t'])) {
      include("php/layout/geentoegang.html");
-}else{
+} else {
   $vervalDatum = executeQuery("SELECT expire_Date FROM password_recovery where token = ?",[$_GET['t']]);
-  if($vervalDatum['data'][0]["expire_Date"] > date("Y-m-d h:i:s")){
+  if($vervalDatum['data'][0]["expire_Date"] > date("Y-m-d h:i:s")) {
 ?>
 <main>
     <div class="columns row text-center" id="content">
