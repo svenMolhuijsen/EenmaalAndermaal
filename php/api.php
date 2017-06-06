@@ -59,6 +59,9 @@ if (!empty($_GET['action'])) {
         case 'trending':
             trending();
             break;
+        case 'sluitVeilingen':
+            sluitVeilingen();
+            break;
         case 'beindigveiling':
             beindigveiling($_POST);
             break;
@@ -606,9 +609,34 @@ function trending()
     stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
 }
 
+function verzendEmail($data){
+    $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?",[$data["veilingId"]]);
+    $veiling = $veiling['data'][0];
+    $to = "sinke.carsten95@gmail.com";
+    $subject = "Gewonnen veiling";
+    $txt = 'Veiling: '.$veiling["titel"].' is gewonnen door '.$veiling["koperGebruikersnaam"].'
+        Veiling gegevens:
+        Veiling Id: '.$veiling["veilingId"].'
+        Titel: '.$veiling["titel"].'</td>
+        Verkoper: '.$veiling["verkoperGebruikersnaam"].'
+        Koper: '.$veiling["koperGebruikersnaam"].'
+        Verkoop prijs: '.$veiling["verkoopPrijs"].'';
+
+    $headers = "From: info@EenmaalAndermaal.nl";
+    mail($to,$subject,$txt,$headers);
+}
+
+function sluitVeilingen(){
+    $veilingen = executeQuery("SELECT * FROM veiling WHERE eindDatum < GETDATE() AND veilingGestopt = 0");
+    foreach ($veilingen['data'] as $veiling) {
+        executeQueryNoFetch("UPDATE veiling SET koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+        verzendEmail($veiling);
+    }
+}
+
 function beindigVeiling($veiling){
-    executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), veilingGestopt = 1 WHERE veilingId = ?",[$veiling["veilingId"]]);
-    //verzend email functie toevoegen voor dit veilingId
+    executeQueryNoFetch("UPDATE veiling SET koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+    verzendEmail($veiling);
 }
 
 function verwijderVeiling($veiling){

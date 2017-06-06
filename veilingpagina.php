@@ -36,71 +36,12 @@ if(checkForEmpty($veilingId)){
     }
 };
 
-//verzenden Email
-function verzendEmail(){
-
-    $to = "dewildtluuk@gmail.com";
-    $subject = "Gewonnen veiling";
-    $txt = '<html>
-    <head><title>Gesloten veiling</title></head>
-    <body>
-        <h2>Veiling '.$veiling->getTitel().' is gewonnen door '.$veiling->getKoperGebruikersnaam().'</h2>
-        <h5>Veiling gegevens</h5>
-        <table>
-            <tr>
-                <th>Veiling</th>
-                <th>Waardes</th>
-            </tr>
-            <tr>
-                <td>Veiling Id</td>
-                <td>'.$veiling->getVeilingId().'</td>
-            </tr>
-            <tr>
-                <td>Titel</td>
-                <td>'.$veiling->getTitel().'</td>
-            </tr>
-            <tr>
-                <td>Verkoper</td>
-                <td>'.$veiling->getVerkoperGebruikersnaam().'</td>
-            </tr>
-            <tr>
-                <td>Koper</td>
-                <td>'.$veiling->getKoperGebruikersnaam().'</td>
-            </tr>
-            <tr>
-                <td>Verkoop prijs</td>
-                <td>'.$veiling->getVerkoopPrijs().'</td>
-            </tr>
-        </table>
-    </body>
-    </html>';
-    // To send HTML mail, the Content-type header must be set
-    $headers[] = 'MIME-Version: 1.0';
-    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = "From: info@EenmaalAndermaal.nl";
-    mail($to,$subject,$txt,$headers);
-}
-//veiling sluiten
-function sluitVeiling($data){
-    $today = date("Y-m-d");
-    if($data->getVeilingGestopt()){
-        return;
-    }else{
-        if($data->getEindDatum() < $today){
-            $data->setVeilingGestopt(1);
-            verzendEmail();
-        }else{
-            return;
-        }
-    }
-}
 function updateHistory($veiling){
     $persoon = "0815nooob";
     executeQueryNoFetch("INSERT INTO history VALUES(?, ?, GETDATE())", [$veiling->getVeilingId(), $persoon]);
 }
 
 updateHistory($veiling);
-sluitVeiling($veiling);
 
 $pagename = 'veilingPagina - '.$veiling->getTitel();
 

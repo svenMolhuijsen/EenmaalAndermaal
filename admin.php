@@ -11,6 +11,7 @@ include("php/layout/breadcrumbs.php");
         <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
         <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
         <li class="tabs-title"><a href="#veiling">Veiling</a></li>
+        <li class="tabs-title"><a href="#sluitVeilingen">Sluit Veilingen</a></li>
     </ul>
 
     <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
@@ -50,13 +51,14 @@ include("php/layout/breadcrumbs.php");
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
             </div>
-
             <div class="row">
                 <div class="columns large-8" id="veilingInfo"></div>
                 <div class="columns large-4" id="veilingDatum"></div>
             </div>
+        </div>
+        <div class="tabs-panel" id="sluitVeilingen">
+            <button class="button secondary">Sluit Veilingen</button>
         </div>
     </div>
 </main>
@@ -166,7 +168,16 @@ var veilingId;
         });
     });
 
-
+    $('#sluitVeilingen').click(function(){
+        $.ajax({
+            type: 'POST',
+            url: 'php/api.php?action=sluitVeilingen',
+            dataType: 'json',
+            success: function (result){
+                console.log("works");
+            }
+        });
+    });
 
 </script>
 </body>
