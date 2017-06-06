@@ -74,6 +74,9 @@ if (!empty($_GET['action'])) {
         case 'registreer':
             registreer($_POST);
             break;
+        case 'resetWachtwoord':
+            resetWachtwoord($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -684,5 +687,9 @@ function registreer($userInfo){
     }
 
     echo json_encode($responseCode);
+}
+
+function resetWachtwoord($data) {
+    executeQueryNoFetch("INSERT INTO password_recovery(username, token, expire_Date, created_Date) VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())",[$data["username"], bin2hex(random_bytes(128))]);
 }
 ?>

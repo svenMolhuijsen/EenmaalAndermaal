@@ -344,6 +344,25 @@ $(document).ready(function () {
     }
 
 //////////////////////////////////////////////
+//  Password Recovery
+/////////////////////////////////////////////
+
+$('#resetPassword').click(function(){
+    var data = {
+        username: $('#reset-username').val()
+    }
+    $.ajax({
+        url: 'php/api.php?action=resetWachtwoord',
+        data: data,
+        method: 'POST',
+        dataType: 'json',
+        success: function(result){
+            alert(result);
+        }
+    })
+});
+
+//////////////////////////////////////////////
 //  Validation
 /////////////////////////////////////////////
     jQuery.validator.addMethod("greaterThanDate",

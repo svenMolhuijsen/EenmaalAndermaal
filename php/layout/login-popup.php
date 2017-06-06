@@ -134,7 +134,7 @@
                 <input id="reset-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" required>
                 <br>
 
-                <input class="button float-right" type="submit" value="Verstuur">
+                <input class="button float-right" type="submit" value="Verstuur" id="resetPassword">
             </form>
         </div>
     </div> <!-- user-modal-container -->
