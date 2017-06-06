@@ -7,7 +7,7 @@ $user = new User($_SESSION['gebruiker']);
 if(!isset($_SESSION['gebruiker'])){ //Geen ingelogde user krijt sws
         include("php/layout/geentoegang.html");
     }
-else if($user ->getVerkoper() == 1){
+else if($user ->getAdmin() == 1){
     ?>
 
     <main class="row">
@@ -71,7 +71,10 @@ else if($user ->getVerkoper() == 1){
 
 
     <?php
-} else {
+    include("php/layout/footer.html");
+}
+
+else {
     include("php/layout/geentoegang.html");
     include("php/layout/footer.html");
 }
