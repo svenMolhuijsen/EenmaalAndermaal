@@ -33,7 +33,7 @@
     </div>
     <div class="top-bar-right">
         <div class="menu">
-            <div id="categorie">
+            <div class="categorie">
 
             </div>
             <div><input type="search" placeholder="Zoekterm"></div>
