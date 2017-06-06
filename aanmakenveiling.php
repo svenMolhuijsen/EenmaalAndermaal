@@ -221,5 +221,5 @@ if(!isset($_SESSION['gebruiker'])) {
             }
         });
     </script>
-</body>
-</html>
+    </body>
+    </html>

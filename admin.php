@@ -3,67 +3,78 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
+$user = new User($_SESSION['gebruiker']);
+if(!isset($_SESSION['gebruiker'])){ //Geen ingelogde user krijt sws
+        include("php/layout/geentoegang.html");
+    }
+else if($user ->getVerkoper() == 1){
+    ?>
 
-?>
+    <main class="row">
+        <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>
+            <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
+            <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
+            <li class="tabs-title"><a href="#veiling">Veiling</a></li>
+        </ul>
 
-<main class="row">
-    <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>
-        <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
-        <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
-        <li class="tabs-title"><a href="#veiling">Veiling</a></li>
-    </ul>
-
-    <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
-        <div class="tabs-panel" id="overzicht">
-            <div class="row expanded show-for-large">
-                <iframe style="width:100%; height:600px;" src="https://app.powerbi.com/view?r=eyJrIjoiMzAxNzVlODktMDEyZC00NWZiLWJiYjUtNDY0ZjBjMzFjMzUyIiwidCI6ImI2N2RjOTdiLTNlZTAtNDAyZi1iNjJkLWFmY2QwMTBlMzA1YiIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-            </div>
-        </div>
-        <div class="tabs-panel categoriemanager" id="categorie">
-            <?php
-            include("php/layout/categorieToevoegen.php");
-            ?>
-        </div>
-        <div class="tabs-panel" id="veiling">
-            <div class="column row">
-                <div class="input-group">
-                    <input type="number" class="input-group-field" placeholder="veilingId" id="veilingId">
-                    <div class="input-group-button"><button id="zoekVeiling" class="button">Zoek</button></div>
+        <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
+            <div class="tabs-panel" id="overzicht">
+                <div class="row expanded show-for-large">
+                    <iframe style="width:100%; height:600px;"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiMzAxNzVlODktMDEyZC00NWZiLWJiYjUtNDY0ZjBjMzFjMzUyIiwidCI6ImI2N2RjOTdiLTNlZTAtNDAyZi1iNjJkLWFmY2QwMTBlMzA1YiIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
                 </div>
             </div>
-            <hr>
-            <div class="column row">
-                <div class="float-right" id="knoppen"></div>
-                <div class="large reveal" id="verplaatsVeiling" data-reveal>
-                    <h4>Selecteer categorie</h4>
-                    <div id="categorieTwee"></div>
-                    <button class="button alert" id="verplaats">Verplaats</button>
-                    <button class="close-button" data-close aria-label="Close modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="large reveal" id="verwijderVeiling" data-reveal>
-                    <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
-                    <button class="button alert" id="verwijder">Verwijder</button>
-                    <button class="close-button" data-close aria-label="Close modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
+            <div class="tabs-panel categoriemanager" id="categorie">
+                <?php
+                include("php/layout/categorieToevoegen.php");
+                ?>
             </div>
+            <div class="tabs-panel" id="veiling">
+                <div class="column row">
+                    <div class="input-group">
+                        <input type="number" class="input-group-field" placeholder="veilingId" id="veilingId">
+                        <div class="input-group-button">
+                            <button id="zoekVeiling" class="button">Zoek</button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="column row">
+                    <div class="float-right" id="knoppen"></div>
+                    <div class="large reveal" id="verplaatsVeiling" data-reveal>
+                        <h4>Selecteer categorie</h4>
+                        <div id="categorieTwee"></div>
+                        <button class="button alert" id="verplaats">Verplaats</button>
+                        <button class="close-button" data-close aria-label="Close modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-            <div class="row">
-                <div class="columns large-8" id="veilingInfo"></div>
-                <div class="columns large-4" id="veilingDatum"></div>
+                    <div class="large reveal" id="verwijderVeiling" data-reveal>
+                        <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
+                        <button class="button alert" id="verwijder">Verwijder</button>
+                        <button class="close-button" data-close aria-label="Close modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="columns large-8" id="veilingInfo"></div>
+                    <div class="columns large-4" id="veilingDatum"></div>
+                </div>
             </div>
         </div>
-    </div>
-</main>
-    
+    </main>
 
-<?php
-include("php/layout/footer.html")
+
+    <?php
+} else {
+    include("php/layout/geentoegang.html");
+    include("php/layout/footer.html");
+}
 ?>
 <script>
 var veilingId;
