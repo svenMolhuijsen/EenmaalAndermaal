@@ -69,7 +69,8 @@ function pasteStatus($typeStatus, $soort) {
                         <div class="field editInlogGegevens">
                             <input id="oudWachtwoord" type="password" placeholder="Old Password">
                             <input id="editWachtwoord" type="text" placeholder="New Password">
-                            <input type="checkbox" id="admin" title="admin">
+
+                            <label for="admin">Adminstatus:</label><input type="checkbox" id="admin" title="admin">
                         </div>
                     </fieldset>
                 </div>
@@ -188,7 +189,7 @@ include("php/layout/footer.html");
             NEWhuisnummer: $('#editHuisnummer').val(),
             NEWtelefoonnummer: $('#editTelefoonnummer').val(),
             NEWpostcode: $('#editPostcode').val(),
-            NEWadmin: $('#admin').val()
+            NEWadmin: $('#admin:checked').length
         };
 
         console.log(userInfo);
