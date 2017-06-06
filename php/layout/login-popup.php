@@ -6,7 +6,7 @@
         </div>
 
         <!-- log in form -->
-        <div id="login">
+        <div class="row column" id="login">
             <form id="loginForm" class="form small-12 column">
                 <label class="signin-username" for="signin-username">Gebruikersnaam</label>
                 <input class="full-width has-padding has-border signin-username" name="email" id="signin-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" required>

@@ -86,7 +86,7 @@ if(!isset($_SESSION['gebruiker'])) {
                             <div class="large-6 columns">
                                 <h5>Huisnummer</h5>
                                 <input id="huisnummer" name="huisnummer" type="text" placeholder="Huisnummer"
-                                       pattern="[1-9]{1}[0-9a-z]+"/>
+                                       pattern="^[1-9][0-9]*[a-zA-Z]?"/>
 
                                 <h5 class="titel">Provincie</h5>
                                 <input id="provincie" name="provincie" type="text" placeholder="Provincie"
@@ -94,7 +94,7 @@ if(!isset($_SESSION['gebruiker'])) {
 
                                 <h5 class="titel">Postcode</h5>
                                 <input id="postcode" name="postcode" type="text" placeholder="Postcode"
-                                       pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}"/>
+                                       pattern="^[1-9][0-9]*[a-zA-z- ]*"/>
                             </div>
                         </div>
                     </div>

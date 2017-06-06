@@ -300,6 +300,44 @@ $(document).ready(function () {
         });
     });
 
+    function registreer(){
+        $registerForm = $('#registerForm');
+
+        var data = {
+            gebruikersnaam: $('#register-username').val(),
+            wachtwoord: $('#register-password').val(),
+            voornaam: $('#register-first-name').val(),
+            achternaam: $('#register-last-name').val(),
+            gebdatum: $('#register-birth-date').val(),
+            telnmr: $('#register-tel').val(),
+            admin: "",
+            land: $('#register-country').val(),
+            provincie: $('#register-province').val(),
+            postcode: $('#register-zip').val(),
+            plaatsnaam: $('#register-city').val(),
+            straatnaam: $('#register-streetname').val(),
+            huisnummer: $('#register-no').val()
+        };
+
+        $.ajax({
+            url: 'php/api.php?action=registreer',
+            data: data,
+            dataType: 'json',
+            success: function(responseCode){
+                switch(responseCode){
+                    case 0:
+                        $registerForm.append("<div class='column callout alert'>Gebruikersnaam is al in bezet.</div>");
+                        break;
+                    case 1:
+                        $registerForm.append("<div class='column callout success'>Registratie voltooid!</div>");
+                        break;
+                    default:
+                        console.log(responseCode);
+                }
+            }
+        });
+    }
+
 //////////////////////////////////////////////
 //  Validation
 /////////////////////////////////////////////
@@ -361,6 +399,7 @@ $(document).ready(function () {
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
     $('#registerForm').validate({
+        submitHandler: registreer,
         rules: {
             'gebdate': {lessThanDate: eighteenYearsAgo},
             'repeat-password': {equalTo: "#register-password"}

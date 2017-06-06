@@ -65,6 +65,9 @@ if (!empty($_GET['action'])) {
         case 'verplaatsVeiling':
             verplaatsVeiling($_POST);
             break;
+        case 'registreer':
+            registreer($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -543,28 +546,33 @@ function checkVeilingenInCategorie($categorieId)
 }
 
 function pasgegevensaan($gegevens) {
-    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$_SESSION['gebruiker']->getGebruikersnaam()]);
+    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$_SESSION['gebruiker']]);
+
+    $gebruiker = new User($_SESSION['gebruiker']);
 
     if (!empty($gegevens['NEWpassword'])) {
         if (password_verify($gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) {
             $passwordnew = password_hash($gegevens['NEWpassword'], PASSWORD_BCRYPT);
-            $_SESSION['gebruiker']->setWachtwoord($passwordnew);
+            $gebruiker->setWachtwoord($passwordnew);
         }
     }
     if (!empty($gegevens['NEWplaats'])) {
-        $_SESSION['gebruiker']->setPlaatsnaam($gegevens['NEWplaats']);
+        $gebruiker->setPlaatsnaam($gegevens['NEWplaats']);
     }
     if (!empty($gegevens['NEWprovincie'])) {
-        $_SESSION['gebruiker']->setProvincie($gegevens['NEWprovincie']);
+        $gebruiker->setProvincie($gegevens['NEWprovincie']);
     }
     if (!empty($gegevens['NEWstraat'])) {
-        $_SESSION['gebruiker']->setStraatnaam($gegevens['NEWstraat']);
+        $gebruiker->setStraatnaam($gegevens['NEWstraat']);
     }
     if (!empty($gegevens['NEWpostcode'])) {
-        $_SESSION['gebruiker']->setPostcode($gegevens['NEWpostcode']);
+        $gebruiker->setPostcode($gegevens['NEWpostcode']);
     }
     if (!empty($gegevens['NEWtelefoonnummer'])) {
-        $_SESSION['gebruiker']->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
+        $gebruiker->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
+    }
+    if(!empty($gegevens['NEWadmin'])){
+        $gebruiker->setAdmin($gegevens['NEWadmin']);
     }
 }
 
@@ -615,4 +623,30 @@ function verplaatsVeiling($veiling){
     executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE veilingId = ?", [$veiling["categorieId"], $veiling["veilingId"]]);
 }
 
+function registreer($userInfo){
+    $gebruikersnaamCheck = executeQuery("SELECT gebruikersnaam FROM gebruikers WHERE gebruikersnaam = ?", [$userInfo['gebruikersnaam']]);
+
+    if($gebruikersnaamCheck['code'] == 0){
+        $responseCode = 0;
+    }
+    elseif($gebruikersnaamCheck['code'] == 1){
+        $responseCode = 1;
+
+        foreach($userInfo as $info){
+            if(empty($info)){
+                $info = null;
+            }
+        }
+
+        $registratie = executeQueryNoFetch('INSERT INTO gebruikers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[$userInfo]);
+        if($registratie['code'] == 2){
+            $responseCode = $registratie;
+        }
+    }
+    else{
+        $responseCode = $gebruikersnaamCheck;
+    }
+
+    echo json_encode($responseCode);
+}
 ?>
