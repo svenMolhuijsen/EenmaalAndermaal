@@ -80,7 +80,7 @@ $categorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdc
     </aside>
 
     <div class="veilingen column small-9">
-        <div class="row" data-equalizer>
+        <div class="row">
             <!--de rest wordt gegenereet met javascript-->
 
         </div>

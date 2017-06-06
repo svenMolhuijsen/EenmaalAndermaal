@@ -26,7 +26,7 @@ include("php/layout/breadcrumbs.php");
         <a href="#" class="button hollow float-right">view more ></a>
     </div>
     <hr>
-    <div class="trendingData small-up-2 medium-up-3 large-up-6 columns-12" data-equalizer>
+    <div class="trendingData small-up-2 medium-up-3 large-up-6 columns-12">
     </div>
 </div>
 <?php include("php/layout/footer.html") ?>
