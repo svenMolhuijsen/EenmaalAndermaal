@@ -178,10 +178,7 @@ var veilingId;
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=sluitVeilingen',
-            dataType: 'json',
-            success: function (result){
-                console.log("works");
-            }
+            dataType: 'json'
         });
     });
 

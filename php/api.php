@@ -77,6 +77,9 @@ if (!empty($_GET['action'])) {
         case 'resetWachtwoord':
             resetWachtwoord($_POST);
             break;
+        case 'veranderWachtwoord':
+            veranderWachtwoord($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -689,7 +692,27 @@ function registreer($userInfo){
     echo json_encode($responseCode);
 }
 
-function resetWachtwoord($data) {
-    executeQueryNoFetch("INSERT INTO password_recovery(username, token, expire_Date, created_Date) VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())",[$data["username"], bin2hex(random_bytes(128))]);
+function verzendResetEmail($data){
+    $token = executeQuery("SELECT token from password_recovery WHERE id = ?", [$data["ID"]]);
+
+    $to = 'sinke.carsten95@gmail.com';
+    $subject = 'Reset password';
+    $txt = '<html><body><p>Click <a href="http://10.211.55.3/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= 'FROM: info@eenmaalandermaal.nl';
+    mail($to,$subject,$txt,$headers);
 }
+
+function resetWachtwoord($data) {
+    $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())",[$data["username"], bin2hex(random_bytes(128))]);
+    verzendResetEmail($resetId['data'][0]);
+}
+
+function veranderWachtwoord($data) {
+    $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
+    executeQueryNoFetch("UPDATE password_recovery SET expire_Date = GETDATE() WHERE token = ?", [$data["token"]]);
+    executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
+}
+
 ?>
