@@ -45,7 +45,8 @@
                     <li>
                         <a href="#"><span class="fi-torso"></a>
                         <ul class="menu">
-                            <?php if(isset($_SESSION['gebruiker'])) { ?>
+                            <?php if(isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
+                                ?>
                             <?php $admin = false; if($admin){?>
                                     <li><a href="admin.php">Admin</a></li>
                             <?php } ?>

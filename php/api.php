@@ -105,6 +105,7 @@ function login($params)
 function logout() {
     session_unset();
     session_destroy();
+
     if ($_SESSION != null) {
         $a_result = ['loggedOut' => false];
     }
@@ -639,13 +640,13 @@ function registreer($userInfo){
     elseif($gebruikersnaamCheck['code'] == 1){
         $responseCode = 1;
 
-        foreach($userInfo as $info){
-            if(empty($info)){
-                $info = null;
+        foreach($userInfo as $key => $value){
+            if(empty($userInfo[$key])){
+                $userInfo[$key] = null;
             }
         }
 
-        $registratie = executeQueryNoFetch('INSERT INTO gebruikers VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[$userInfo]);
+        $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
         if($registratie['code'] == 2){
             $responseCode = $registratie;
         }

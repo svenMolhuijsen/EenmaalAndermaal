@@ -5,9 +5,8 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
-$_SESSION['gebruiker'] = new User("((marion))");
 if(!isset($_SESSION['gebruiker'])) {
-    include("geentoegang.php");
+    include("php/layout/geentoegang.html");
 }else {
     ?>
     <main>
@@ -42,7 +41,7 @@ if(!isset($_SESSION['gebruiker'])) {
                         </select>
 
                         <h4><strong>Categorie</strong></h4>
-                        <div id="categorie">
+                        <div id="categorieTwee">
                         </div>
                     </div>
                     <div class="large-6 columns float-right">
@@ -105,7 +104,7 @@ if(!isset($_SESSION['gebruiker'])) {
             </form>
         </div>
     </main>
-<?php include('php/layout/footer.html'); ?>
+<?php } include('php/layout/footer.html'); ?>
     <script>
         $(document).ready(function () {
             var date = new Date();
@@ -179,7 +178,7 @@ if(!isset($_SESSION['gebruiker'])) {
 
                 data.append('titel', $('#titel').val());
                 data.append('beschrijving', $('#omschrijving').val());
-                data.append('categorieId', $('#categorie').children().last().prev().find(":selected").val());
+                data.append('categorieId', $('#categorieTwee').children().last().prev().find(":selected").val());
                 data.append('postcode', $('#postcode').val());
                 data.append('land', $('#land').val());
                 data.append('startPrijs', $('#prijs').val());
@@ -222,7 +221,5 @@ if(!isset($_SESSION['gebruiker'])) {
             }
         });
     </script>
-    </body>
-    </html>
-    <?php
-}
+</body>
+</html>

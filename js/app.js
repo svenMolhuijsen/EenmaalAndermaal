@@ -311,7 +311,7 @@ $(document).ready(function () {
             gebdatum: $('#register-birth-date').val(),
             telnmr: $('#register-tel').val(),
             admin: "",
-            land: $('#register-country').val(),
+            land: $('#register-country').find(":selected").html(),
             provincie: $('#register-province').val(),
             postcode: $('#register-zip').val(),
             plaatsnaam: $('#register-city').val(),
@@ -319,11 +319,16 @@ $(document).ready(function () {
             huisnummer: $('#register-no').val()
         };
 
+        console.log(data);
+
         $.ajax({
             url: 'php/api.php?action=registreer',
             data: data,
+            method: 'post',
             dataType: 'json',
             success: function(responseCode){
+                $registerForm.find('.callout').remove();
+
                 switch(responseCode){
                     case 0:
                         $registerForm.append("<div class='column callout alert'>Gebruikersnaam is al in bezet.</div>");
@@ -398,8 +403,9 @@ $(document).ready(function () {
     var eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-    $('#registerForm').validate({
-        submitHandler: registreer,
+    $registerForm = $('#registerForm');
+
+    $registerForm.validate({
         rules: {
             'gebdate': {lessThanDate: eighteenYearsAgo},
             'repeat-password': {equalTo: "#register-password"}
@@ -409,6 +415,12 @@ $(document).ready(function () {
             'tel': {pattern: "Foutief patroon."},
             'postcode': {pattern: "Foutief patroon."}
         }
+    });
+
+    $('#registerForm input[type="submit"]').on('click', function(){
+       if($registerForm.valid()){
+           registreer();
+       }
     });
 
     $('#resetForm').validate();
