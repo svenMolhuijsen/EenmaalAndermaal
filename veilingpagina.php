@@ -280,7 +280,7 @@ $(document).ready(function(){
     var data = { veilingId: veilingId };
 
     $.ajax({
-        url: 'php/api.php?action=getVeilingInfo',
+        url: 'php/api.php?action=getBiedingInfo',
         data: data,
         type: 'post',
         dataType: 'json',
