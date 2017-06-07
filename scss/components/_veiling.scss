@@ -1,6 +1,7 @@
 .veiling {
+    position: relative;
     .inner {
-        position: relative;
+        height: 100%;
         border-bottom: 30px solid white;
         background: lighten($secondary-light, 10%);
     }
@@ -46,12 +47,10 @@
         }
     }
     .clock {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-        text-align: center;
-        font-size: 30px;
+        display: block;
+        font-size: 25px;
+        line-height: 25px;
+        height: 25px;
         color: $secondary;
-        height: 35px
     }
 }

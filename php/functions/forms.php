@@ -1,6 +1,6 @@
 <?php
 function valideerForm(){
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
+    if ($_SERVER["REQUEST_METHOD"] == "POST"){
         return true;
     }
     return false;
@@ -17,7 +17,7 @@ function stripInput($input)
 }
 
 function checkCharacters($input){
-    for($i = 0; $i < count($input); $i++) {
+    for ($i = 0; $i < count($input); $i++) {
         if (!preg_match("/^[a-zA-Z ]*$/", $input)) {
             return false;
         }
@@ -26,8 +26,8 @@ function checkCharacters($input){
 }
 
 function checkForEmpty($toCheck){
-    for($i = 0; $i < count($toCheck); $i++){
-        if(empty($toCheck[$i])){
+    for ($i = 0; $i < count($toCheck); $i++){
+        if (empty($toCheck[$i])){
             return false;
         }
     }

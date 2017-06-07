@@ -72,8 +72,8 @@
                             <option selected disabled value="">Kies een land</option>
                             <?php
                             $landen = executeQuery("SELECT * FROM landen");
-                            if($landen['code'] == 0){
-                                foreach($landen['data'] as $land){
+                            if ($landen['code'] == 0){
+                                foreach ($landen['data'] as $land){
                                     echo('<option value="'.$land['gba_code'].'">'.$land['land'].'</option>');
                                 }
                             }
@@ -134,7 +134,7 @@
                 <input id="reset-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" required>
                 <br>
 
-                <input class="button float-right" type="submit" value="Verstuur">
+                <input class="button float-right" type="submit" value="Verstuur" id="resetPassword">
             </form>
         </div>
     </div> <!-- user-modal-container -->

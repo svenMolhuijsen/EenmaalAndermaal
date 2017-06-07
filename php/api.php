@@ -59,6 +59,9 @@ if (!empty($_GET['action'])) {
         case 'trending':
             trending();
             break;
+        case 'sluitVeilingen':
+            sluitVeilingen();
+            break;
         case 'beindigveiling':
             beindigveiling($_POST);
             break;
@@ -70,6 +73,12 @@ if (!empty($_GET['action'])) {
             break;
         case 'registreer':
             registreer($_POST);
+            break;
+        case 'resetWachtwoord':
+            resetWachtwoord($_POST);
+            break;
+        case 'veranderWachtwoord':
+            veranderWachtwoord($_POST);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -403,7 +412,7 @@ function bieden($bieding)
         [$bieding["veilingId"], $_SESSION["gebruiker"], $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
     );
 
-    if($bieding['code'] == 2) {
+    if ($bieding['code'] == 2) {
         var_dump($bieding);
     }
 }
@@ -513,7 +522,7 @@ function uploadFiles($veilingId)
     foreach ($_FILES as $key => $file) {
         $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            if($key == 'thumbnail' && $key !== 0){
+            if ($key == 'thumbnail' && $key !== 0){
                 executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
                 continue;
             }
@@ -547,8 +556,7 @@ function checkVeilingenInCategorie($categorieId)
             print('Er zitten GEEN veilingen in deze categorie');
             return false;
         }
-    }
-    else {
+    } else {
         var_dump($veiling);
     }
 }
@@ -579,7 +587,7 @@ function pasgegevensaan($gegevens) {
     if (!empty($gegevens['NEWtelefoonnummer'])) {
         $gebruiker->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
     }
-    if(!empty($gegevens['NEWadmin'])){
+    if (!empty($gegevens['NEWadmin'])){
         $gebruiker->setAdmin($gegevens['NEWadmin']);
     }
 }
@@ -615,9 +623,34 @@ function trending()
     stuurTerug(executeQuery("SELECT TOP 6 * FROM veiling v WHERE v.veilingGestopt = 0 AND v.veilingId IN (SELECT veilingId FROM history) ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC"));
 }
 
+function verzendEmail($data){
+    $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?",[$data["veilingId"]]);
+    $veiling = $veiling['data'][0];
+    $naar = "sinke.carsten95@gmail.com";
+    $subject = "Gewonnen veiling";
+    $txt = 'Veiling: '.$veiling["titel"].' is gewonnen door '.$veiling["koperGebruikersnaam"].'
+        Veiling gegevens:
+        Veiling Id: '.$veiling["veilingId"].'
+        Titel: '.$veiling["titel"].'</td>
+        Verkoper: '.$veiling["verkoperGebruikersnaam"].'
+        Koper: '.$veiling["koperGebruikersnaam"].'
+        Verkoop prijs: '.$veiling["verkoopPrijs"].'';
+
+    $headers = "From: info@EenmaalAndermaal.nl";
+    mail($naar,$subject,$txt,$headers);
+}
+
+function sluitVeilingen(){
+    $veilingen = executeQuery("SELECT * FROM veiling WHERE eindDatum < GETDATE() AND veilingGestopt = 0");
+    foreach ($veilingen['data'] as $veiling) {
+        executeQueryNoFetch("UPDATE veiling SET koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+        verzendEmail($veiling);
+    }
+}
+
 function beindigVeiling($veiling){
-    executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), veilingGestopt = 1 WHERE veilingId = ?",[$veiling["veilingId"]]);
-    //verzend email functie toevoegen voor dit veilingId
+    executeQueryNoFetch("UPDATE veiling SET koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+    verzendEmail($veiling);
 }
 
 function verwijderVeiling($veiling){
@@ -634,27 +667,49 @@ function verplaatsVeiling($veiling){
 function registreer($userInfo){
     $gebruikersnaamCheck = executeQuery("SELECT gebruikersnaam FROM gebruikers WHERE gebruikersnaam = ?", [$userInfo['gebruikersnaam']]);
 
-    if($gebruikersnaamCheck['code'] == 0){
+    if ($gebruikersnaamCheck['code'] == 0){
         $responseCode = 0;
-    }
-    elseif($gebruikersnaamCheck['code'] == 1){
+    } elseif ($gebruikersnaamCheck['code'] == 1){
         $responseCode = 1;
 
-        foreach($userInfo as $key => $value){
-            if(empty($userInfo[$key])){
+        foreach ($userInfo as $key => $value){
+            if (empty($userInfo[$key])){
                 $userInfo[$key] = null;
             }
         }
 
         $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
-        if($registratie['code'] == 2){
+        if ($registratie['code'] == 2){
             $responseCode = $registratie;
         }
-    }
-    else{
+    } else {
         $responseCode = $gebruikersnaamCheck;
     }
 
     echo json_encode($responseCode);
 }
+
+function verzendResetEmail($data){
+    $token = executeQuery("SELECT token from password_recovery WHERE id = ?", [$data["ID"]]);
+
+    $naar = 'sinke.carsten95@gmail.com';
+    $subject = 'Reset password';
+    $txt = '<html><body><p>Click <a href="http://10.211.55.3/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
+    $headers = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= 'FROM: info@eenmaalandermaal.nl';
+    mail($naar,$subject,$txt,$headers);
+}
+
+function resetWachtwoord($data) {
+    $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())",[$data["username"], bin2hex(random_bytes(128))]);
+    verzendResetEmail($resetId['data'][0]);
+}
+
+function veranderWachtwoord($data) {
+    $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
+    executeQueryNoFetch("UPDATE password_recovery SET expire_Date = GETDATE() WHERE token = ?", [$data["token"]]);
+    executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
+}
+
 ?>

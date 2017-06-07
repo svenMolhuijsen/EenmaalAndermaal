@@ -8,7 +8,7 @@ class Bieding {
     function __construct($veilingId) {
         $biedingen = executeQuery("SELECT * FROM biedingen WHERE veilingId = ?", [$veilingId]);
 
-        if($biedingen["code"] == 0){
+        if ($biedingen["code"] == 0){
             $bieding = $biedingen["data"][0];
 
             $this->veilingId = $bieding["veilingId"];

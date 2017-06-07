@@ -1,4 +1,4 @@
-.categoriepagina{
+.categoriepagina {
   border: 1px solid $secondary-light;
   text-align: center;
 
@@ -12,9 +12,15 @@
   .subcategorien {
     max-height: 500px;
     overflow-y: auto;
-
     margin: 0 !important;
 
+    a {
+      display: block;
+      min-height: 100px;
+      img {
+        width: 75px;
+      }
+    }
   }
 
   div.side-nav-block {

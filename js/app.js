@@ -62,89 +62,67 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Functions
 /////////////////////////////////////////////
-function generateCategorySelect($childtarget, $target, category, selected) {
-    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-        if (res.code == 0) {
-            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
-            $($select).append("<option value='" + category + "' disabled selected>Categorie selecteren</option>");
-
-            $.each(res.data, function (index, item) {
-                if (selected == item["categorieId"]) {
-                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
-                } else {
-                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
-                }
-            });
-            $childtarget.append($select);
-        }
-
-        $($childtarget).change(function () {
-            var value = $($childtarget).find(":selected").val();
-            currCategory = value;
-            generateParentCategories(value, $target);
-            zoeken();
-        });
-    });
-}
-
-function generateParentCategories(category, target) {
-    target.empty();
-    $(target).unbind("change");
-    $.post("/php/api.php?action=getParentCategories", {category: category}, function (result) {
-        // JSON result omzetten naar var
-        var res = JSON.parse(result);
-
-        // Kijken of het result true is
-        if (res.code == 0) {
-            var parents = res["data"];
-            var inverse = 0;
-            for (var i = parents.length - 1; i >= 0; i--) {
-                //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
-                target.append("<div class='" + inverse + "'></div>");
-                var childtarget = $('.' + inverse, target);
-
-                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
-
-                inverse++;
-                if (i == 0) {
-                    target.append("<div class='" + inverse + "'></div>")
-                    var childtarget = $('.' + inverse, target);
-                    generateCategorySelect(childtarget, target, category, null);
-                }
-            }
-        } else {
-            generateCategorySelect(target, target, null, null);
-        }
-
-    });
-}
-
 function veiling(target, result) {
     var res = JSON.parse(result);
     $(target).empty();
     if (res.code === 0) {
         $.each(res.data, function (index, item) {
-            console.log(target);
-            $(target).append('<div class="column small-6 medium-4 veiling" data-equalizer-watch><div class="inner">' +
+            $(target).append('<div class="column small-6 medium-4 veiling"><div class="inner">' +
                 '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/' + item["thumbNail"] + ')"></div>' +
                 '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
                 '<div class="titel">' + item["titel"] + '</div> ' +
-                '<div class="bod">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div> ' +
+                '<div class="bod ">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div><div class="clock eindtijd-' + item["veilingId"] + '"></div> ' +
                 '<br></div> ' +
-                '</a><div class="clock eindtijd-' + item["veilingId"] + '"></div></div></div></div>');
+                '</a></div></div></div>');
             createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);
+            $('.veiling').matchHeight({byRow: true});
+
         });
 
-        //$(target).foundation('destroy');
-        new Foundation.Equalizer($(target)).getHeightsByRow();
+
+    } else if (res.code === 1) {
+        $(target).append('<div class="column veiling">' +
+            "<div class='callout warning'> " +
+            "<h5>Niets gevonden</h5> " +
+            "<p>Er zijn geen veilingen gevonden</p> " +
+            "</div></div></div>")
+    } else {
+        $(target).append('<div class="column veiling" >' +
+            "<div class='callout error'> " +
+            "<h5>Niets gevonden</h5> " +
+            "<p>Er is waarschijnlijk een database probleem</p> " +
+            "</div></div></div>")
     }
-    $(target).append('<div class="column veiling" data-equalizer-watch>' +
-        "<div class='callout warning'> " +
-        "<h5>Niets gevonden</h5> " +
-        "<p>Er is waarschijnlijk een database probleem</p> " +
-        "</div></div></div>");
+}
+
+var pageIndexCounter = 0;
+function createPageIndex() {
+    var minBedrag = $('#sliderOutput1').val();
+    var maxBedrag = $('#sliderOutput2').val();
+    var searchterm = $('#searchterm').val();
+    var categorie = currCategory;
+    var sortering = $("#sortering").find(":selected").val();
+    pageIndexCounter++;
+    requestNumber = pageIndexCounter;
+    $.post("/php/api.php?action=getNumRows", {
+        category: categorie,
+        minprice: minBedrag,
+        maxprice: maxBedrag,
+        searchterm: searchterm,
+        sortering: sortering
+    }, function (result) {
+        var res = JSON.parse(result);
+        if (requestNumber == pageIndexCounter && res.data["0"]['numRows'] > 0) {
+            $('.pagination').fadeIn(300);
+            pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
+            $('.pagination').jqPagination('option', 'max_page', pages);
+        } else if (res.data["0"]['numRows'] == 0) {
+            $('.pagination').fadeOut(300);
+            $('.pagination').jqPagination('option', 'current_page', 1);
+            $('.pagination').jqPagination('option', 'max_page', 1);
+
+        }
+    });
 }
 
 var searchRequestcounter = 0;
@@ -177,63 +155,95 @@ function zoeken(page = 0, newIndex = false) {
     }
 }
 
-var pageIndexCounter = 0;
-function createPageIndex() {
-    var minBedrag = $('#sliderOutput1').val();
-    var maxBedrag = $('#sliderOutput2').val();
-    var searchterm = $('#searchterm').val();
-    var categorie = currCategory;
-    var sortering = $("#sortering").find(":selected").val();
-    pageIndexCounter++;
-    requestNumber = pageIndexCounter;
-    $.post("/php/api.php?action=getNumRows", {
-        category: categorie,
-        minprice: minBedrag,
-        maxprice: maxBedrag,
-        searchterm: searchterm,
-        sortering: sortering
-    }, function (result) {
+function generateParentCategories(category, target) {
+    target.empty();
+    $(target).unbind("change");
+    $.post("/php/api.php?action=getParentCategories", {category: category}, function (result) {
+        // JSON result omzetten naar var
         var res = JSON.parse(result);
-        console.log(pageIndexCounter);
-        if (requestNumber == pageIndexCounter && res.data["0"]['numRows'] > 0) {
-            $('.pagination').fadeIn(300);
-            pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
-            $('.pagination').jqPagination('option', 'max_page', pages);
-        } else if (res.data["0"]['numRows'] == 0) {
-            $('.pagination').fadeOut(300);
-            $('.pagination').jqPagination('option', 'current_page', 1);
 
-            $('.pagination').jqPagination('option', 'max_page', 1);
+        // Kijken of het result true is
+        if (res.code == 0) {
+            var parents = res["data"];
+            var inverse = 0;
+            for (var i = parents.length - 1; i >= 0; i--) {
+                //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
+                target.append("<div class='" + inverse + "'></div>");
+                var childtarget = $('.' + inverse, target);
 
+                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
+
+                inverse++;
+                if (i == 0) {
+                    target.append("<div class='" + inverse + "'></div>");
+                    var childtarget = $('.' + inverse, target);
+                    generateCategorySelect(childtarget, target, category, null);
+                }
+            }
+        } else {
+            generateCategorySelect(target, target, null, null);
         }
+
     });
 }
 
+function generateCategorySelect($childtarget, $target, category, selected) {
+    $.post("/php/api.php?action=getCategories", {hoofdCategory: category}, function (result) {
+        // JSON result omzetten naar var
+        var res = JSON.parse(result);
+        if (res.code == 0) {
+            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
+            $($select).append("<option value='" + category + "'selected>Categorie selecteren</option>");
+
+            $.each(res.data, function (index, item) {
+                if (selected == item["categorieId"]) {
+                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                } else {
+                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                }
+            });
+            $childtarget.append($select);
+        }
+
+        $($childtarget).change(function () {
+            var value = $($childtarget).find(":selected").val();
+            currCategory = value;
+            generateParentCategories(value, $target);
+            zoeken();
+        });
+    });
+}
+
+function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 function createCountdown($target, countDownDate) {
-
     setInterval(function () {
-
+        var oldPosition = $(document).scrollTop();
         // Get todays date and time
         var now = new Date().getTime();
         // Find the distance between now an the count down date
         var distance = new Date(countDownDate).getTime() - now;
-
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Output the result in an element with id="timer"
-        $target.html(days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ");
-
         // If the count down is over, write some text
         if (distance < 0) {
             clearInterval(x);
-            $("#timer").html("VERLOPEN");
-            $("#expired").html("");
+            $target.text("VERLOPEN");
+            $target.text("");
+        } else {
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Output the result in an element with id="timer"
+
+            $target.text(days + "d " + pad(hours, 2) + ":"
+                + pad(minutes, 2) + ":" + pad(seconds, 2));
         }
+
     }, 1000);
 }
 
@@ -251,7 +261,7 @@ $(document).ready(function () {
         $('#navigatie-menu .menu button.submit').click(function () {
             var searchterm = $('#navigatie-menu .menu input').val();
             var categorie = $('#navigatie-menu .categorie select').val();
-            document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
+            document.location["href"] = "filterpagina.  php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
         });
     }
 //////////////////////////////////////////////
@@ -266,7 +276,6 @@ $(document).ready(function () {
         $.post(url, {gebruikersnaam: gebruikersnaam, wachtwoord: wachtwoord}, function (result) {
             // JSON result omzetten naar var
             var res = JSON.parse(result);
-            console.log(res);
             // Kijken of het result true is
             if (res.code == 0) {
                 // Melding weergeven
@@ -342,6 +351,25 @@ $(document).ready(function () {
             }
         });
     }
+
+//////////////////////////////////////////////
+//  Password Recovery
+/////////////////////////////////////////////
+
+$('#resetPassword').click(function(){
+    var data = {
+        username: $('#reset-username').val()
+    }
+    $.ajax({
+        url: 'php/api.php?action=resetWachtwoord',
+        data: data,
+        method: 'POST',
+        dataType: 'json',
+        success: function(result){
+            alert(result);
+        }
+    });
+});
 
 //////////////////////////////////////////////
 //  Validation
@@ -428,7 +456,7 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Categoriepagina
 /////////////////////////////////////////////
-    if ($('#categoriepagina').length != 0) {
+    if ($('.categoriepagina').length != 0) {
         $hoofdcategorie = $('.categoriepagina .hoofdcategorien');
 
         $.post("/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
@@ -487,11 +515,12 @@ $(document).ready(function () {
                             $("#" + id).append("<li><a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class =''><img src='http://placehold.it/30x30'/> " + value.categorieNaam + "</a></li>").hide().fadeIn(500);
                         });
                         $.each(res.data, function (index, value) {
-                            $subcategorien.append("<a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' data-equalizer-watch class ='column medium-6 large-3'><img src='http://placehold.it/200x200'/> " + value.categorieNaam + "</a>");
+                            $subcategorien.append("<a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class ='column medium-3 large-3 matchHeight'><img src='http://placehold.it/200x200'/><div> " + value.categorieNaam + "</div></a>");
                         });
-                        new Foundation.Equalizer($subcategorien).getHeightsByRow();
                     }
-
+                    $(function () {
+                        $('.matchHeight').matchHeight({byRow: true});
+                    });
                 });
             }
         });

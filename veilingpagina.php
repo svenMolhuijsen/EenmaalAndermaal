@@ -3,7 +3,7 @@ include("php/core.php");
 
 $veilingId = stripInput($_GET["veilingId"]);
 
-if(checkForEmpty($veilingId)){
+if (checkForEmpty($veilingId)){
 
     $veiling = Veiling::existingVeiling($veilingId);
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
@@ -13,7 +13,7 @@ if(checkForEmpty($veilingId)){
 
     $images = executeQuery("SELECT fotoPath FROM veilingFoto WHERE veilingId = ?", [$veiling->getVeilingId()]);
 
-    if($images['code'] == 0) {
+    if ($images['code'] == 0) {
         $images = $images["data"];
     }
     else{
@@ -23,9 +23,9 @@ if(checkForEmpty($veilingId)){
     //$images = glob("upload/".$veiling->getPrefix()."*", GLOB_NOSORT);
 
     function bepaalBiedStap($hoogsteBedrag){
-        if($hoogsteBedrag > 50){
-            if($hoogsteBedrag > 500){
-                if($hoogsteBedrag > 1000){
+        if ($hoogsteBedrag > 50){
+            if ($hoogsteBedrag > 500){
+                if ($hoogsteBedrag > 1000){
                     return 50;
                 }
                 return 5;
@@ -36,77 +36,18 @@ if(checkForEmpty($veilingId)){
     }
 };
 
-//verzenden Email
-function verzendEmail(){
-
-    $to = "dewildtluuk@gmail.com";
-    $subject = "Gewonnen veiling";
-    $txt = '<html>
-    <head><title>Gesloten veiling</title></head>
-    <body>
-        <h2>Veiling '.$veiling->getTitel().' is gewonnen door '.$veiling->getKoperGebruikersnaam().'</h2>
-        <h5>Veiling gegevens</h5>
-        <table>
-            <tr>
-                <th>Veiling</th>
-                <th>Waardes</th>
-            </tr>
-            <tr>
-                <td>Veiling Id</td>
-                <td>'.$veiling->getVeilingId().'</td>
-            </tr>
-            <tr>
-                <td>Titel</td>
-                <td>'.$veiling->getTitel().'</td>
-            </tr>
-            <tr>
-                <td>Verkoper</td>
-                <td>'.$veiling->getVerkoperGebruikersnaam().'</td>
-            </tr>
-            <tr>
-                <td>Koper</td>
-                <td>'.$veiling->getKoperGebruikersnaam().'</td>
-            </tr>
-            <tr>
-                <td>Verkoop prijs</td>
-                <td>'.$veiling->getVerkoopPrijs().'</td>
-            </tr>
-        </table>
-    </body>
-    </html>';
-    // To send HTML mail, the Content-type header must be set
-    $headers[] = 'MIME-Version: 1.0';
-    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = "From: info@EenmaalAndermaal.nl";
-    mail($to,$subject,$txt,$headers);
-}
-//veiling sluiten
-function sluitVeiling($data){
-    $today = date("Y-m-d");
-    if($data->getVeilingGestopt()){
-        return;
-    }else{
-        if($data->getEindDatum() < $today){
-            $data->setVeilingGestopt(1);
-            verzendEmail();
-        }else{
-            return;
-        }
-    }
-}
 function updateHistory($veiling){
     $persoon = "0815nooob";
     executeQueryNoFetch("INSERT INTO history VALUES(?, ?, GETDATE())", [$veiling->getVeilingId(), $persoon]);
 }
 
 updateHistory($veiling);
-sluitVeiling($veiling);
 
 $pagename = 'veilingPagina - '.$veiling->getTitel();
 
 include("php/layout/header.php");
 
-if($veiling->getCode() == 0){
+if ($veiling->getCode() == 0){
 include("php/layout/breadcrumbs.php");
 
 ?>
@@ -123,10 +64,9 @@ include("php/layout/breadcrumbs.php");
         <div class="veilingImage">
             <?php
             echo('<img id="image" src="');
-            if(!is_null($images[0])){
+            if (!is_null($images[0])){
                 echo($images[0]['fotoPath']);
-            }
-            else{
+            } else{
                 echo('http://placehold.it/450x450');
             }
             echo('"alt="Image">');
@@ -135,7 +75,7 @@ include("php/layout/breadcrumbs.php");
 
         <div class="altImages row small-up-4">
             <?php
-            for($i = 1; $i < count($images) && $i < 5; $i++){
+            for ($i = 1; $i < count($images) && $i < 5; $i++){
                 echo('<div class="column">');
                 echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$images[$i]['fotoPath'].'" alt="altImage">');
                 echo('</div>');
@@ -155,24 +95,23 @@ include("php/layout/breadcrumbs.php");
                 <span id="timer"></span><br>
             </div>
 
-            <?php if(!$veiling->getVeilingGestopt()){ ?>
+            <?php if (!$veiling->getVeilingGestopt()){ ?>
             <div id="expired">
-            <?php if(isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])){ ?>
+            <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])){ ?>
                 <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
                 <label class="is-invalid-label veilingError" id="bedragError">
                     U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €
                     <?php
-                    if($boden['code'] == 0){
+                    if ($boden['code'] == 0){
                         echo(round($boden['data'][0]['biedingsBedrag']+bepaalBiedStap($boden['data'][0]['biedingsBedrag']), 2));
-                    }
-                    else if($boden['code'] == 1){
+                    } else if($boden['code'] == 1){
                         echo(round($veiling->getStartPrijs()+bepaalBiedStap($veiling->getStartPrijs()), 2));
                     }
                     ?>
                 </label>
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
-            <?php } else{ ?>
+            <?php } else { ?>
                 <p class="callout warning" style="margin: 1% 0;">U bent niet ingelogd, log in om te bieden.</p>
                 <input name="loginKnop" value="Login" type="submit" id="loginKnop" class="login_button button biedKnop">
             <?php } ?>
@@ -180,7 +119,7 @@ include("php/layout/breadcrumbs.php");
             <?php } ?>
             <table class="card-section biedingen">
                 <?php
-                    if($boden['code'] == 0) {
+                    if ($boden['code'] == 0) {
                         for ($i = 0; $i < count($boden['data']); $i++) {
                             echo('
                         <tr>
@@ -199,8 +138,7 @@ include("php/layout/breadcrumbs.php");
 </div>
 </div>
 <?php
-}
-else{
+} else{
 ?>
 <div class="row">
     <div class="small-12 columns">

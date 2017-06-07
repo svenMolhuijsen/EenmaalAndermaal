@@ -5,9 +5,9 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
-if(!isset($_SESSION['gebruiker'])) {
+if (!isset($_SESSION['gebruiker'])) {
     include("php/layout/geentoegang.html");
-}else {
+} else {
     ?>
     <main>
         <div class="aanmakenveiling">
