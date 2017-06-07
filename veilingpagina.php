@@ -15,7 +15,7 @@ if (checkForEmpty($veilingId)) {
 
     if ($images['code'] == 0) {
         $images = $images["data"];
-    } else{
+    } else {
         var_dump($images);
     }
 

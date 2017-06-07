@@ -3,7 +3,7 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
-if(isset($_SESSION['gebruiker'])) {
+if (isset($_SESSION['gebruiker'])) {
     if ($adminCheck) {
         ?>
         <main class="row">

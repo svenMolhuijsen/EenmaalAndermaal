@@ -23,9 +23,10 @@ if (!isset($_GET['t'])) {
     </div>
 </main>
 <?php
-  }
+  } else {
     include("php/layout/geentoegang.html");
   }
+}
 include("php/layout/footer.html");
 ?>
 <script>

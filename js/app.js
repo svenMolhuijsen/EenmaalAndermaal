@@ -147,7 +147,7 @@ function createPageIndex() {
         var res = JSON.parse(result);
         if (requestNumber == pageIndexCounter && res.data["0"]["numRows"] > 0) {
             $(".pagination").fadeIn(300);
-            pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
+            pages = Math.ceil(parseInt(res.data["0"]["numRows"]) / 12);
             $(".pagination").jqPagination("option", "max_page", pages);
         } else if (res.data["0"]["numRows"] == 0) {
             $(".pagination").fadeOut(300);
@@ -267,7 +267,7 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Inloggen/registreren
 /////////////////////////////////////////////
-    $("#login input[type='submit']").on('click', function () {
+    $("#login input[type='submit']").on("click", function () {
         var url = "/php/api.php?action=login";
 
         var wachtwoord = $("#login #signin-password").val();
@@ -281,7 +281,7 @@ $(document).ready(function () {
                 // Melding weergeven
                 $("#login form").append("<div data-alert class='callout success'>" + res.message + "</div>");
                 // Alle velden legen, behalve submit
-                $("#login input:not([type=\'submit\'])").val('');
+                $("#login input:not([type=\'submit\'])").val("");
                 $(".signin-register-modal,.signin-register-modal .callout").fadeOut(300);
 
                 location.reload();
@@ -293,23 +293,23 @@ $(document).ready(function () {
         });
     });
 
-    $('#logoutButton').on('click', function(){
+    $('#logoutButton').on("click", function(){
         $.ajax({
-            dataType: 'json',
-            url: 'php/api.php?action=logout',
+            dataType: "json",
+            url: "php/api.php?action=logout",
             success: function(data){
                 if(data.loggedOut) {
                     window.location.replace("http://iproject34.icasites.nl");
                 }
                 else{
-                    alert('Logout failed!');
+                    alert("Logout failed!");
                 }
             }
         });
     });
 
     function registreer(){
-        $registerForm = $('#registerForm');
+        $registerForm = $("#registerForm");
 
         var data = {
             gebruikersnaam: $("#register-username").val(),
@@ -328,10 +328,10 @@ $(document).ready(function () {
         };
 
         $.ajax({
-            url: 'php/api.php?action=registreer',
+            url: "php/api.php?action=registreer",
             data: data,
-            type: 'post',
-            dataType: 'json',
+            type: "post",
+            dataType: "json",
             success: function(responseCode){
                 $registerForm.find(".callout").remove();
 
@@ -350,20 +350,20 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Password Recovery
 /////////////////////////////////////////////
-$resetForm = $('#resetForm');
+$resetForm = $("#resetForm");
 
 $("#resetPassword").click(function(){
     var data = {
         username: $("#reset-username").val()
     };
     $.ajax({
-        url: 'php/api.php?action=resetWachtwoord',
+        url: "php/api.php?action=resetWachtwoord",
         data: data,
-        type: 'POST',
-        dataType: 'json',
+        type: "POST",
+        dataType: "json",
         success: function(result){
-            $resetForm.find('.callout').remove();
-            $resetForm.append('<div class="column callout ' + result.resultClass + '">'+ result.message + '</div>')
+            $resetForm.find(".callout").remove();
+            $resetForm.append("<div class='column callout" + result.resultClass + "'>"+ result.message + "</div>");
         }
     });
 });

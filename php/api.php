@@ -115,11 +115,11 @@ function logout() {
     session_destroy();
 
     if ($_SESSION != null) {
-        $a_result = ['loggedOut' => false];
+        $result = ['loggedOut' => false];
     } else {
-        $a_result = ['loggedOut' => true];
+        $result = ['loggedOut' => true];
     }
-    echo json_encode($a_result);
+    echo json_encode($result);
 }
 
 function getNumRows()
@@ -707,8 +707,7 @@ function resetWachtwoord($data) {
         } elseif ($resetId['code'] == 2) {
             echo json_encode(["resultClass" => "warning", "message" => "Ongeldige gebruikersnaam."]);
         }
-    }
-    elseif ($duplicateCheck['code'] == 0) {
+    } elseif ($duplicateCheck['code'] == 0) {
         echo json_encode(["resultClass" => "warning", "message" => "U heeft al een reset aangevraagd."]);
     }
 }
