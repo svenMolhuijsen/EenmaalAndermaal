@@ -12,20 +12,15 @@ include("php/layout/header.php");
 
 
   <div class="row" style="padding-bottom:100px;">
-    <div class="small-up-1 medium-up-3 columns-12">
+      <div class="small-up-1 medium-up-3 columns-12 big-search">
       <div class="column column-block" id="blocks">
-        <input type="text" placeholder="zoek">
+          <input type="text" placeholder="zoekterm">
       </div>
+          <div class="column column-block categorieselect" id="blocks">
+
+          </div>
       <div class="column column-block" id="blocks">
-        <select>
-          <option value="Voertuigen">Voertuigen</option>
-          <option value="Kleding">Kleding</option>
-          <option value="Vakanties">Vakanties</option>
-          <option value="Sport">Sport</option>
-        </select>
-      </div>
-      <div class="column column-block" id="blocks">
-        <input type="submit" class="button" value="submit">
+          <input type="submit" class="button submit" value="submit">
       </div>
     </div>
   </div>

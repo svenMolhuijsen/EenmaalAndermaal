@@ -261,7 +261,20 @@ $(document).ready(function () {
         $("#navigatie-menu .menu button.submit").click(function () {
             var searchterm = $("#navigatie-menu .menu input").val();
             var categorie = $("#navigatie-menu .categorie select").val();
-            document.location["href"] = "filterpagina.  php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
+            document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
+        });
+    }
+
+    //////////////////////////////////////////////
+//  Big search
+/////////////////////////////////////////////
+    if ($('.big-search').length != 0) {
+        var target = $('.big-search .categorieselect');
+        generateCategorySelect(target, null, null, null);
+        $('.big-search input.submit').click(function () {
+            var searchterm = $('.big-search input[type="text"]').val();
+            var categorie = $('.big-search .categorieselect select').val();
+            document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
         });
     }
 //////////////////////////////////////////////
