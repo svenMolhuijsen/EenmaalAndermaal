@@ -23,7 +23,7 @@ include("php/layout/breadcrumbs.php");
 <div class="veilingen row">
     <div class="clearfix">
         <h4 class="float-left" id="trending">Trending</h4>
-        <a href="#" class="button hollow float-right">view more ></a>
+        <a href="filterpagina.php" class="button hollow float-right">view more ></a>
     </div>
     <hr>
     <div class="trendingData small-up-2 medium-up-3 large-up-6 columns-12">
