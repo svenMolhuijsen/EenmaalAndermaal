@@ -8,53 +8,53 @@ $(document).ready(function () {
 /////////////////////////////////////////////
 //achtergrond en venster openen
     function showModal() {
-        $('.signin-register-modal').fadeIn(300);
+        $(".signin-register-modal").fadeIn(300);
     }
 
 //het openen van inlog scherm binnen het modal
     function showSignIn() {
-        $('#register, #reset').hide();
-        $('#login').show();
-        $('.switcher').children().removeClass("active");
-        $('.switcher .signin').addClass("active");
+        $("#register, #reset").hide();
+        $("#login").show();
+        $(".switcher").children().removeClass("active");
+        $(".switcher .signin").addClass("active");
     }
 
 //het openen van registreren scherm binnen het modal
     function showRegister() {
-        $('#login, #reset').hide();
-        $('#register').show();
-        $('.switcher').children().removeClass("active");
-        $('.switcher .register').addClass("active");
+        $("#login, #reset").hide();
+        $("#register").show();
+        $(".switcher").children().removeClass("active");
+        $(".switcher .register").addClass("active");
     }
 
 //het openen van reset scherm binnen het modal
     function showReset() {
-        $('#login, #register').hide();
-        $('.switcher').children().removeClass("active");
-        $('#reset').show();
+        $("#login, #register").hide();
+        $(".switcher").children().removeClass("active");
+        $("#reset").show();
     }
 
 //Modal afsluiten
     $(".signin-register-modal").click(function () {
-        $('.signin-register-modal').fadeOut(300);
+        $(".signin-register-modal").fadeOut(300);
     }).children().click(function (e) {
         return false;
     });
 
 //inlog-pop modal openen
-    $('.login_button, .signin').on('click', function () {
+    $(".login_button, .signin").on('click', function () {
         showModal();
         showSignIn();
     });
 
 //registreer modal openen
-    $('.signup_button, .register').on('click', function () {
+    $(".signup_button, .register").on('click', function () {
 
         showModal();
         showRegister();
     });
 //reset modal openen
-    $('.reset').on('click', function () {
+    $(".reset").on('click', function () {
         showReset();
     });
 });
@@ -67,27 +67,27 @@ function veiling(target, result) {
     $(target).empty();
     if (res.code === 0) {
         $.each(res.data, function (index, item) {
-            $(target).append('<div class="column small-6 medium-4 veiling"><div class="inner">' +
-                '<a href="veilingpagina.php?veilingId=' + item['veilingId'] + '"><div class="image" style="background-image: url(http://iproject34.icasites.nl/' + item["thumbNail"] + ')"></div>' +
-                '<div class="omschrijving"><div class="button primary">Bied mee!</div>' +
-                '<div class="titel">' + item["titel"] + '</div> ' +
-                '<div class="bod ">&euro;' + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + '</div><div class="clock eindtijd-' + item["veilingId"] + '"></div> ' +
-                '<br></div> ' +
-                '</a></div></div></div>');
+            $(target).append("<div class='column small-6 medium-4 veiling'><div class='inner'>" +
+                "<a href='veilingpagina.php?veilingId='" + item['veilingId'] + "'><div class='image' style='background-image: url(http://iproject34.icasites.nl/" + item["thumbNail"] + ")'></div>" +
+                "<div class='omschrijving'><div class='button primary'>Bied mee!</div>" +
+                "<div class='titel'>" + item["titel"] + "</div> " +
+                "<div class='bod'>&euro;" + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + "</div><div class='clock eindtijd-" + item["veilingId"] + "'></div> " +
+                "<br></div> " +
+                "</a></div></div></div>");
             createCountdown($(".eindtijd-" + item["veilingId"]), item["eindDatum"]);
-            $('.veiling').matchHeight({byRow: true});
+            $(".veiling").matchHeight({byRow: true});
 
         });
 
 
     } else if (res.code === 1) {
-        $(target).append('<div class="column veiling">' +
+        $(target).append("<div class='column veiling'>" +
             "<div class='callout warning'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er zijn geen veilingen gevonden</p> " +
             "</div></div></div>")
     } else {
-        $(target).append('<div class="column veiling" >' +
+        $(target).append("<div class='column veiling'>" +
             "<div class='callout error'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er is waarschijnlijk een database probleem</p> " +
@@ -97,9 +97,9 @@ function veiling(target, result) {
 
 var pageIndexCounter = 0;
 function createPageIndex() {
-    var minBedrag = $('#sliderOutput1').val();
-    var maxBedrag = $('#sliderOutput2').val();
-    var searchterm = $('#searchterm').val();
+    var minBedrag = $("#sliderOutput1").val();
+    var maxBedrag = $("#sliderOutput2").val();
+    var searchterm = $("#searchterm").val();
     var categorie = currCategory;
     var sortering = $("#sortering").find(":selected").val();
     pageIndexCounter++;
@@ -113,13 +113,13 @@ function createPageIndex() {
     }, function (result) {
         var res = JSON.parse(result);
         if (requestNumber == pageIndexCounter && res.data["0"]['numRows'] > 0) {
-            $('.pagination').fadeIn(300);
+            $(".pagination").fadeIn(300);
             pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
-            $('.pagination').jqPagination('option', 'max_page', pages);
+            $(".pagination").jqPagination('option', 'max_page', pages);
         } else if (res.data["0"]['numRows'] == 0) {
-            $('.pagination').fadeOut(300);
-            $('.pagination').jqPagination('option', 'current_page', 1);
-            $('.pagination').jqPagination('option', 'max_page', 1);
+            $(".pagination").fadeOut(300);
+            $(".pagination").jqPagination('option', 'current_page', 1);
+            $(".pagination").jqPagination('option', 'max_page', 1);
 
         }
     });
@@ -127,9 +127,9 @@ function createPageIndex() {
 
 var searchRequestcounter = 0;
 function zoeken(page = 0, newIndex = false) {
-    var minBedrag = $('#sliderOutput1').val();
-    var maxBedrag = $('#sliderOutput2').val();
-    var searchterm = $('#searchterm').val();
+    var minBedrag = $("#sliderOutput1").val();
+    var maxBedrag = $("#sliderOutput2").val();
+    var searchterm = $("#searchterm").val();
     var categorie = currCategory;
     var sortering = $("#sortering").find(":selected").val();
     searchRequestcounter++;
@@ -255,23 +255,23 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Navbar
 /////////////////////////////////////////////
-    if ($('#navigatie-menu').length != 0) {
-        var target = $('#navigatie-menu .categorie');
+    if ($("#navigatie-menu").length != 0) {
+        var target = $("#navigatie-menu .categorie");
         generateCategorySelect(target, null, null, null);
-        $('#navigatie-menu .menu button.submit').click(function () {
-            var searchterm = $('#navigatie-menu .menu input').val();
-            var categorie = $('#navigatie-menu .categorie select').val();
+        $("#navigatie-menu .menu button.submit").click(function () {
+            var searchterm = $("#navigatie-menu .menu input").val();
+            var categorie = $("#navigatie-menu .categorie select").val();
             document.location["href"] = "filterpagina.  php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
         });
     }
 //////////////////////////////////////////////
 //  Inloggen/registreren
 /////////////////////////////////////////////
-    $('#login input[type="submit"]').on('click', function () {
+    $("#login input[type='submit']").on('click', function () {
         var url = "/php/api.php?action=login";
 
-        var wachtwoord = $('#login #signin-password').val();
-        var gebruikersnaam = $('#login #signin-username').val();
+        var wachtwoord = $("#login #signin-password").val();
+        var gebruikersnaam = $("#login #signin-username").val();
 
         $.post(url, {gebruikersnaam: gebruikersnaam, wachtwoord: wachtwoord}, function (result) {
             // JSON result omzetten naar var
@@ -279,17 +279,16 @@ $(document).ready(function () {
             // Kijken of het result true is
             if (res.code == 0) {
                 // Melding weergeven
-                $('#login form').append("<div data-alert class='callout success'>" + res.message + "</div>");
+                $("#login form").append("<div data-alert class='callout success'>" + res.message + "</div>");
                 // Alle velden legen, behalve submit
-                $('#login input:not([type=\"submit\"])').val('');
-                $('.signin-register-modal,.signin-register-modal .callout').fadeOut(300);
+                $("#login input:not([type=\'submit\'])").val('');
+                $(".signin-register-modal,.signin-register-modal .callout").fadeOut(300);
 
                 location.reload();
-            }
-            else {
+            } else {
                 //oude foutmeldingen verwijderen, en laatste foutmelding weergeven
-                $('.signin-register-modal .callout').remove();
-                $('#loginForm').append("<div class='column callout alert'>" + res.message + "</div>");
+                $(".signin-register-modal .callout").remove();
+                $("#loginForm").append("<div class='column callout alert'>" + res.message + "</div>");
             }
         });
     });
@@ -313,19 +312,19 @@ $(document).ready(function () {
         $registerForm = $('#registerForm');
 
         var data = {
-            gebruikersnaam: $('#register-username').val(),
-            wachtwoord: $('#register-password').val(),
-            voornaam: $('#register-first-name').val(),
-            achternaam: $('#register-last-name').val(),
-            gebdatum: $('#register-birth-date').val(),
-            telnmr: $('#register-tel').val(),
+            gebruikersnaam: $("#register-username").val(),
+            wachtwoord: $("#register-password").val(),
+            voornaam: $("#register-first-name").val(),
+            achternaam: $("#register-last-name").val(),
+            gebdatum: $("#register-birth-date").val(),
+            telnmr: $("#register-tel").val(),
             admin: "",
-            land: $('#register-country').find(":selected").html(),
-            provincie: $('#register-province').val(),
-            postcode: $('#register-zip').val(),
-            plaatsnaam: $('#register-city').val(),
-            straatnaam: $('#register-streetname').val(),
-            huisnummer: $('#register-no').val()
+            land: $("#register-country").find(":selected").html(),
+            provincie: $("#register-province").val(),
+            postcode: $("#register-zip").val(),
+            plaatsnaam: $("#register-city").val(),
+            straatnaam: $("#register-streetname").val(),
+            huisnummer: $("#register-no").val()
         };
 
         console.log(data);
@@ -336,7 +335,7 @@ $(document).ready(function () {
             type: 'post',
             dataType: 'json',
             success: function(responseCode){
-                $registerForm.find('.callout').remove();
+                $registerForm.find(".callout").remove();
 
                 switch(responseCode){
                     case 0:
@@ -356,9 +355,9 @@ $(document).ready(function () {
 //  Password Recovery
 /////////////////////////////////////////////
 
-$('#resetPassword').click(function(){
+$("#resetPassword").click(function(){
     var data = {
-        username: $('#reset-username').val()
+        username: $("#reset-username").val()
     }
     $.ajax({
         url: 'php/api.php?action=resetWachtwoord',
@@ -456,8 +455,8 @@ $('#resetPassword').click(function(){
 //////////////////////////////////////////////
 //  Categoriepagina
 /////////////////////////////////////////////
-    if ($('.categoriepagina').length != 0) {
-        $hoofdcategorie = $('.categoriepagina .hoofdcategorien');
+    if ($(".categoriepagina").length != 0) {
+        $hoofdcategorie = $(".categoriepagina .hoofdcategorien");
 
         $.post("/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
             // JSON result omzetten naar var
@@ -466,15 +465,15 @@ $('#resetPassword').click(function(){
             if (res.code == 0) {
                 //correct
                 $.each(res.data, function (index, value) {
-                    $hoofdcategorie.append('<li class="accordion-item " data-accordion-item> ' +
-                        '<a href="#" data-category="' + value.categorieId + '" class="accordion-title">' + value.categorieNaam + '</a> ' +
-                        '<div class="accordion-content hide-for-small-only show-for-medium-up " data-tab-content> ' +
-                        'Bekijk rechts de categorien' +
-                        '</div> ' +
-                        '<div class="accordion-content mobile-subcategorien show-for-small-only " aria-hidden="true" data-tab-content> ' +
-                        '<ul id="' + value.categorieId + '"></ul>' +
-                        '</div> ' +
-                        '</li>');
+                    $hoofdcategorie.append("<li class='accordion-item' data-accordion-item>" +
+                        "<a href="#" data-category='" + value.categorieId + "' class='accordion-title'>" + value.categorieNaam + "</a> " +
+                        "<div class='accordion-content hide-for-small-only show-for-medium-up' data-tab-content> " +
+                        "Bekijk rechts de categorien" +
+                        "</div>" +
+                        "<div class='accordion-content mobile-subcategorien show-for-small-only' aria-hidden='true' data-tab-content> " +
+                        "<ul id='" + value.categorieId + "'></ul>" +
+                        "</div> " +
+                        "</li>");
                 });
             }
             else {
@@ -529,45 +528,45 @@ $('#resetPassword').click(function(){
 //////////////////////////////////////////////
 //  filterpagina
 /////////////////////////////////////////////
-    if ($('#filterpagina').length != 0) {
+    if ($("#filterpagina").length != 0) {
         var searchterm = getURLParameter('searchterm');
         searchterm != null ? $("#searchterm").val(searchterm) : null;
         var category = getURLParameter('hoofdcategorie');
-        var target = $('#filterpagina aside .filter .categorien');
+        var target = $("#filterpagina aside .filter .categorien");
         generateParentCategories(category, target);
         currCategory = category;
 
-        $('.pagination').jqPagination({
+        $(".pagination").jqPagination({
             paged: function (pages) {
                 zoeken(pages - 1);
             }
         });
 
-        $('.filter .slider').on('changed.zf.slider', function () {
-            $('.pagination').jqPagination('option', 'current_page', 1);
+        $(".filter .slider").on('changed.zf.slider', function () {
+            $(".pagination").jqPagination('option', 'current_page', 1);
             zoeken(0, true);
         });
 
         var typingTimer;                //timer identifier
         var doneTypingInterval = 1000;  //time in ms, 5 second for example
 
-        $('#searchterm').keyup(function () {
+        $("#searchterm").keyup(function () {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(function () {
-                $('.pagination').jqPagination('option', 'current_page', 1);
+                $(".pagination").jqPagination('option', 'current_page', 1);
                 zoeken(0, true);
             }, doneTypingInterval);
         });
 
         $("#sortering").change(function () {
-            $('.pagination').jqPagination('option', 'current_page', 1);
+            $(".pagination").jqPagination('option', 'current_page', 1);
             zoeken(0, true);
         });
         zoeken(0, true);
     }
 
-    generateParentCategories(null, $('#categorie'));
-    generateParentCategories(null, $('#categorieToevoegen form .categorien'));
-    generateParentCategories(null, $('#categorieTwee'));
+    generateParentCategories(null, $("#categorie"));
+    generateParentCategories(null, $("#categorieToevoegen form .categorien"));
+    generateParentCategories(null, $("#categorieTwee"));
 
 });
