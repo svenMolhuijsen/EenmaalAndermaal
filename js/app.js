@@ -226,20 +226,20 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         var res = JSON.parse(result);
         if (res.code == 0) {
             $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
-            $($select).append("<option value='" + category + "'selected>Categorie selecteren</option>");
+            $select.append("<option value='" + category + "'selected>Categorie selecteren</option>");
 
             $.each(res.data, function (index, item) {
                 if (selected == item["categorieId"]) {
-                    $($select).append("<option selected value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
+                    $select.append("<option selected value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
                 } else {
-                    $($select).append("<option value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
+                    $select.append("<option value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
                 }
             });
             $childtarget.append($select);
         }
 
-        $($childtarget).change(function () {
-            var value = $($childtarget).find(":selected").val();
+        $childtarget.change(function () {
+            var value = $childtarget.find(":selected").val();
             currCategory = value;
             generateParentCategories(value, $target);
             zoeken();
