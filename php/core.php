@@ -9,4 +9,3 @@ include("classes/Veiling.php");
 include("classes/Bieding.php");
 
 include("functions/database.php");
-include("functions/forms.php");

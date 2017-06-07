@@ -1,16 +1,15 @@
 <?php
 include("php/core.php");
 
-$veilingId = stripInput($_GET["veilingId"]);
+$veilingId = $_GET["veilingId"];
 
-if (checkForEmpty($veilingId)){
+if (!empty($veilingId)){
     //laad veiling info
     $veiling = Veiling::existingVeiling($veilingId);
 
 //check om te kijken of er een veiling is gevonden
 if ($veiling->getCode() == 0){
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
-    $categorie = new Categorie($veiling->getCategorieId());
 
     //boden laden
     $boden = executeQuery("SELECT * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$veiling->getVeilingId()]);
