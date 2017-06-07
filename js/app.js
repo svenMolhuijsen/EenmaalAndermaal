@@ -101,7 +101,7 @@ function veiling(target, result) {
     if (res.code === 0) {
         $.each(res.data, function (index, item) {
             $(target).append("<div class='column small-6 medium-4 veiling'><div class='inner'>" +
-                "<a href='veilingpagina.php?veilingId='" + item['veilingId'] + "'><div class='image' style='background-image: url(http://iproject34.icasites.nl/" + item["thumbNail"] + ")'></div>" +
+                "<a href='veilingpagina.php?veilingId="+item["veilingId"]+"'><div class='image' style='background-image: url(http://iproject34.icasites.nl/" + item["thumbNail"] + ")'></div>" +
                 "<div class='omschrijving'><div class='button primary'>Bied mee!</div>" +
                 "<div class='titel'>" + item["titel"] + "</div> " +
                 "<div class='bod'>&euro;" + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + "</div><div class='clock eindtijd-" + item["veilingId"] + "'></div> " +
