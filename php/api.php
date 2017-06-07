@@ -692,7 +692,7 @@ function verzendResetEmail($data){
 
     $naar = 'sinke.carsten95@gmail.com';
     $subject = 'Reset password';
-    $txt = '<html><body><p>Click <a href="http://10.211.55.3/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
+    $txt = '<html><body><p>Click <a href="http://iproject34.icasites.nl/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= 'FROM: info@eenmaalandermaal.nl';

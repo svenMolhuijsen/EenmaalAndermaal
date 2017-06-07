@@ -41,8 +41,6 @@ include("php/layout/footer.html");
             data: data,
             dateType: 'json',
             complete: function(){
-                alert('Wachtwoord succesvol veranderd!');
-
                 $('#content').empty();
                 $('#content').append("<h4>Wachtwoord is gewijzigd!</h4>");
             }
