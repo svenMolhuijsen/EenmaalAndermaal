@@ -662,7 +662,7 @@ function voegCategorieToe($categorie)
 
 function trending()
 {
-    stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId IN(SELECT TOP 6 veilingId FROM history ORDER BY (COUNT(veilingId) OVER(PARTITION BY veilingId)) DESC)"));
+    stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId IN(SELECT TOP 6 h.veilingId FROM history h, veiling v WHERE v.eindDatum > GETDATE() GROUP BY h.veilingId ORDER BY COUNT(h.veilingId) DESC)"));
 }
 
 function verzendEmail($data){
