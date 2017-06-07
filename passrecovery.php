@@ -34,7 +34,8 @@ include("php/layout/footer.html");
         var data = {
             nieuwWachtwoord: $('#NEWPassword').val(),
             token: "<?php echo($_GET['t'])?>"
-        }
+        };
+
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=veranderWachtwoord',

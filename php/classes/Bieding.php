@@ -1,10 +1,13 @@
 <?php
+//Ale informatie van een bieding in class-vorm
 class Bieding {
+    //Eigenschappen van een bieding
     private $veilingId;
     private $gebruikersnaam;
     private $biedingsTijd;
     private $biedingsBedrag;
 
+    //Zet de informatie van de bieding in de class
     function __construct($veilingId) {
         $biedingen = executeQuery("SELECT * FROM biedingen WHERE veilingId = ?", [$veilingId]);
 
@@ -25,6 +28,7 @@ class Bieding {
         }
     }
 
+    //Geeft alle informatie van de bieding terug in een array
     public function toArray()
     {
         return [
@@ -35,12 +39,16 @@ class Bieding {
         ];
     }
 
+    //Pas de gegevens van de bieding aan in de database
     private
     function update($column, $oldVal, $newVal)
     {
         executeQuery("UPDATE Categorie SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
     }
 
+    ////////////////////////
+    //Getters en setters
+    ///////////////////////
     /**
      * @return mixed
      */

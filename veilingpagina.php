@@ -3,14 +3,19 @@ include("php/core.php");
 
 $veilingId = stripInput($_GET["veilingId"]);
 
-if (checkForEmpty($veilingId)) {
-
+if (checkForEmpty($veilingId)){
+    //laad veiling info
     $veiling = Veiling::existingVeiling($veilingId);
+
+//check om te kijken of er een veiling is gevonden
+if ($veiling->getCode() == 0){
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
     $categorie = new Categorie($veiling->getCategorieId());
 
+    //boden laden
     $boden = executeQuery("SELECT * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$veiling->getVeilingId()]);
 
+    //images laden
     $images = executeQuery("SELECT fotoPath FROM veilingFoto WHERE veilingId = ?", [$veiling->getVeilingId()]);
 
     if ($images['code'] == 0) {
@@ -19,8 +24,7 @@ if (checkForEmpty($veilingId)) {
         var_dump($images);
     }
 
-    //$images = glob("upload/".$veiling->getPrefix()."*", GLOB_NOSORT);
-
+    //bepaald de tussensprong tussen 2 biedingen
     function bepaalBiedStap($hoogsteBedrag){
         if ($hoogsteBedrag > 50) {
             if ($hoogsteBedrag > 500) {
@@ -33,22 +37,19 @@ if (checkForEmpty($veilingId)) {
         }
         return 0.5;
     }
-};
 
-function updateHistory($veiling){
-    $persoon = "0815nooob";
-    executeQueryNoFetch("INSERT INTO history VALUES(?, ?, GETDATE())", [$veiling->getVeilingId(), $persoon]);
-}
+    //pagina naam voor de titel
+    $pagename = 'veilingPagina - '.$veiling->getTitel();
 
-updateHistory($veiling);
+    //header
+    include("php/layout/header.php");
 
-$pagename = 'veilingPagina - '.$veiling->getTitel();
+    //zet de veiling in de watchistory van de gebruiker
+    if(isset($_SESSION['gebruiker'])) {
+        executeQueryNoFetch("INSERT INTO history VALUES(?, ?, GETDATE())", [$veiling->getVeilingId(), $_SESSION['gebruiker']]);
+    }
 
-include("php/layout/header.php");
-
-if ($veiling->getCode() == 0) {
-include("php/layout/breadcrumbs.php");
-
+    include("php/layout/breadcrumbs.php");
 ?>
 <hr>
 <div class="veilingpagina">
@@ -60,6 +61,7 @@ include("php/layout/breadcrumbs.php");
 </div>
 <div class="row">
     <div class="large-8 columns">
+        <!-- grote image -->
         <div class="veilingImage">
             <?php
             echo('<img id="image" src="');
@@ -71,6 +73,7 @@ include("php/layout/breadcrumbs.php");
             ?>
         </div>
 
+        <!-- kleine images -->
         <div class="altImages row small-up-4">
             <?php
             for ($i = 1; $i < count($images) && $i < 5; $i++) {
@@ -81,12 +84,14 @@ include("php/layout/breadcrumbs.php");
             ?>
         </div>
         <hr>
+        <!-- Omschrijving -->
         <h4><strong>Omschrijving:</strong></h4>
         <h5><?php echo($veiling->getBeschrijving()); ?></h5>
     </div>
 
     <hr class="hide-for-large">
     <div class="large-4 columns">
+        <!-- bieding venster -->
         <div class="card">
             <div class="card-divider">
                 <h4><strong>Veiling eindigt over:</strong></h4>
@@ -98,6 +103,8 @@ include("php/layout/breadcrumbs.php");
             <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) { ?>
                 <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
+
+                <!-- Bieding errors -->
                 <label class="is-invalid-label veilingError" id="bedragError">
                     U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €
                     <?php
@@ -110,11 +117,13 @@ include("php/layout/breadcrumbs.php");
                 </label>
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
             <?php } else { ?>
+                <!-- login check -->
                 <p class="callout warning" style="margin: 1% 0;">U bent niet ingelogd, log in om te bieden.</p>
                 <input name="loginKnop" value="Login" type="submit" id="loginKnop" class="login_button button biedKnop">
             <?php } ?>
             </div>
             <?php } ?>
+            <!-- Huidige boden -->
             <table class="card-section biedingen">
                 <?php
                     if ($boden['code'] == 0) {
@@ -136,7 +145,10 @@ include("php/layout/breadcrumbs.php");
 </div>
 </div>
 <?php
-} else {
+//Voor wanneer de veiling niet laad of bestaat
+} else{
+    $pagename = "veilingpagina";
+    include('php/layout/header.php');
 ?>
 <div class="row">
     <div class="small-12 columns">
@@ -147,7 +159,7 @@ include("php/layout/breadcrumbs.php");
     </div>
 </div>
 <?php
-}
+}}
 include("php/layout/footer.html");
 ?>
 <script>
@@ -215,6 +227,7 @@ $(document).ready(function(){
     var gebruiker;
     var data = { veilingId: veilingId };
 
+    //Pak de veiling info en de hoogste bieder
     $.ajax({
         url: 'php/api.php?action=getBiedingInfo',
         data: data,
@@ -234,10 +247,15 @@ $(document).ready(function(){
     $biedenError = $('#biedenError');
     $bedragError = $('#bedragError');
 
+    //Check het hoogste bod telkens wanneer er een bod wordt gemaakt
     $biedenKnop.on('click', function(){
         checkHoogsteBod(veiling["veilingId"]);
     });
 
+    /**
+     * @param veilingId VeilingId
+     * @param bedrag int bedrag
+     */
     function checkHoogsteBod(veilingId, bedrag){
         var response;
         var url = "php/api.php?action=biedingCheck";
@@ -256,7 +274,11 @@ $(document).ready(function(){
         });
     }
 
+    /**
+     * @param hoogsteBod Het hoogste bod
+     */
     function biedAttempt(hoogsteBod){
+        //Stel de bied-drempel in
         var biedDrempel;
         if(hoogsteBod.code == 0) {
             biedDrempel = Number(hoogsteBod.data[0].biedingsBedrag) + bepaalBiedStap(hoogsteBod.data[0].biedingsBedrag);
@@ -265,18 +287,26 @@ $(document).ready(function(){
             biedDrempel = Number(veiling["startPrijs"]) + bepaalBiedStap(veiling["startPrijs"]);
         }
 
+        //Geef de huidige tijd mee
         var now = new Date($.now());
         var biedingsTijd = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
 
+        //Alle informatie van het bod
         var bod = { veilingId: veiling["veilingId"], gebruikersnaam: gebruiker,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
 
+        //Kijk of de gebruiker niet al het hoogste bod heeft
         if(hoogsteBod.code == 1 || bod['gebruikersnaam'] != hoogsteBod.data[0]["gebruikersnaam"]) {
             $biedenError.hide();
+
+            //Kijk of het bod hoger is dan de biedrempel
             if (bod.biedingsBedrag > biedDrempel) {
 
+                //Bied
                 $.post("php/api.php?action=bieden", bod);
 
+                //Update het nieuwe hoogste bod
                 hoogsteBod = bod;
+                //Update de bied-drempel
                 biedDrempel = Number(hoogsteBod.biedingsBedrag) + bepaalBiedStap(hoogsteBod.biedingsBedrag);
 
                 var dateString = ("0"+(now.getDate().toString())).slice(-2)+'-'+("0"+(now.getMonth()+1)).toString().slice(-2)+'-'+now.getFullYear().toString().substring(2);
@@ -295,6 +325,7 @@ $(document).ready(function(){
         }
     }
 
+    //Bepaal de stappen tussen 2 boden.
     function bepaalBiedStap(hoogsteBedrag){
         if(hoogsteBedrag > 50){
             if(hoogsteBedrag > 500){

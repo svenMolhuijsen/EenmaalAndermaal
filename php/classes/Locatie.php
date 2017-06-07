@@ -1,10 +1,8 @@
 <?php
-
-/**
- * 
- */
+//Een locatie, extended door Veiling en User
 abstract class Locatie
 {
+    //Eigenschappen van een locatie
     protected $land;
     protected $provincie;
     protected $postcode;
@@ -13,6 +11,7 @@ abstract class Locatie
     protected $huisnummer;
 
      /**
+     * Voor het updaten van de database
      * @param $column String kolomnaam
      * @param $oldVal $oldVal Waarde om te veranderen
      * @param $newVal $newVal Nieuwe waarde
@@ -20,6 +19,10 @@ abstract class Locatie
     protected
     abstract function update($column, $newVal);
 
+
+    //////////////////////////
+    //Getters en setters
+    /////////////////////////
     /**
      * @return mixed
      */

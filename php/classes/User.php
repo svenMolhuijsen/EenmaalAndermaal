@@ -1,7 +1,8 @@
 <?php
-
+//Alle eigenschappen van een gebruiker in class vorm
 class User extends Locatie
 {
+    //Eigenschappen van een gebruiker
     private $wachtwoord;
     private $voornaam;
     private $achternaam;
@@ -10,6 +11,7 @@ class User extends Locatie
     private $telefoonnmr;
     private $admin;
 
+    //Geeft de gebruiker de informatie
     function __construct($gebruikersnaam)
     {
         $gebruikers = executeQuery("SELECT * FROM gebruikers WHERE gebruikersnaam = ?", [$gebruikersnaam]);
@@ -24,6 +26,7 @@ class User extends Locatie
             $this->telefoonnmr = $gebruiker["telefoonnmr"];
             $this->admin = $gebruiker["admin"];
 
+            //Vult ook de locatie variabelen
             $this->land = $gebruiker['land'];
             $this->provincie = $gebruiker['provincie'];
             $this->postcode = $gebruiker['postcode'];
@@ -34,13 +37,7 @@ class User extends Locatie
         }
     }
 
-    public static function newUser($gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $admin, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer)
-    {
-        executeQuery("INSERT INTO Gebruikers (gebruikersnaam, wachtwoord, voormaam, achternaam, geboortedatum, telefoonmr, admin, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer)
-                      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [$gebruikersnaam, $wachtwoord, $voornaam, $achternaam, $geboortedatum, $teloonmr, $admin, $land, $provincie, $postcode, $plaatsnaam, $straatnaam, $huisnummer]);
-    }
-
+    //Geeft de informatie terug in array vorm
     public function toArray()
     {
         return ['gebruikersnaam' => $this->gebruikersnaam,
@@ -59,6 +56,7 @@ class User extends Locatie
     }
 
     /**
+     * Voor het updaten van de database
      * @param $column String Kolomnaam
      * @param $oldVal $oldVal Oud val
      * @param $newVal $newVal Nieuw val
@@ -68,6 +66,9 @@ class User extends Locatie
         executeQueryNoFetch("UPDATE gebruikers SET ? = ? WHERE gebruikersnaam = ?", [$column, $newVal, $this->gebruikersnaam]);
     }
 
+    ///////////////////////
+    //Getters en setters
+    ///////////////////////
     public
     function getWachtwoord()
     {

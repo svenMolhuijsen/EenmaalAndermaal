@@ -87,22 +87,27 @@ if (!empty($_GET['action'])) {
     }
 }
 
-// Inloggen
+//Inloggen
 function login($params)
 {
+    //Splits de informatie
     $gebruikersnaam = $params["gebruikersnaam"];
     $wachtwoord = $params["wachtwoord"];
 
+    //Check of de velden gevuld zijn
     if (empty($gebruikersnaam) || empty($wachtwoord)) {
         $response = ['status' => 'error', "message" => "Een van de velden is niet ingevuld"];
     } else {
+        //Check of de gebruikersnaam en wachtwoord combinatie bij elkaar hoort
         $result = executeQuery("SELECT TOP 1 gebruikersnaam, wachtwoord FROM gebruikers WHERE gebruikersnaam = ?", [$gebruikersnaam]);
         if ($result['code'] == 0) {
             if (password_verify($wachtwoord, $result['data'][0]["wachtwoord"])) {
+                //Stel de sessie in
                 $_SESSION['gebruiker'] = $gebruikersnaam;
                 $response = ['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd'];
             }
-        } else {
+        }
+        else {
             $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
         }
     }
@@ -110,15 +115,21 @@ function login($params)
     echo json_encode($response);
 }
 
+//Uitloggen
 function logout() {
+    //Maak de sessie leeg
     session_unset();
+    //Vernietig de sessie
     session_destroy();
 
+    //Geef het resultaat terug
     if ($_SESSION != null) {
         $result = ['loggedOut' => false];
-    } else {
+    }
+    else {
         $result = ['loggedOut' => true];
     }
+
     echo json_encode($result);
 }
 
@@ -213,15 +224,15 @@ HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedings
     stuurTerug($result);
 }
 
-function search()
+function search($input)
 {
-    $searchterm = $_POST['searchterm'];
-    $minprice = (float)$_POST['minprice'];
-    $maxprice = (float)$_POST['maxprice'];
-    $category = (int)$_POST['category'];
-    $sortering = $_POST['sortering'];
-    $numrows = (int)$_POST['numrows'];
-    $page = (int)$_POST['page'];
+    $searchterm = $input['searchterm'];
+    $minprice = (float)$input['minprice'];
+    $maxprice = (float)$input['maxprice'];
+    $category = (int)$input['category'];
+    $sortering = $input['sortering'];
+    $numrows = (int)$input['numrows'];
+    $page = (int)$input['page'];
 
     switch ($sortering) {
         case 'Date ASC':
@@ -356,27 +367,34 @@ function stuurTerug($data)
 //genereren categorie-accordion
 function categorieAccordion()
 {
+    //Maak het accordion aan
     echo('
         <div class="side-nav-block medium-3 large-3 columns">
         <ul class="side-nav accordion" data-accordion data-allow-all-closed="true" data-multi-expand="false">
     ');
 
+    //Zoek de hoofdcategorien
     $hoofdcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
 
+    //Check of ze gevonden zijn
     if ($hoofdcategorien['code'] == 0) {
+        //Maak voor elke hoofdcategorie een accordion item aan
         for ($i = 0; $i < count($hoofdcategorien['data']); $i++) {
             $hoofdcategorie = $hoofdcategorien['data'][$i];
 
+            //Maak de accordion items aan
             echo('<li onclick="updateSubCategorie()" class="accordion-item" data-accordion-item>');
             echo('<a href="#" rel="categorie-' . $hoofdcategorie['categorieId'] . '" class="hoofdcategorie accordion-title">' . $hoofdcategorie['categorieNaam'] . '</a>');
             echo('<div class="accordion-content show-for-small-only" data-tab-content>');
 
+            //Zoek de subcategoriën van de hoofdcategorie
             $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie['categorieId']]);
 
             if ($subcategorien['code'] == 0) {
                 for ($j = 0; $j < count($subcategorien['data']); $j++) {
                     $subcategorie = $subcategorien['data'][$j];
 
+                    //Zet de subcategoriën in de accordion
                     echo('<a href="#" id="categorie-' . $subcategorie['categorieId'] . '">' . $subcategorie['categorieNaam'] . '</a>');
                 }
             }
@@ -404,16 +422,19 @@ function setSubcategorien($hoofdcategorie)
 //bieden
 function bieden($bieding)
 {
+    //Zet de bieding in de database
     $bieding = executeQueryNoFetch(
         "INSERT INTO biedingen(veilingId, gebruikersnaam, biedingsTijd, biedingsBedrag) VALUES(?, ?, ?, ?)",
         [$bieding["veilingId"], $_SESSION["gebruiker"], $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
     );
 
+    //Geef een error terug
     if ($bieding['code'] == 2) {
         var_dump($bieding);
     }
 }
 
+//Zoek het hoogste bod
 function getHoogsteBod($data)
 {
     $hoogsteBod = executeQuery("SELECT TOP 1 * FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]);
@@ -424,11 +445,13 @@ function getHoogsteBod($data)
     }
 }
 
+//Geef de info van de veiling en gebruiker
 function getVeilingInfo($data)
 {
    stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]]));
 }
 
+//Geef de info van een bod
 function getBiedingInfo($data){
     echo json_encode(["gebruiker" => $_SESSION['gebruiker'], "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
 }
@@ -439,10 +462,14 @@ function checkFiles()
     $feedbacks = array();
     $uploadOk = true;
 
+    //Loop door alle files heen
     foreach ($_FILES as $file) {
+        //Feedback op de huidig file
         $feedback = array();
+        //Pak de filetype van de image
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
 
+        //Check het tegen een aantal filetypes
         if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
             && $imageFileType != "gif"
         ) {
@@ -450,18 +477,21 @@ function checkFiles()
             $uploadOk = false;
         }
 
+        //Check de filesize
         if ($file["size"] > 500000) {
             array_push($feedback, $file['name'] . ": Bestand is te groot");
             $uploadOk = false;
         }
 
+        //Geef de feedback
         if (!empty($feedback)) {
             array_push($feedbacks, $feedback);
         }
     }
 
+    //Ga door met het aanmaken van de veiling, mits het valideren goed is gegaan
     if ($uploadOk) {
-        $response = aanmakenveiling($_POST, $_FILES['thumbnail']);
+        $response = aanmakenveiling($_POST);
     } else {
         $response = array('status' => 'userError', 'feedback' => $feedbacks);
     }
@@ -469,15 +499,18 @@ function checkFiles()
     echo json_encode($response);
 }
 
+//Maak de veiling aan
 function aanmakenveiling($veilingInfo)
 {
-    $veilingInfo['verkoperGebruikersnaam'] = $_SESSION['gebruiker']->getGebruikersnaam();
+    //Zet wat info klaar die JS niet klaar kon zetten
+    $veilingInfo['verkoperGebruikersnaam'] = $_SESSION['gebruiker'];
     $veilingInfo['categorieId'] = intval($veilingInfo['categorieId']);
     $veilingInfo['startPrijs'] = intval($veilingInfo['startPrijs']);
     $veilingInfo['verkoopPrijs'] = null;
     $veilingInfo['koperGebruikersnaam'] = null;
     $veilingInfo['betalingswijze'] = 'IDEAL';
     $veilingInfo['verzendwijze'] = 'POSTNL';
+    //Maak nulls van lege velden
     foreach ($veilingInfo as $key => $value) {
         if (empty($veilingInfo[$key])) {
             $veilingInfo[$key] = null;
@@ -486,6 +519,7 @@ function aanmakenveiling($veilingInfo)
     $veilingInfo['thumbNail'] = "";
     $veilingInfo['veilingGestopt'] = false;
 
+    //Maak de veiling aan
     $veiling = executeQueryNoFetch("INSERT INTO veiling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
         $veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['categorieId'], $veilingInfo['postcode'],
         $veilingInfo['land'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['koperGebruikersnaam'],
@@ -496,9 +530,11 @@ function aanmakenveiling($veilingInfo)
     ]);
 
     if ($veiling['code'] == 0) {
+        //Pak het veilingId van de zojuist aangemaakte veiling
         $veilingId = executeQuery("SELECT veilingId FROM veiling WHERE titel = ? AND beschrijving = ? AND verkoperGebruikersnaam = ? AND beginDatum = ?",
             [$veilingInfo['titel'], $veilingInfo['beschrijving'], $veilingInfo['verkoperGebruikersnaam'], $veilingInfo['beginDatum']]);
         if ($veilingId['code'] == 0) {
+            //Upload de files
             return uploadFiles($veilingId['data'][0]['veilingId']);
         } else {
             var_dump($veilingId);
@@ -509,21 +545,27 @@ function aanmakenveiling($veilingInfo)
     }
 }
 
-function uploadFiles($veilingId)
-{
+//Uploaden van files
+function uploadFiles($veilingId) {
+    //Geef de files een prefix-code en zet de directories klaar
     $prefix = date('Ymdhms').rand(0, 999);
     $uploaddirPrefix = $_SERVER['DOCUMENT_ROOT'].'/';
     $uploaddir = 'upload/';
     $error = false;
 
+    //Loop door de files heen
     foreach ($_FILES as $key => $file) {
+        //Geef aan waar de file heen moet
         $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
+        //Upload de file
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            if ($key == 'thumbnail' && $key !== 0) {
+            //Zet de thumbnail in de database
+            if ($key == 'thumbnail' && $key !== 0){
                 executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
                 continue;
             }
-                executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
+            //Zet de images in de database
+            executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
         } else {
             $error = true;
         }
@@ -558,9 +600,14 @@ function checkVeilingenInCategorie($categorieId)
     }
 }
 
+//Aanpassen van gebruikergegevens
 function pasgegevensaan($gegevens) {
+    //Haal de oude gegevens op
     $gebruiker = new User($_SESSION['gebruiker']);
 
+    ////////////////////////////
+    //Veranderen van gegevens
+    ///////////////////////////
     if (!empty($gegevens['NEWpassword'])) {
         if (password_verify($gegevens['OLDpassword'], $gebruiker->getWachtwoord())) {
             $passwordnew = password_hash($gegevens['NEWpassword'], PASSWORD_BCRYPT);
@@ -659,7 +706,9 @@ function verplaatsVeiling($veiling){
     executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE veilingId = ?", [$veiling["categorieId"], $veiling["veilingId"]]);
 }
 
+//Registreren
 function registreer($userInfo){
+    //Kijk of de gebruikersnaam al bestaat
     $gebruikersnaamCheck = executeQuery("SELECT gebruikersnaam FROM gebruikers WHERE gebruikersnaam = ?", [$userInfo['gebruikersnaam']]);
 
     if ($gebruikersnaamCheck['code'] == 0) {
@@ -667,14 +716,17 @@ function registreer($userInfo){
     } elseif ($gebruikersnaamCheck['code'] == 1) {
         $responseCode = 1;
 
-        foreach ($userInfo as $key => $value) {
-            if (empty($userInfo[$key])) {
+        //Zet lege strings om naar nulls
+        foreach ($userInfo as $key => $value){
+            if (empty($userInfo[$key])){
                 $userInfo[$key] = null;
             }
         }
 
-        $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
-        if ($registratie['code'] == 2) {
+        //Voer de informatie in
+        $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
+        if ($registratie['code'] == 2){
             $responseCode = $registratie;
         }
     } else {
