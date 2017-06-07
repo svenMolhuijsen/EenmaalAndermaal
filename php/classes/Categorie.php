@@ -7,7 +7,7 @@ class Categorie {
     function __construct($categorieId){
         $categorien = executeQuery("SELECT * FROM categorie WHERE categorieId = ?", [$categorieId]);
 
-        if ($categorien["code"] == 0){
+        if ($categorien["code"] == 0) {
             $categorie = $categorien["data"][0];
 
             $this->categorieId = $categorie["categorieId"];

@@ -26,26 +26,26 @@ function pasteStatus($typeStatus, $soort) {
                 <div class="columns small-5">
                     <p><strong>Titel: </strong>' . $status["titel"] . '</p>
             ');
-            if ($soort == 1) {echo('<p><strong> Verkoper: </strong> ' . $status["verkoperGebruikersnaam"] . '</p >');}
-            elseif ($soort == 3){echo('<p><strong>Beëindigd op: </strong>'.$status["eindDatum"].'</p>');}
-            echo('
-                </div>
-
-                <div class="columns small-4">
-            ');
-            if ($soort == 1){echo('<p><strong>Bedrag: </strong>' . $status['biedingsBedrag'] . '</p>');}
-            elseif ($soort == 2){echo('<p><strong>Huidige bod: </strong>' . $status["startPrijs"] . '</p>');}
-            elseif ($soort == 3){
-                echo('<p><strong>Verkocht voor: </strong>'.$status["verkoopPrijs"].'</p>
-                <p><strong>Gekocht door: </strong>'.$status["koperGebruikersnaam"].'</p>');}
+            if ($soort == 1) {
+                echo('<p><strong> Verkoper: </strong> ' . $status["verkoperGebruikersnaam"] . '</p >');
+                } elseif ($soort == 3) {
+                    echo('<p><strong>Beëindigd op: </strong>'.$status["eindDatum"].'</p>');
+                } 
+            echo('</div><div class="columns small-4">');
+            if ($soort == 1) {
+                echo('<p><strong>Bedrag: </strong>' . $status['biedingsBedrag'] . '</p>');
+            } elseif ($soort == 2) {
+                echo('<p><strong>Huidige bod: </strong>' . $status["startPrijs"] . '</p>');
+            } elseif ($soort == 3) {
+                echo('<p><strong>Verkocht voor: </strong>'.$status["verkoopPrijs"].'</p><p><strong>Gekocht door: </strong>'.$status["koperGebruikersnaam"].'</p>');
+            }
             echo('</div>');
         }
-    } else {
-        echo('<div class="column"><hr><p><strong>Geen biedingen gevonden</strong></p></div>');
     }
+    echo('<div class="column"><hr><p><strong>Geen biedingen gevonden</strong></p></div>');
 }
 
-if(!isset($_SESSION['gebruiker'])){
+if (!isset($_SESSION['gebruiker'])) {
     include("php/layout/geentoegang.html");
 } else {
     ?>

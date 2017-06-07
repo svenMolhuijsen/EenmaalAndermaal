@@ -102,8 +102,7 @@ function login($params)
                 $_SESSION['gebruiker'] = $gebruikersnaam;
                 $response = ['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd'];
             }
-        }
-        else {
+        } else {
             $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
         }
     }
@@ -117,11 +116,9 @@ function logout() {
 
     if ($_SESSION != null) {
         $a_result = ['loggedOut' => false];
-    }
-    else {
+    } else {
         $a_result = ['loggedOut' => true];
     }
-
     echo json_encode($a_result);
 }
 
@@ -137,7 +134,7 @@ function getNumRows()
     switch ($sortering) {
         case 'Date ASC':
             $order = 'V.eindDatum ASC';
-            Break;
+            break;
         case 'Date DESC':
             $order = 'V.eindDatum DESC';
             break;
@@ -522,7 +519,7 @@ function uploadFiles($veilingId)
     foreach ($_FILES as $key => $file) {
         $targetFile = $uploaddirPrefix.$uploaddir.$prefix.basename($file['name']);
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            if ($key == 'thumbnail' && $key !== 0){
+            if ($key == 'thumbnail' && $key !== 0) {
                 executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
                 continue;
             }
@@ -585,7 +582,7 @@ function pasgegevensaan($gegevens) {
     if (!empty($gegevens['NEWtelefoonnummer'])) {
         executeQueryNoFetch("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersnaam = ?", [$gegevens['NEWtelefoonnummer'], $_SESSION['gebruiker']]);
     }
-    if (!empty($gegevens['NEWadmin'])){
+    if (!empty($gegevens['NEWadmin'])) {
         executeQueryNoFetch("UPDATE gebruikers SET admin = ? WHERE gebruikersnaam = ?", [$gegevens['NEWadmin'], $_SESSION['gebruiker']]);
     }
 }
@@ -665,19 +662,19 @@ function verplaatsVeiling($veiling){
 function registreer($userInfo){
     $gebruikersnaamCheck = executeQuery("SELECT gebruikersnaam FROM gebruikers WHERE gebruikersnaam = ?", [$userInfo['gebruikersnaam']]);
 
-    if ($gebruikersnaamCheck['code'] == 0){
+    if ($gebruikersnaamCheck['code'] == 0) {
         $responseCode = 0;
-    } elseif ($gebruikersnaamCheck['code'] == 1){
+    } elseif ($gebruikersnaamCheck['code'] == 1) {
         $responseCode = 1;
 
-        foreach ($userInfo as $key => $value){
-            if (empty($userInfo[$key])){
+        foreach ($userInfo as $key => $value) {
+            if (empty($userInfo[$key])) {
                 $userInfo[$key] = null;
             }
         }
 
         $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
-        if ($registratie['code'] == 2){
+        if ($registratie['code'] == 2) {
             $responseCode = $registratie;
         }
     } else {
@@ -703,7 +700,7 @@ function verzendResetEmail($data){
 
 function resetWachtwoord($data) {
     $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
-    if($duplicateCheck['code'] == 1) {
+    if ($duplicateCheck['code'] == 1) {
         $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())", [$data["username"], bin2hex(random_bytes(128))]);
         if ($resetId['code'] == 0) {
             verzendResetEmail($resetId['data'][0]);
@@ -711,7 +708,7 @@ function resetWachtwoord($data) {
             echo json_encode(["resultClass" => "warning", "message" => "Ongeldige gebruikersnaam."]);
         }
     }
-    elseif($duplicateCheck['code'] == 0){
+    elseif ($duplicateCheck['code'] == 0) {
         echo json_encode(["resultClass" => "warning", "message" => "U heeft al een reset aangevraagd."]);
     }
 }

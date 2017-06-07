@@ -3,7 +3,7 @@ include("php/core.php");
 
 $veilingId = stripInput($_GET["veilingId"]);
 
-if (checkForEmpty($veilingId)){
+if (checkForEmpty($veilingId)) {
 
     $veiling = Veiling::existingVeiling($veilingId);
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
@@ -15,17 +15,16 @@ if (checkForEmpty($veilingId)){
 
     if ($images['code'] == 0) {
         $images = $images["data"];
-    }
-    else{
+    } else{
         var_dump($images);
     }
 
     //$images = glob("upload/".$veiling->getPrefix()."*", GLOB_NOSORT);
 
     function bepaalBiedStap($hoogsteBedrag){
-        if ($hoogsteBedrag > 50){
-            if ($hoogsteBedrag > 500){
-                if ($hoogsteBedrag > 1000){
+        if ($hoogsteBedrag > 50) {
+            if ($hoogsteBedrag > 500) {
+                if ($hoogsteBedrag > 1000) {
                     return 50;
                 }
                 return 5;
@@ -47,7 +46,7 @@ $pagename = 'veilingPagina - '.$veiling->getTitel();
 
 include("php/layout/header.php");
 
-if ($veiling->getCode() == 0){
+if ($veiling->getCode() == 0) {
 include("php/layout/breadcrumbs.php");
 
 ?>
@@ -64,18 +63,17 @@ include("php/layout/breadcrumbs.php");
         <div class="veilingImage">
             <?php
             echo('<img id="image" src="');
-            if (!is_null($images[0])){
+            if (!is_null($images[0])) {
                 echo($images[0]['fotoPath']);
-            } else{
+            } else {
                 echo('http://placehold.it/450x450');
-            }
-            echo('"alt="Image">');
+            } echo('"alt="Image">');
             ?>
         </div>
 
         <div class="altImages row small-up-4">
             <?php
-            for ($i = 1; $i < count($images) && $i < 5; $i++){
+            for ($i = 1; $i < count($images) && $i < 5; $i++) {
                 echo('<div class="column">');
                 echo('<img id="image'.$i.'" rel="image" class="thumbnail" src="'.$images[$i]['fotoPath'].'" alt="altImage">');
                 echo('</div>');
@@ -95,17 +93,17 @@ include("php/layout/breadcrumbs.php");
                 <span id="timer"></span><br>
             </div>
 
-            <?php if (!$veiling->getVeilingGestopt()){ ?>
+            <?php if (!$veiling->getVeilingGestopt()) { ?>
             <div id="expired">
-            <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])){ ?>
+            <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) { ?>
                 <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
                 <label class="is-invalid-label veilingError" id="bedragError">
                     U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €
                     <?php
-                    if ($boden['code'] == 0){
+                    if ($boden['code'] == 0) {
                         echo(round($boden['data'][0]['biedingsBedrag']+bepaalBiedStap($boden['data'][0]['biedingsBedrag']), 2));
-                    } else if($boden['code'] == 1){
+                    } else if ($boden['code'] == 1) {
                         echo(round($veiling->getStartPrijs()+bepaalBiedStap($veiling->getStartPrijs()), 2));
                     }
                     ?>
@@ -138,7 +136,7 @@ include("php/layout/breadcrumbs.php");
 </div>
 </div>
 <?php
-} else{
+} else {
 ?>
 <div class="row">
     <div class="small-12 columns">

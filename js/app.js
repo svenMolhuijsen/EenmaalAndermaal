@@ -42,19 +42,19 @@ $(document).ready(function () {
     });
 
 //inlog-pop modal openen
-    $(".login_button, .signin").on('click', function () {
+    $(".login_button, .signin").on("click", function () {
         showModal();
         showSignIn();
     });
 
 //registreer modal openen
-    $(".signup_button, .register").on('click', function () {
+    $(".signup_button, .register").on("click", function () {
 
         showModal();
         showRegister();
     });
 //reset modal openen
-    $(".reset").on('click', function () {
+    $(".reset").on("click", function () {
         showReset();
     });
 });
@@ -62,6 +62,39 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Functions
 /////////////////////////////////////////////
+function pad(n, width, z) {
+    z = z || "0";
+    n = n + "";
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+function createCountdown($target, countDownDate) {
+    setInterval(function () {
+        var oldPosition = $(document).scrollTop();
+        // Get todays date and time
+        var now = new Date().getTime();
+        // Find the distance between now an the count down date
+        var distance = new Date(countDownDate).getTime() - now;
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            $target.text("VERLOPEN");
+            $target.text("");
+        } else {
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Output the result in an element with id="timer"
+
+            $target.text(days + "d " + pad(hours, 2) + ":"
+                + pad(minutes, 2) + ":" + pad(seconds, 2));
+        }
+
+    }, 1000);
+}
+
 function veiling(target, result) {
     var res = JSON.parse(result);
     $(target).empty();
@@ -85,13 +118,13 @@ function veiling(target, result) {
             "<div class='callout warning'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er zijn geen veilingen gevonden</p> " +
-            "</div></div></div>")
+            "</div></div></div>");
     } else {
         $(target).append("<div class='column veiling'>" +
             "<div class='callout error'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er is waarschijnlijk een database probleem</p> " +
-            "</div></div></div>")
+            "</div></div></div>");
     }
 }
 
@@ -112,14 +145,14 @@ function createPageIndex() {
         sortering: sortering
     }, function (result) {
         var res = JSON.parse(result);
-        if (requestNumber == pageIndexCounter && res.data["0"]['numRows'] > 0) {
+        if (requestNumber == pageIndexCounter && res.data["0"]["numRows"] > 0) {
             $(".pagination").fadeIn(300);
             pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
-            $(".pagination").jqPagination('option', 'max_page', pages);
-        } else if (res.data["0"]['numRows'] == 0) {
+            $(".pagination").jqPagination("option", "max_page", pages);
+        } else if (res.data["0"]["numRows"] == 0) {
             $(".pagination").fadeOut(300);
-            $(".pagination").jqPagination('option', 'current_page', 1);
-            $(".pagination").jqPagination('option', 'max_page', 1);
+            $(".pagination").jqPagination("option", "current_page", 1);
+            $(".pagination").jqPagination("option", "max_page", 1);
 
         }
     });
@@ -169,14 +202,14 @@ function generateParentCategories(category, target) {
             for (var i = parents.length - 1; i >= 0; i--) {
                 //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
                 target.append("<div class='" + inverse + "'></div>");
-                var childtarget = $('.' + inverse, target);
+                var childtarget = $("." + inverse, target);
 
-                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
+                generateCategorySelect(childtarget, target, parents[i]["superId"], parents[i]["categorieId"]);
 
                 inverse++;
                 if (i == 0) {
                     target.append("<div class='" + inverse + "'></div>");
-                    var childtarget = $('.' + inverse, target);
+                    var childtarget = $("." + inverse, target);
                     generateCategorySelect(childtarget, target, category, null);
                 }
             }
@@ -197,9 +230,9 @@ function generateCategorySelect($childtarget, $target, category, selected) {
 
             $.each(res.data, function (index, item) {
                 if (selected == item["categorieId"]) {
-                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                    $($select).append("<option selected value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
                 } else {
-                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                    $($select).append("<option value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
                 }
             });
             $childtarget.append($select);
@@ -214,41 +247,8 @@ function generateCategorySelect($childtarget, $target, category, selected) {
     });
 }
 
-function pad(n, width, z) {
-    z = z || '0';
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
-function createCountdown($target, countDownDate) {
-    setInterval(function () {
-        var oldPosition = $(document).scrollTop();
-        // Get todays date and time
-        var now = new Date().getTime();
-        // Find the distance between now an the count down date
-        var distance = new Date(countDownDate).getTime() - now;
-        // If the count down is over, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            $target.text("VERLOPEN");
-            $target.text("");
-        } else {
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            // Output the result in an element with id="timer"
-
-            $target.text(days + "d " + pad(hours, 2) + ":"
-                + pad(minutes, 2) + ":" + pad(seconds, 2));
-        }
-
-    }, 1000);
-}
-
 function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+    return decodeURIComponent((new RegExp("[?|&]" + name + "=" + "([^&;]+?)(&|#|;|$)").exec(location.search) || [null, ""])[1].replace(/\+/g, "%20")) || null;
 }
 
 $(document).ready(function () {
