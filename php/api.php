@@ -697,16 +697,28 @@ function verzendResetEmail($data){
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= 'FROM: info@eenmaalandermaal.nl';
     mail($naar,$subject,$txt,$headers);
+
+    echo json_encode(["resultClass" => "success", "message" => "Een reset mail is verstuurd."]);
 }
 
 function resetWachtwoord($data) {
-    $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())",[$data["username"], bin2hex(random_bytes(128))]);
-    verzendResetEmail($resetId['data'][0]);
+    $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
+    if($duplicateCheck['code'] == 1) {
+        $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())", [$data["username"], bin2hex(random_bytes(128))]);
+        if ($resetId['code'] == 0) {
+            verzendResetEmail($resetId['data'][0]);
+        } elseif ($resetId['code'] == 2) {
+            echo json_encode(["resultClass" => "warning", "message" => "Ongeldige gebruikersnaam."]);
+        }
+    }
+    elseif($duplicateCheck['code'] == 0){
+        echo json_encode(["resultClass" => "warning", "message" => "U heeft al een reset aangevraagd."]);
+    }
 }
 
 function veranderWachtwoord($data) {
     $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
-    executeQueryNoFetch("UPDATE password_recovery SET expire_Date = GETDATE() WHERE token = ?", [$data["token"]]);
+    executeQueryNoFetch("DELETE FROM password_recovery WHERE token = ?", [$data['token']]);
     executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
 }
 

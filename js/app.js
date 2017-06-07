@@ -327,8 +327,6 @@ $(document).ready(function () {
             huisnummer: $("#register-no").val()
         };
 
-        console.log(data);
-
         $.ajax({
             url: 'php/api.php?action=registreer',
             data: data,
@@ -344,8 +342,6 @@ $(document).ready(function () {
                     case 1:
                         $registerForm.append("<div class='column callout success'>Registratie voltooid!</div>");
                         break;
-                    default:
-                        console.log(responseCode);
                 }
             }
         });
@@ -354,18 +350,20 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Password Recovery
 /////////////////////////////////////////////
+$resetForm = $('#resetForm');
 
 $("#resetPassword").click(function(){
     var data = {
         username: $("#reset-username").val()
-    }
+    };
     $.ajax({
         url: 'php/api.php?action=resetWachtwoord',
         data: data,
-        method: 'POST',
+        type: 'POST',
         dataType: 'json',
         success: function(result){
-            alert(result);
+            $resetForm.find('.callout').remove();
+            $resetForm.append('<div class="column callout ' + result.resultClass + '">'+ result.message + '</div>')
         }
     });
 });
@@ -444,13 +442,13 @@ $("#resetPassword").click(function(){
         }
     });
 
-    $('#registerForm input[type="submit"]').on('click', function(){
+    $registerForm.find('input[type="submit"]').on('click', function(){
        if($registerForm.valid()){
            registreer();
        }
     });
 
-    $('#resetForm').validate();
+    $resetForm.validate();
 
 //////////////////////////////////////////////
 //  Categoriepagina
@@ -466,7 +464,7 @@ $("#resetPassword").click(function(){
                 //correct
                 $.each(res.data, function (index, value) {
                     $hoofdcategorie.append("<li class='accordion-item' data-accordion-item>" +
-                        "<a href="#" data-category='" + value.categorieId + "' class='accordion-title'>" + value.categorieNaam + "</a> " +
+                        "<a href'#' data-category='" + value.categorieId + "' class='accordion-title'>" + value.categorieNaam + "</a> " +
                         "<div class='accordion-content hide-for-small-only show-for-medium-up' data-tab-content> " +
                         "Bekijk rechts de categorien" +
                         "</div>" +
