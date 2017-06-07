@@ -63,7 +63,7 @@ class User extends Locatie
      */
     protected function update($column, $newVal)
     {
-        $test = executeQueryNoFetch("UPDATE gebruikers SET ? = ? WHERE gebruikersnaam = ?", [$column, $newVal, $this->gebruikersnaam]);
+        executeQueryNoFetch("UPDATE gebruikers SET ? = ? WHERE gebruikersnaam = ?", [$column, $newVal, $this->gebruikersnaam]);
     }
 
     ///////////////////////

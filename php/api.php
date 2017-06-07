@@ -145,7 +145,7 @@ function getNumRows()
     switch ($sortering) {
         case 'Date ASC':
             $order = 'V.eindDatum ASC';
-            Break;
+            break;
         case 'Date DESC':
             $order = 'V.eindDatum DESC';
             break;
@@ -629,7 +629,7 @@ function pasgegevensaan($gegevens) {
     if (!empty($gegevens['NEWtelefoonnummer'])) {
         executeQueryNoFetch("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersnaam = ?", [$gegevens['NEWtelefoonnummer'], $_SESSION['gebruiker']]);
     }
-    if (!empty($gegevens['NEWadmin'])){
+    if (!empty($gegevens['NEWadmin'])) {
         executeQueryNoFetch("UPDATE gebruikers SET admin = ? WHERE gebruikersnaam = ?", [$gegevens['NEWadmin'], $_SESSION['gebruiker']]);
     }
 }
@@ -711,9 +711,9 @@ function registreer($userInfo){
     //Kijk of de gebruikersnaam al bestaat
     $gebruikersnaamCheck = executeQuery("SELECT gebruikersnaam FROM gebruikers WHERE gebruikersnaam = ?", [$userInfo['gebruikersnaam']]);
 
-    if ($gebruikersnaamCheck['code'] == 0){
+    if ($gebruikersnaamCheck['code'] == 0) {
         $responseCode = 0;
-    } elseif ($gebruikersnaamCheck['code'] == 1){
+    } elseif ($gebruikersnaamCheck['code'] == 1) {
         $responseCode = 1;
 
         //Zet lege strings om naar nulls
@@ -752,15 +752,14 @@ function verzendResetEmail($data){
 
 function resetWachtwoord($data) {
     $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
-    if($duplicateCheck['code'] == 1) {
+    if ($duplicateCheck['code'] == 1) {
         $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())", [$data["username"], bin2hex(random_bytes(128))]);
         if ($resetId['code'] == 0) {
             verzendResetEmail($resetId['data'][0]);
         } elseif ($resetId['code'] == 2) {
             echo json_encode(["resultClass" => "warning", "message" => "Ongeldige gebruikersnaam."]);
         }
-    }
-    elseif($duplicateCheck['code'] == 0){
+    } elseif ($duplicateCheck['code'] == 0) {
         echo json_encode(["resultClass" => "warning", "message" => "U heeft al een reset aangevraagd."]);
     }
 }

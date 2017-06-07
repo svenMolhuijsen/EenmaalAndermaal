@@ -42,19 +42,19 @@ $(document).ready(function () {
     });
 
 //inlog-pop modal openen
-    $(".login_button, .signin").on('click', function () {
+    $(".login_button, .signin").on("click", function () {
         showModal();
         showSignIn();
     });
 
 //registreer modal openen
-    $(".signup_button, .register").on('click', function () {
+    $(".signup_button, .register").on("click", function () {
 
         showModal();
         showRegister();
     });
 //reset modal openen
-    $(".reset").on('click', function () {
+    $(".reset").on("click", function () {
         showReset();
     });
 });
@@ -62,6 +62,39 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Functions
 /////////////////////////////////////////////
+function pad(n, width, z) {
+    z = z || "0";
+    n = n + "";
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+function createCountdown($target, countDownDate) {
+    setInterval(function () {
+        var oldPosition = $(document).scrollTop();
+        // Get todays date and time
+        var now = new Date().getTime();
+        // Find the distance between now an the count down date
+        var distance = new Date(countDownDate).getTime() - now;
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            $target.text("VERLOPEN");
+            $target.text("");
+        } else {
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Output the result in an element with id="timer"
+
+            $target.text(days + "d " + pad(hours, 2) + ":"
+                + pad(minutes, 2) + ":" + pad(seconds, 2));
+        }
+
+    }, 1000);
+}
+
 function veiling(target, result) {
     var res = JSON.parse(result);
     $(target).empty();
@@ -85,13 +118,13 @@ function veiling(target, result) {
             "<div class='callout warning'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er zijn geen veilingen gevonden</p> " +
-            "</div></div></div>")
+            "</div></div></div>");
     } else {
         $(target).append("<div class='column veiling'>" +
             "<div class='callout error'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er is waarschijnlijk een database probleem</p> " +
-            "</div></div></div>")
+            "</div></div></div>");
     }
 }
 
@@ -112,14 +145,14 @@ function createPageIndex() {
         sortering: sortering
     }, function (result) {
         var res = JSON.parse(result);
-        if (requestNumber == pageIndexCounter && res.data["0"]['numRows'] > 0) {
+        if (requestNumber == pageIndexCounter && res.data["0"]["numRows"] > 0) {
             $(".pagination").fadeIn(300);
-            pages = Math.ceil(parseInt(res.data["0"]['numRows']) / 12);
-            $(".pagination").jqPagination('option', 'max_page', pages);
-        } else if (res.data["0"]['numRows'] == 0) {
+            pages = Math.ceil(parseInt(res.data["0"]["numRows"]) / 12);
+            $(".pagination").jqPagination("option", "max_page", pages);
+        } else if (res.data["0"]["numRows"] == 0) {
             $(".pagination").fadeOut(300);
-            $(".pagination").jqPagination('option', 'current_page', 1);
-            $(".pagination").jqPagination('option', 'max_page', 1);
+            $(".pagination").jqPagination("option", "current_page", 1);
+            $(".pagination").jqPagination("option", "max_page", 1);
 
         }
     });
@@ -169,14 +202,14 @@ function generateParentCategories(category, target) {
             for (var i = parents.length - 1; i >= 0; i--) {
                 //eerst container aanmaken zodat het in de goede volgorde wordt aangemaakt
                 target.append("<div class='" + inverse + "'></div>");
-                var childtarget = $('.' + inverse, target);
+                var childtarget = $("." + inverse, target);
 
-                generateCategorySelect(childtarget, target, parents[i]['superId'], parents[i]['categorieId']);
+                generateCategorySelect(childtarget, target, parents[i]["superId"], parents[i]["categorieId"]);
 
                 inverse++;
                 if (i == 0) {
                     target.append("<div class='" + inverse + "'></div>");
-                    var childtarget = $('.' + inverse, target);
+                    var childtarget = $("." + inverse, target);
                     generateCategorySelect(childtarget, target, category, null);
                 }
             }
@@ -193,20 +226,20 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         var res = JSON.parse(result);
         if (res.code == 0) {
             $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
-            $($select).append("<option value='" + category + "'selected>Categorie selecteren</option>");
+            $select.append("<option value='" + category + "'selected>Categorie selecteren</option>");
 
             $.each(res.data, function (index, item) {
                 if (selected == item["categorieId"]) {
-                    $($select).append("<option selected value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                    $select.append("<option selected value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
                 } else {
-                    $($select).append("<option value='" + item['categorieId'] + "'>" + item['categorieNaam'] + "</option>");
+                    $select.append("<option value='" + item["categorieId"] + "'>" + item["categorieNaam"] + "</option>");
                 }
             });
             $childtarget.append($select);
         }
 
-        $($childtarget).change(function () {
-            var value = $($childtarget).find(":selected").val();
+        $childtarget.change(function () {
+            var value = $childtarget.find(":selected").val();
             currCategory = value;
             generateParentCategories(value, $target);
             zoeken();
@@ -214,41 +247,8 @@ function generateCategorySelect($childtarget, $target, category, selected) {
     });
 }
 
-function pad(n, width, z) {
-    z = z || '0';
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
-function createCountdown($target, countDownDate) {
-    setInterval(function () {
-        var oldPosition = $(document).scrollTop();
-        // Get todays date and time
-        var now = new Date().getTime();
-        // Find the distance between now an the count down date
-        var distance = new Date(countDownDate).getTime() - now;
-        // If the count down is over, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            $target.text("VERLOPEN");
-            $target.text("");
-        } else {
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            // Output the result in an element with id="timer"
-
-            $target.text(days + "d " + pad(hours, 2) + ":"
-                + pad(minutes, 2) + ":" + pad(seconds, 2));
-        }
-
-    }, 1000);
-}
-
 function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+    return decodeURIComponent((new RegExp("[?|&]" + name + "=" + "([^&;]+?)(&|#|;|$)").exec(location.search) || [null, ""])[1].replace(/\+/g, "%20")) || null;
 }
 
 $(document).ready(function () {
@@ -267,8 +267,8 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Inloggen/registreren
 /////////////////////////////////////////////
-    //inloggen
-    $("#login input[type='submit']").on('click', function () {
+    //Inloggen
+    $("#login input[type='submit']").on("click", function () {
         var url = "/php/api.php?action=login";
 
         var wachtwoord = $("#login #signin-password").val();
@@ -282,7 +282,7 @@ $(document).ready(function () {
                 // Melding weergeven
                 $("#login form").append("<div data-alert class='callout success'>" + res.message + "</div>");
                 // Alle velden legen, behalve submit
-                $("#login input:not([type=\'submit\'])").val('');
+                $("#login input:not([type=\'submit\'])").val("");
                 $(".signin-register-modal,.signin-register-modal .callout").fadeOut(300);
 
                 location.reload();
@@ -295,17 +295,17 @@ $(document).ready(function () {
     });
 
     //Uitloggen
-    $('#logoutButton').on('click', function(){
+    $('#logoutButton').on("click", function(){
         $.ajax({
-            dataType: 'json',
-            url: 'php/api.php?action=logout',
+            dataType: "json",
+            url: "php/api.php?action=logout",
             success: function(data){
                 //Ga naar home
                 if(data.loggedOut) {
                     window.location.replace("http://iproject34.icasites.nl");
                 }
                 else{
-                    alert('Logout failed!');
+                    alert("Logout failed!");
                 }
             }
         });
@@ -313,7 +313,7 @@ $(document).ready(function () {
 
     //Registreren
     function registreer(){
-        $registerForm = $('#registerForm');
+        $registerForm = $("#registerForm");
 
         //Persoongegevens
         var data = {
@@ -333,10 +333,10 @@ $(document).ready(function () {
         };
 
         $.ajax({
-            url: 'php/api.php?action=registreer',
+            url: "php/api.php?action=registreer",
             data: data,
-            type: 'post',
-            dataType: 'json',
+            type: "post",
+            dataType: "json",
             success: function(responseCode){
                 $registerForm.find(".callout").remove();
 
@@ -356,7 +356,7 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Password Recovery
 /////////////////////////////////////////////
-$resetForm = $('#resetForm');
+$resetForm = $("#resetForm");
 
 //Wachtwoord reset
 $("#resetPassword").click(function(){
@@ -365,14 +365,14 @@ $("#resetPassword").click(function(){
     };
 
     $.ajax({
-        url: 'php/api.php?action=resetWachtwoord',
+        url: "php/api.php?action=resetWachtwoord",
         data: data,
-        type: 'POST',
-        dataType: 'json',
+        type: "POST",
+        dataType: "json",
         success: function(result){
             //Resultaat weergeven
-            $resetForm.find('.callout').remove();
-            $resetForm.append('<div class="column callout ' + result.resultClass + '">'+ result.message + '</div>')
+            $resetForm.find(".callout").remove();
+            $resetForm.append("<div class='column callout" + result.resultClass + "'>"+ result.message + "</div>");
         }
     });
 });
@@ -391,7 +391,7 @@ $("#resetPassword").click(function(){
             return isNaN(value) && isNaN(params)
                 || (Number(value) > Number(params));
         },
-        'Voer een latere datum in.'
+        "Voer een latere datum in."
     );
 
     //Regel die kijkt of de opgegeven datum eerder valt dan een andere datum
@@ -405,36 +405,36 @@ $("#resetPassword").click(function(){
             return isNaN(value) && isNaN(params)
                 || (Number(value) < Number(params));
         },
-        'Voer een eerdere datum in.'
+        "Voer een eerdere datum in."
     );
 
     //Opmaak van de errormessage
     var errorCSS = {
-        'position': 'absolute',
-        'font-size': '70%',
-        'margin-bottom': '0',
-        'bottom': '0',
-        'right': '0'
+        "position": "absolute",
+        "font-size": "70%",
+        "margin-bottom": "0",
+        "bottom": "0",
+        "right": "0"
     };
 
     //Defaults van de regels van de validatie plugin
     jQuery.validator.setDefaults({
-        errorClass: 'validationError',
-        errorElement: 'strong',
+        errorClass: "validationError",
+        errorElement: "strong",
         focusCleanup: true,
         focusInvalid: false,
         highlight: function (element) {
-            $(element).addClass('is-invalid-input validationError');
+            $(element).addClass("is-invalid-input validationError");
         },
         unhighlight: function (element) {
-            $(element).removeClass('is-invalid-input validationError');
+            $(element).removeClass("is-invalid-input validationError");
         },
         errorPlacement: function(error, element) {
             error.appendTo(element.prev());
-            error.addClass('hide-for-small show-for-large');
+            error.addClass("hide-for-small show-for-large");
 
             error.css(errorCSS);
-            error.parent().css('position', 'relative');
+            error.parent().css("position", "relative");
         }
     });
 
@@ -442,23 +442,23 @@ $("#resetPassword").click(function(){
     var eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-    $registerForm = $('#registerForm');
+    $registerForm = $("#registerForm");
 
     //Valideren van de registratie en de regels
     $registerForm.validate({
         rules: {
-            'gebdate': {lessThanDate: eighteenYearsAgo},
-            'repeat-password': {equalTo: "#register-password"}
+            "gebdate": {lessThanDate: eighteenYearsAgo},
+            "repeat-password": {equalTo: "#register-password"}
         },
         messages: {
-            'repeat-password': {equalTo: "Vul hetzelfde wachtwoord in."},
-            'tel': {pattern: "Foutief patroon."},
-            'postcode': {pattern: "Foutief patroon."}
+            "repeat-password": {equalTo: "Vul hetzelfde wachtwoord in."},
+            "tel": {pattern: "Foutief patroon."},
+            "postcode": {pattern: "Foutief patroon."}
         }
     });
 
-    $registerForm.find('input[type="submit"]').on('click', function(){
-       if($registerForm.valid()){
+    $registerForm.find("input[type='submit']").on("click", function(){
+       if ($registerForm.valid()) {
            registreer();
        }
     });
@@ -498,18 +498,18 @@ $("#resetPassword").click(function(){
     function bindClickListenercategoriePagina() {
         //Bind click listener to newly created element
         $(".categoriepagina .hoofdcategorien .accordion-item a").click(function () {
-            var id = $(this).data('category');
+            var id = $(this).data("category");
             var $subcategorien = $(".subcategorien");
 
-            if ($subcategorien.data('hoofdcategorie') == id) {
+            if ($subcategorien.data("hoofdcategorie") == id) {
                 $subcategorien.empty();
                 $("#" + id).empty();
-                $subcategorien.data('hoofdcategorie', null);
+                $subcategorien.data("hoofdcategorie", null);
 
             } else {
                 $subcategorien.empty();
                 $("#" + id).empty();
-                $subcategorien.data('hoofdcategorie', id);
+                $subcategorien.data("hoofdcategorie", id);
                 $subcategorien.append("Categorien laden...");
                 $("#" + id).append("Categorien laden...");
 
@@ -539,9 +539,9 @@ $("#resetPassword").click(function(){
 //  filterpagina
 /////////////////////////////////////////////
     if ($("#filterpagina").length != 0) {
-        var searchterm = getURLParameter('searchterm');
+        var searchterm = getURLParameter("searchterm");
         searchterm != null ? $("#searchterm").val(searchterm) : null;
-        var category = getURLParameter('hoofdcategorie');
+        var category = getURLParameter("hoofdcategorie");
         var target = $("#filterpagina aside .filter .categorien");
         generateParentCategories(category, target);
         currCategory = category;
@@ -552,8 +552,8 @@ $("#resetPassword").click(function(){
             }
         });
 
-        $(".filter .slider").on('changed.zf.slider', function () {
-            $(".pagination").jqPagination('option', 'current_page', 1);
+        $(".filter .slider").on("changed.zf.slider", function () {
+            $(".pagination").jqPagination("option", "current_page", 1);
             zoeken(0, true);
         });
 
@@ -563,13 +563,13 @@ $("#resetPassword").click(function(){
         $("#searchterm").keyup(function () {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(function () {
-                $(".pagination").jqPagination('option', 'current_page', 1);
+                $(".pagination").jqPagination("option", "current_page", 1);
                 zoeken(0, true);
             }, doneTypingInterval);
         });
 
         $("#sortering").change(function () {
-            $(".pagination").jqPagination('option', 'current_page', 1);
+            $(".pagination").jqPagination("option", "current_page", 1);
             zoeken(0, true);
         });
         zoeken(0, true);
