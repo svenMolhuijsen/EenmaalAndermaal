@@ -6,6 +6,7 @@ class Veiling extends Locatie
     private $titel;
     private $beschrijving;
     private $verkoperGebruikersnaam;
+    private $koperGebruikersnaam;
     private $koperId;
     private $startPrijs;
     private $verkoopPrijs;
@@ -64,9 +65,9 @@ class Veiling extends Locatie
      * @param $newVal Nieuwe waarde
      */
     protected
-    function update($column, $oldVal, $newVal)
+    function update($column, $newVal)
     {
-         executeQuery("UPDATE veiling SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
+         executeQuery("UPDATE veiling SET ? = ? WHERE veilingId = ?", [$column, $newVal, $this->veilingId]);
     }
 
     public
@@ -76,7 +77,7 @@ class Veiling extends Locatie
 
     public
     function setThumbNail($thumbNail){
-        $this::update("thumbNail", $this->thumbNail, $thumbNail);
+        $this::update("thumbNail", $thumbNail);
         $this->prefix = $thumbNail;
     }
 
@@ -87,6 +88,7 @@ class Veiling extends Locatie
 
     public
     function setCode($code){
+        $this::update("code", $code);
         $this->code = $code;
     }
 
@@ -122,16 +124,6 @@ class Veiling extends Locatie
     }
 
     /**
-     * @param mixed $veilingId
-     */
-    public
-    function setVeilingId($veilingId)
-    {
-        $this::update("veilingId", $this->veilingId, $veilingId);
-        $this->veilingId = $veilingId;
-    }
-
-    /**
      * @return mixed
      */
     public
@@ -146,7 +138,7 @@ class Veiling extends Locatie
     public
     function setTitel($titel)
     {
-        $this::update("titel", $this->titel, $titel);
+        $this::update("titel", $titel);
         $this->titel = $titel;
     }
 
@@ -165,7 +157,7 @@ class Veiling extends Locatie
     public
     function setBeschrijving($beschrijving)
     {
-        $this::update("beschrijving", $this->beschrijving, $beschrijving);
+        $this::update("beschrijving", $beschrijving);
         $this->beschrijving = $beschrijving;
     }
 
@@ -184,7 +176,7 @@ class Veiling extends Locatie
     public
     function setVerkoperGebruikersnaam($verkoperGebruikersnaam)
     {
-        $this::update("verkoperGebruikersnaam", $this->verkoperGebruikersnaam, $verkoperGebruikersnaam);
+        $this::update("verkoperGebruikersnaam", $verkoperGebruikersnaam);
         $this->verkoperGebruikersnaam = $verkoperGebruikersnaam;
     }
 
@@ -203,7 +195,7 @@ class Veiling extends Locatie
     public
     function setKoperGebruikersnaam($koperGebruikersnaam)
     {
-        $this::update("koperGebruikersnaam", $this->koperGebruikersnaam, $koperGebruikersnaam);
+        $this::update("koperGebruikersnaam", $koperGebruikersnaam);
         $this->koperId = $koperGebruikersnaam;
     }
 
@@ -222,7 +214,7 @@ class Veiling extends Locatie
     public
     function setStartPrijs($startPrijs)
     {
-        $this::update("startPrijs", $this->startPrijs, $startPrijs);
+        $this::update("startPrijs", $startPrijs);
         $this->startPrijs = $startPrijs;
     }
 
@@ -241,7 +233,7 @@ class Veiling extends Locatie
     public
     function setVerkoopPrijs($verkoopPrijs)
     {
-        $this::update("verkoopPrijs", $this->verkoopPrijs, $verkoopPrijs);
+        $this::update("verkoopPrijs", $verkoopPrijs);
         $this->verkoopPrijs = $verkoopPrijs;
     }
 
@@ -260,7 +252,7 @@ class Veiling extends Locatie
     public
     function setVerzendKosten($verzendKosten)
     {
-        $this::update("verzendKosten", $this->verzendKosten, $verzendKosten);
+        $this::update("verzendKosten", $verzendKosten);
         $this->verzendKosten = $verzendKosten;
     }
 
@@ -279,7 +271,7 @@ class Veiling extends Locatie
     public
     function setBetalingswijze($betalingswijze)
     {
-        $this::update("betalingswijze", $this->betalingswijze, $betalingswijze);
+        $this::update("betalingswijze", $betalingswijze);
         $this->betalingswijze = $betalingswijze;
     }
 
@@ -298,7 +290,7 @@ class Veiling extends Locatie
     public
     function setVerzendwijze($verzendwijze)
     {
-        $this::update("verzendwijze", $this->verzendwijze, $verzendwijze);
+        $this::update("verzendwijze", $verzendwijze);
         $this->verzendwijze = $verzendwijze;
     }
 
@@ -317,7 +309,7 @@ class Veiling extends Locatie
     public
     function setBeginDatum($beginDatum)
     {
-        $this::update("beginDatum", $this->beginDatum, $beginDatum);
+        $this::update("beginDatum", $beginDatum);
         $this->beginDatum = $beginDatum;
     }
 
@@ -336,7 +328,7 @@ class Veiling extends Locatie
     public
     function setEindDatum($eindDatum)
     {
-        $this::update("eindDatum", $this->eindDatum, $eindDatum);
+        $this::update("eindDatum", $eindDatum);
         $this->eindDatum = $eindDatum;
     }
 
@@ -355,7 +347,7 @@ class Veiling extends Locatie
     public
     function setCategorieId($categorieId)
     {
-        $this::update("categorieId", $this->categorieId, $categorieId);
+        $this::update("categorieId", $categorieId);
         $this->categorieId = $categorieId;
     }
 }

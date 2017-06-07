@@ -59,13 +59,18 @@ class User extends Locatie
     }
 
     /**
-     * @param $column Kolomnaam
-     * @param $oldVal Oud val
-     * @param $newVal Nieuw val
+     * @param $column String Kolomnaam
+     * @param $oldVal $oldVal Oud val
+     * @param $newVal $newVal Nieuw val
      */
-    protected function update($column, $oldVal, $newVal)
+    protected function update($column, $newVal)
     {
-        executeQueryNoFetch("UPDATE gebruiker SET ? = ? WHERE ? = ?", [$column, $newVal, $column, $oldVal]);
+        echo "$column<br />$newVal<br />$this->gebruikersnaam<br />";
+        $test = executeQueryNoFetch("UPDATE gebruikers SET ? = ? WHERE gebruikersnaam = ?", [$column, $newVal, $this->gebruikersnaam]);
+        $test2 = executeQuery("select * from gebruikers where gebruikersnaam = ?", [$this->getGebruikersnaam()]);
+        var_dump($test);
+        echo"<br /><br />";
+        var_dump($test2['data'][0]);
     }
 
     public
@@ -80,7 +85,7 @@ class User extends Locatie
     public
     function setWachtwoord($wachtwoord)
     {
-        $this::update("wachtwoord", $this->wachtwoord, $wachtwoord);
+        $this::update("wachtwoord", $wachtwoord);
         $this->wachtwoord = $wachtwoord;
     }
 
@@ -99,7 +104,7 @@ class User extends Locatie
     public
     function setVoornaam($voornaam)
     {
-        $this::update("voornaam", $this->voornaam, $voornaam);
+        $this::update("voornaam", $voornaam);
         $this->voornaam = $voornaam;
     }
 
@@ -118,7 +123,7 @@ class User extends Locatie
     public
     function setAchternaam($achternaam)
     {
-        $this::update("achternaam", $this->achternaam, $achternaam);
+        $this::update("achternaam", $achternaam);
         $this->achternaam = $achternaam;
     }
 
@@ -137,7 +142,7 @@ class User extends Locatie
     public
     function setGeboortedatum($geboortedatum)
     {
-        $this::update("geboortedatum", $this->geboortedatum, $geboortedatum);
+        $this::update("geboortedatum", $geboortedatum);
         $this->geboortedatum = $geboortedatum;
     }
 
@@ -165,7 +170,7 @@ class User extends Locatie
     public
     function setTelefoonnmr($telefoonnmr)
     {
-        $this::update("telefoonnmr", $this->telefoonnmr, $telefoonnmr);
+        $this::update("telefoonnmr", $telefoonnmr);
         $this->telefoonnmr = $telefoonnmr;
     }
 
@@ -184,8 +189,8 @@ class User extends Locatie
     public
     function setAdmin($admin)
     {
-        $this::update("admin", $this->admin, $admin);
-        $this->verkoper = $admin;
+        $this::update("admin", $admin);
+        $this->admin = $admin;
     }
 }
 

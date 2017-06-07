@@ -4,12 +4,11 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 $user = new User($_SESSION['gebruiker']);
-if(!isset($_SESSION['gebruiker'])){ //Geen ingelogde user krijt sws
+if(!isset($_SESSION['gebruiker'])){
         include("php/layout/geentoegang.html");
-    }
-else if($user ->getVerkoper() == 1){
-    ?>
-
+}
+else if($user->getAdmin() == 1){
+?>
     <main class="row">
         <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>
             <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
@@ -73,8 +72,8 @@ else if($user ->getVerkoper() == 1){
     <?php
 } else {
     include("php/layout/geentoegang.html");
-    include("php/layout/footer.html");
 }
+include("php/layout/footer.html");
 ?>
 <script>
 var veilingId;

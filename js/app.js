@@ -324,7 +324,7 @@ $(document).ready(function () {
         $.ajax({
             url: 'php/api.php?action=registreer',
             data: data,
-            method: 'post',
+            type: 'post',
             dataType: 'json',
             success: function(responseCode){
                 $registerForm.find('.callout').remove();

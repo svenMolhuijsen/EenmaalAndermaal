@@ -13,12 +13,12 @@ abstract class Locatie
     protected $huisnummer;
 
      /**
-     * @param $column Kolomnaam
-     * @param $oldVal Doelwaarde om te veranderen
-     * @param $newVal Nieuwe waarde
+     * @param $column String kolomnaam
+     * @param $oldVal $oldVal Waarde om te veranderen
+     * @param $newVal $newVal Nieuwe waarde
      */
     protected
-    abstract function update($column, $oldVal, $newVal);
+    abstract function update($column, $newVal);
 
     /**
      * @return mixed
@@ -35,7 +35,7 @@ abstract class Locatie
     public
     function setLand($land)
     {
-        $this::update("land", $this->land, $land);
+        $this::update("land", $land);
         $this->land = $land;
     }
 
@@ -54,7 +54,7 @@ abstract class Locatie
     public
     function setProvincie($provincie)
     {
-        $this::update("provincie", $this->provincie, $provincie);
+        $this::update("provincie", $provincie);
         $this->provincie = $provincie;
     }
 
@@ -73,7 +73,7 @@ abstract class Locatie
     public
     function setPostcode($postcode)
     {
-        $this::update("postcode", $this->postcode, $postcode);
+        $this::update("postcode", $postcode);
         $this->postcode = $postcode;
     }
 
@@ -92,7 +92,7 @@ abstract class Locatie
     public
     function setPlaatsnaam($plaatsnaam)
     {
-        $this::update("plaatsnaam", $this->plaatsnaam, $plaatsnaam);
+        $this::update("plaatsnaam", $plaatsnaam);
         $this->plaatsnaam = $plaatsnaam;
     }
 
@@ -111,7 +111,7 @@ abstract class Locatie
     public
     function setStraatnaam($straatnaam)
     {
-        $this::update("straatnaam", $this->straatnaam, $straatnaam);
+        $this::update("straatnaam", $straatnaam);
         $this->straatnaam = $straatnaam;
     }
 
@@ -130,7 +130,7 @@ abstract class Locatie
     public
     function setHuisnummer($huisnummer)
     {
-        $this::update("huisnummer", $this->huisnummer, $huisnummer);
+        $this::update("huisnummer", $huisnummer);
         $this->huisnummer = $huisnummer;
     }
 
