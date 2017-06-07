@@ -267,6 +267,7 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Inloggen/registreren
 /////////////////////////////////////////////
+    //inloggen
     $("#login input[type='submit']").on('click', function () {
         var url = "/php/api.php?action=login";
 
@@ -293,11 +294,13 @@ $(document).ready(function () {
         });
     });
 
+    //Uitloggen
     $('#logoutButton').on('click', function(){
         $.ajax({
             dataType: 'json',
             url: 'php/api.php?action=logout',
             success: function(data){
+                //Ga naar home
                 if(data.loggedOut) {
                     window.location.replace("http://iproject34.icasites.nl");
                 }
@@ -308,9 +311,11 @@ $(document).ready(function () {
         });
     });
 
+    //Registreren
     function registreer(){
         $registerForm = $('#registerForm');
 
+        //Persoongegevens
         var data = {
             gebruikersnaam: $("#register-username").val(),
             wachtwoord: $("#register-password").val(),
@@ -335,6 +340,7 @@ $(document).ready(function () {
             success: function(responseCode){
                 $registerForm.find(".callout").remove();
 
+                //Geef het resultaat weer
                 switch(responseCode){
                     case 0:
                         $registerForm.append("<div class='column callout alert'>Gebruikersnaam is al in bezet.</div>");
@@ -352,16 +358,19 @@ $(document).ready(function () {
 /////////////////////////////////////////////
 $resetForm = $('#resetForm');
 
+//Wachtwoord reset
 $("#resetPassword").click(function(){
     var data = {
         username: $("#reset-username").val()
     };
+
     $.ajax({
         url: 'php/api.php?action=resetWachtwoord',
         data: data,
         type: 'POST',
         dataType: 'json',
         success: function(result){
+            //Resultaat weergeven
             $resetForm.find('.callout').remove();
             $resetForm.append('<div class="column callout ' + result.resultClass + '">'+ result.message + '</div>')
         }
@@ -371,6 +380,7 @@ $("#resetPassword").click(function(){
 //////////////////////////////////////////////
 //  Validation
 /////////////////////////////////////////////
+    //Regel die kijkt of de opgegeven datum later valt dan een andere datum
     jQuery.validator.addMethod("greaterThanDate",
         function (value, element, params) {
 
@@ -384,6 +394,7 @@ $("#resetPassword").click(function(){
         'Voer een latere datum in.'
     );
 
+    //Regel die kijkt of de opgegeven datum eerder valt dan een andere datum
     jQuery.validator.addMethod("lessThanDate",
         function (value, element, params) {
 
@@ -397,6 +408,7 @@ $("#resetPassword").click(function(){
         'Voer een eerdere datum in.'
     );
 
+    //Opmaak van de errormessage
     var errorCSS = {
         'position': 'absolute',
         'font-size': '70%',
@@ -405,6 +417,7 @@ $("#resetPassword").click(function(){
         'right': '0'
     };
 
+    //Defaults van de regels van de validatie plugin
     jQuery.validator.setDefaults({
         errorClass: 'validationError',
         errorElement: 'strong',
@@ -425,11 +438,13 @@ $("#resetPassword").click(function(){
         }
     });
 
+    //18 jaar geleden
     var eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
     $registerForm = $('#registerForm');
 
+    //Valideren van de registratie en de regels
     $registerForm.validate({
         rules: {
             'gebdate': {lessThanDate: eighteenYearsAgo},
@@ -447,9 +462,6 @@ $("#resetPassword").click(function(){
            registreer();
        }
     });
-
-    $resetForm.validate();
-
 //////////////////////////////////////////////
 //  Categoriepagina
 /////////////////////////////////////////////

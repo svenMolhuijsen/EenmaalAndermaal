@@ -120,7 +120,7 @@ if(!isset($_SESSION['gebruiker'])){
 
                     <div class="columns small-6">
                         <fieldset class="fieldset">
-                            <legend><h5>Jouw contact gegevens</h5></legend>
+                            <legend><h5>Jouw contactgegevens</h5></legend>
 
                             <button id="showContactgegevens" type="button" class="button hollow tiny">Edit</button>
 

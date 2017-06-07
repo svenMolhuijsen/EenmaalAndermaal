@@ -1,7 +1,9 @@
 <?php
 
+//Alle informatie van een veiling in class-vorm
 class Veiling extends Locatie
 {
+    //Eigenschappen van een veiling
     private $veilingId;
     private $titel;
     private $beschrijving;
@@ -23,6 +25,7 @@ class Veiling extends Locatie
     public function __construct(){
     }
 
+    //Vult de gegevens
     public function fill($veiling){
         $this->veilingId = $veiling["veilingId"];
         $this->titel = $veiling["titel"];
@@ -40,36 +43,40 @@ class Veiling extends Locatie
         $this->thumbNail = $veiling["thumbNail"];
     }
 
+    //Constructor van een bestaande veiling
     public static function existingVeiling($veilingId) {
+        //Maakt zichzelf aan
         $instance = new self();
 
-        $veilingen = executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$veilingId]);
-
+        //Zoek de veilingInformatie
+        $veilingen = executeQuery("SELECT TOP 1 * FROM veiling WHERE veilingId = ?", [$veilingId]);
         if ($veilingen['code'] == 0) {
+            //Vult zichzelf wanneer de veiling gevonden is
             $instance->fill($veilingen['data'][0]);
-            $instance->setCode($veilingen['code']);
         }
+        //Geef de status code mee
+        $instance->setCode($veilingen['code']);
 
         return $instance;
     }
 
+    //Constructor voor een nog-niet-bestaande veiling
     public static function newVeiling($veiling) {
         $instance = new self();
         $instance->fill($veiling);
         return $instance;
     }
 
-    /**
-     * @param $column Kolomnaam
-     * @param $oldVal Doelwaarde om te veranderen
-     * @param $newVal Nieuwe waarde
-     */
+    //Update de veiling in de database
     protected
     function update($column, $newVal)
     {
          executeQuery("UPDATE veiling SET ? = ? WHERE veilingId = ?", [$column, $newVal, $this->veilingId]);
     }
 
+    //////////////////////
+    //Getters en setters
+    //////////////////////
     public
     function getThumbNail(){
         return $this->thumbNail;
@@ -88,7 +95,6 @@ class Veiling extends Locatie
 
     public
     function setCode($code){
-        $this::update("code", $code);
         $this->code = $code;
     }
 

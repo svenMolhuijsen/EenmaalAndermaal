@@ -5,6 +5,7 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
+//Blokeer de gebruiker als hij niet ingelogd is.
 if (!isset($_SESSION['gebruiker'])) {
     include("php/layout/geentoegang.html");
 } else {
@@ -18,20 +19,25 @@ if (!isset($_SESSION['gebruiker'])) {
             <form id="veilingForm">
                 <div class="row">
                     <div class="large-6 columns float-left">
+                        <!-- Titel -->
                         <h4><strong>Titel</strong></h4>
                         <input id="titel" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z0-9]+" required/>
 
+                        <!-- Prijs -->
                         <h4><strong>Prijs</strong></h4>
                         <input id="prijs" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]+"
                                required/>
 
+                        <!-- Einddatum -->
                         <h4><strong>Einddatum</strong></h4>
                         <input id="einddatum" name="einddatum" type="date" placeholder="Einddatum" required/>
 
+                        <!-- Conditie -->
                         <h4><strong>Conditie</strong></h4>
                         <select title="conditie" name="conditie" id="conditie">
                             <option value="" selected disabled>Kies een conditie</option>
                             <?php
+                            //Haal de condities uit de database als optie
                             $condities = executeQuery("SELECT distinct conditie FROM veiling WHERE conditie != ''");
                             for ($i = 0; $i < count($condities['data']); $i++) {
                                 $conditie = $condities['data'][$i];
@@ -40,40 +46,49 @@ if (!isset($_SESSION['gebruiker'])) {
                             ?>
                         </select>
 
+                        <!-- Categorie -->
                         <h4><strong>Categorie</strong></h4>
                         <div id="categorieTwee">
                         </div>
                     </div>
                     <div class="large-6 columns float-right">
+                        <!-- Omschrijving -->
                         <h4><strong>Omschrijving</strong></h4>
                         <textarea id="omschrijving" name="text" placeholder="Omschrijving" type="text"
                                   required></textarea>
 
+                        <!-- Thumbnail image -->
                         <h4><strong>Thumbnail</strong></h4>
                         <input type="file" name="thumbnailUpload" id="thumbnailUpload" required>
 
+                        <!-- Foto's -->
                         <h4><strong>Foto's</strong></h4>
                         <input type="file" name="imageUpload" id="imageUpload" multiple>
                     </div>
                 </div>
                 <hr>
                 <div class="row">
+                    <!-- Locatie informatie -->
                     <div class="large-6 columns float-left">
                         <h4><strong>Verkoopadres</strong></h4>
                         <div class="row">
                             <div class="large-6 columns">
+                                <!-- Straatnaam -->
                                 <h5>Straat</h5>
                                 <input id="straat" name="straat" type="text" placeholder="Straat"
                                        pattern="[A-Za-z- ]+"/>
 
+                                <!-- Plaatsnaam -->
                                 <h5 class="titel">Plaats</h5>
                                 <input id="plaats" name="plaats" type="text" placeholder="Plaats"
                                        pattern="[A-Za-z- ]+"/>
 
+                                <!-- Land -->
                                 <h5 class="titel">Land</h5>
                                 <select title="land" name="land" id="land" required>
                                     <option value="" disabled selected>Kies een land</option>
                                     <?php
+                                    //Haal de landen uit de database als optie
                                     $landen = executeQuery("SELECT land FROM landen");
                                     for ($i = 0; $i < count($landen['data']); $i++) {
                                         $land = $landen['data'][$i];
@@ -83,14 +98,17 @@ if (!isset($_SESSION['gebruiker'])) {
                                 </select>
                             </div>
                             <div class="large-6 columns">
+                                <!-- Huisnummer -->
                                 <h5>Huisnummer</h5>
                                 <input id="huisnummer" name="huisnummer" type="text" placeholder="Huisnummer"
                                        pattern="^[1-9][0-9]*[a-zA-Z]?"/>
 
+                                <!-- Provincie -->
                                 <h5 class="titel">Provincie</h5>
                                 <input id="provincie" name="provincie" type="text" placeholder="Provincie"
                                        pattern="[A-Za-z-]+"/>
 
+                                <!-- Postcode -->
                                 <h5 class="titel">Postcode</h5>
                                 <input id="postcode" name="postcode" type="text" placeholder="Postcode"
                                        pattern="^[1-9][0-9]*[a-zA-z- ]*"/>
@@ -107,13 +125,16 @@ if (!isset($_SESSION['gebruiker'])) {
 <?php } include('php/layout/footer.html'); ?>
     <script>
         $(document).ready(function () {
+            //Nu in het juiste formaat
             var date = new Date();
             now = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds();
 
+            //DOM locatie van elementen
             $veilingForm = $('#veilingForm');
             $imageUploader = $('#imageUpload');
             $thumbnailUploader = $('#thumbnailUpload');
 
+            //Opmaak van de error class
             var errorCSS = {
                 'position': 'absolute',
                 'font-size': '70%',
@@ -122,6 +143,7 @@ if (!isset($_SESSION['gebruiker'])) {
                 'right': '0'
             };
 
+            //Validatie van de veiling form en al zijn regels
             $veilingForm.validate({
                 submitHandler: submit,
                 messages: {
@@ -131,6 +153,7 @@ if (!isset($_SESSION['gebruiker'])) {
                     }
                 },
                 errorPlacement: function (error, element) {
+                    //Dynamische errorpositionering voor de categorielijst
                     if (element.hasClass('categorieLijst')) {
                         if (element.parent().prev().is('h4')) {
                             error.appendTo(element.parent().prev());
@@ -154,9 +177,11 @@ if (!isset($_SESSION['gebruiker'])) {
                 }
             });
 
+            //Opslag voor de image files
             var thumbnail;
             var images;
 
+            //Klaarzetten van de images
             $imageUploader.on('change', function (event) {
                 images = event.target.files;
             });
@@ -165,9 +190,11 @@ if (!isset($_SESSION['gebruiker'])) {
                 thumbnail = event.target.files;
             });
 
+            //Opsturen van de form
             function submit() {
                 var data = new FormData();
 
+                //Images
                 $.each(images, function (key, value) {
                     data.append(key, value);
                 });
@@ -176,6 +203,7 @@ if (!isset($_SESSION['gebruiker'])) {
                     data.append('thumbnail', value);
                 });
 
+                //Veilinginfo
                 data.append('titel', $('#titel').val());
                 data.append('beschrijving', $('#omschrijving').val());
                 data.append('categorieId', $('#categorieTwee').children().last().prev().find(":selected").val());
@@ -199,6 +227,7 @@ if (!isset($_SESSION['gebruiker'])) {
                     processData: false,
                     contentType: false,
                     success: function (result) {
+                        //Geef het resultaat weer
                         switch (result.status) {
                             case 'success':
                                 $imageUploader.removeClass('is-invalid-input');
