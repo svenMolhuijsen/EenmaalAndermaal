@@ -224,15 +224,15 @@ HAVING ((MAX(B.biedingsBedrag)>=? AND MAX(B.biedingsBedrag)<=?)OR MAX(B.biedings
     stuurTerug($result);
 }
 
-function search()
+function search($input)
 {
-    $searchterm = $_POST['searchterm'];
-    $minprice = (float)$_POST['minprice'];
-    $maxprice = (float)$_POST['maxprice'];
-    $category = (int)$_POST['category'];
-    $sortering = $_POST['sortering'];
-    $numrows = (int)$_POST['numrows'];
-    $page = (int)$_POST['page'];
+    $searchterm = $input['searchterm'];
+    $minprice = (float)$input['minprice'];
+    $maxprice = (float)$input['maxprice'];
+    $category = (int)$input['category'];
+    $sortering = $input['sortering'];
+    $numrows = (int)$input['numrows'];
+    $page = (int)$input['page'];
 
     switch ($sortering) {
         case 'Date ASC':
@@ -691,7 +691,7 @@ function sluitVeilingen(){
 }
 
 function beindigVeiling($veiling){
-    executeQueryNoFetch("UPDATE veiling SET koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+    executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
     verzendEmail($veiling);
 }
 

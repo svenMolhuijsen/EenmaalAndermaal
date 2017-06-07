@@ -101,7 +101,7 @@ function veiling(target, result) {
     if (res.code === 0) {
         $.each(res.data, function (index, item) {
             $(target).append("<div class='column small-6 medium-4 veiling'><div class='inner'>" +
-                "<a href='veilingpagina.php?veilingId='" + item['veilingId'] + "'><div class='image' style='background-image: url(http://iproject34.icasites.nl/" + item["thumbNail"] + ")'></div>" +
+                "<a href='veilingpagina.php?veilingId="+item["veilingId"]+"'><div class='image' style='background-image: url(http://iproject34.icasites.nl/" + item["thumbNail"] + ")'></div>" +
                 "<div class='omschrijving'><div class='button primary'>Bied mee!</div>" +
                 "<div class='titel'>" + item["titel"] + "</div> " +
                 "<div class='bod'>&euro;" + (item["hoogsteBieding"] > item["startPrijs"] || item["hoogsteBieding"] == null ? item["startPrijs"] : item["hoogsteBieding"]) + "</div><div class='clock eindtijd-" + item["veilingId"] + "'></div> " +
@@ -261,7 +261,20 @@ $(document).ready(function () {
         $("#navigatie-menu .menu button.submit").click(function () {
             var searchterm = $("#navigatie-menu .menu input").val();
             var categorie = $("#navigatie-menu .categorie select").val();
-            document.location["href"] = "filterpagina.  php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
+            document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
+        });
+    }
+
+    //////////////////////////////////////////////
+//  Big search
+/////////////////////////////////////////////
+    if ($('.big-search').length != 0) {
+        var target = $('.big-search .categorieselect');
+        generateCategorySelect(target, null, null, null);
+        $('.big-search input.submit').click(function () {
+            var searchterm = $('.big-search input[type="text"]').val();
+            var categorie = $('.big-search .categorieselect select').val();
+            document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
         });
     }
 //////////////////////////////////////////////
