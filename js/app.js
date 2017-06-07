@@ -315,7 +315,7 @@ $(document).ready(function () {
             success: function(data){
                 //Ga naar home
                 if(data.loggedOut) {
-                    window.location.replace("http://iproject34.icasites.nl");
+                    window.location.replace("/");
                 }
                 else{
                     alert("Logout failed!");
