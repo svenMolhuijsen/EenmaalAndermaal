@@ -44,128 +44,139 @@ function pasteStatus($typeStatus, $soort) {
         echo('<div class="column"><hr><p><strong>Geen biedingen gevonden</strong></p></div>');
     }
 }
-?>
-<main class="row profiel">
-    <ul class="tabs" id="profieltabs" data-tabs>
-        <li class="tabs-title is-active"><a href="#overzicht">Account instellingen</a></li>
-        <li class="tabs-title"><a href="#biedingen">Mijn biedingen</a></li>
-        <li class="tabs-title"><a href="#advertenties">Mijn advertenties</a></li>
-    </ul>
 
-    <div class="tabs-content" data-tabs-content="profieltabs" data-active-collapse="true">
-        <div class="tabs-panel" id="overzicht">
-            <div class="row small-up-1 large-up-2">
-                <div class="columns small-6">
-                    <fieldset class="fieldset">
-                        <legend><h5>Gebruikersnaam en wachtwoord</h5></legend>
+if(!isset($_SESSION['gebruiker'])){
+    include("php/layout/geentoegang.html");
+} else {
+    ?>
+    <main class="row profiel">
+        <ul class="tabs" id="profieltabs" data-tabs>
+            <li class="tabs-title is-active"><a href="#overzicht">Account instellingen</a></li>
+            <li class="tabs-title"><a href="#biedingen">Mijn biedingen</a></li>
+            <li class="tabs-title"><a href="#advertenties">Mijn advertenties</a></li>
+        </ul>
 
-                        <button id="showInlogGegevens" type="button" class="tiny button hollow">Edit</button>
+        <div class="tabs-content" data-tabs-content="profieltabs" data-active-collapse="true">
+            <div class="tabs-panel" id="overzicht">
+                <div class="row small-up-1 large-up-2">
+                    <div class="columns small-6">
+                        <fieldset class="fieldset">
+                            <legend><h5>Gebruikersnaam en wachtwoord</h5></legend>
 
-                        <?php
-                        echo('<p id="gebruikersnaam"><strong>Gebruikersnaam: </strong>' . $gebruiker->getGebruikersnaam() . '</p>');
-                        ?>
-                        <p id="wachtwoord"><strong>Wachtwoord: </strong>********</p>
+                            <button id="showInlogGegevens" type="button" class="tiny button hollow">Edit</button>
 
-                        <div class="field editInlogGegevens">
-                            <input id="oudWachtwoord" type="password" placeholder="Old Password">
-                            <input id="editWachtwoord" type="text" placeholder="New Password">
+                            <?php
+                            echo('<p id="gebruikersnaam"><strong>Gebruikersnaam: </strong>' . $gebruiker->getGebruikersnaam() . '</p>');
+                            ?>
+                            <p id="wachtwoord"><strong>Wachtwoord: </strong>********</p>
 
-                            <label for="admin">Adminstatus:</label><input type="checkbox" id="admin" title="admin">
-                        </div>
-                    </fieldset>
+                            <div class="field editInlogGegevens">
+                                <input id="oudWachtwoord" type="password" placeholder="Old Password">
+                                <input id="editWachtwoord" type="text" placeholder="New Password">
+
+                                <label for="admin">Adminstatus:</label><input type="checkbox" id="admin" title="admin">
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="columns small-6">
+                        <fieldset class="fieldset">
+                            <legend><h5>Naam en geboortedatum</h5></legend>
+
+                            <?php echo('<p id="Naam"><strong>Naam: </strong>' . $gebruiker->getVoornaam() . ' ' . $gebruiker->getAchternaam() . '</p>'); ?>
+                            <?php echo('<p id="Geboortedatum"><strong>Geboortedatum: </strong>' . $gebruiker->getGeboortedatum() . '</p>'); ?>
+                        </fieldset>
+                    </div>
                 </div>
 
-                <div class="columns small-6">
-                    <fieldset class="fieldset">
-                        <legend><h5>Naam en geboortedatum</h5></legend>
+                <div class="row small-up-1 large-up-2">
+                    <div class="columns small-6">
+                        <fieldset class="fieldset">
+                            <legend><h5>Adres</h5></legend>
 
-                        <?php echo('<p id="Naam"><strong>Naam: </strong>' . $gebruiker->getVoornaam() . ' ' . $gebruiker->getAchternaam() . '</p>'); ?>
-                        <?php echo('<p id="Geboortedatum"><strong>Geboortedatum: </strong>' . $gebruiker->getGeboortedatum() . '</p>'); ?>
-                    </fieldset>
+                            <button id="showAdres" type="button" class="button tiny hollow">Edit</button>
+
+                            <?php echo('<p id="Provincie"><strong>Provincie: </strong>' . $gebruiker->getProvincie() . '</p>');
+                            echo('<p id="Plaats"><strong>Plaats: </strong>' . $gebruiker->getPlaatsnaam() . '</p>');
+                            echo('<p id="Straat"><strong>Straat: </strong>' . $gebruiker->getStraatnaam() . '</p>');
+                            echo('<p id="Huisnummer"><strong>Huisnummer: </strong>' . $gebruiker->getHuisnummer() . '</p>');
+                            echo('<p id="Postcode"><strong>Postcode: </strong>' . $gebruiker->getPostcode() . '</p>');
+                            ?>
+
+                            <div class="field editAdres">
+                                <input rel="Provincie" id="editProvincie" type="text" placeholder="Provincie"
+                                       pattern="[A-Za-z-]+">
+                                <input rel="Plaats" id="editPlaats" type="text" placeholder="Plaats"
+                                       pattern="[A-Za-z- ]+">
+                                <input rel="Straat" id="editStraat" type="text" placeholder="Straat"
+                                       pattern="[A-Za-z- ]+">
+                                <input rel="Huisnummer" id="editHuisnummer" type="text" placeholder="Huisnummer"
+                                       pattern="[0-9a-z]+">
+                                <input rel="Postcode" id="editPostcode" type="text" placeholder="Postcode"
+                                       pattern="[0-9a-zA-Z ]+">
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="columns small-6">
+                        <fieldset class="fieldset">
+                            <legend><h5>Jouw contact gegevens</h5></legend>
+
+                            <button id="showContactgegevens" type="button" class="button hollow tiny">Edit</button>
+
+                            <?php echo('<p id="Telefoonnummer"><strong>Telefoonnummer: </strong>' . $gebruiker->getTelefoonnmr() . '</p>'); ?>
+
+                            <input rel="Telefoonnummer" class="field editContactgegevens" id="editTelefoonnummer"
+                                   type="text" placeholder="Telefoonnmr">
+                        </fieldset>
+                    </div>
+                </div>
+                <hr>
+                <button type="button" id="submitChanges" class="button large">Submit Changes</button>
+            </div>
+
+            <div class="tabs-panel" id="biedingen">
+                <div class="row column">
+                    <h4>Lopende biedingen</h4>
+                </div>
+                <div class="noMarginRow row">
+                    <?php pasteStatus($lopendeBiedingen, 1); ?>
+                </div>
+
+                <div class="row column">
+                    <h4>Verlopen biedingen</h4>
+                </div>
+                <div class="row noMarginRow">
+                    <?php pasteStatus($verlopenBiedingen, 1); ?>
+                </div>
+
+                <div class="row column">
+                    <h4>Gewonnen biedingen</h4>
+                </div>
+                <div class="noMarginRow row">
+                    <?php pasteStatus($gewonnenBiedingen, 1); ?>
                 </div>
             </div>
 
-            <div class="row small-up-1 large-up-2">
-                <div class="columns small-6">
-                    <fieldset class="fieldset">
-                        <legend><h5>Adres</h5></legend>
-
-                        <button id="showAdres" type="button" class="button tiny hollow">Edit</button>
-
-                        <?php echo('<p id="Provincie"><strong>Provincie: </strong>' . $gebruiker->getProvincie() . '</p>');
-                        echo('<p id="Plaats"><strong>Plaats: </strong>' . $gebruiker->getPlaatsnaam() . '</p>');
-                        echo('<p id="Straat"><strong>Straat: </strong>' . $gebruiker->getStraatnaam() . '</p>');
-                        echo('<p id="Huisnummer"><strong>Huisnummer: </strong>' . $gebruiker->getHuisnummer() . '</p>');
-                        echo('<p id="Postcode"><strong>Postcode: </strong>' . $gebruiker->getPostcode() . '</p>');
-                        ?>
-
-                        <div class="field editAdres">
-                            <input rel="Provincie" id="editProvincie" type="text" placeholder="Provincie" pattern="[A-Za-z-]+">
-                            <input rel="Plaats" id="editPlaats" type="text" placeholder="Plaats" pattern="[A-Za-z- ]+">
-                            <input rel="Straat" id="editStraat" type="text" placeholder="Straat" pattern="[A-Za-z- ]+">
-                            <input rel="Huisnummer" id="editHuisnummer" type="text" placeholder="Huisnummer" pattern="[0-9a-z]+">
-                            <input rel="Postcode" id="editPostcode" type="text" placeholder="Postcode" pattern="[0-9a-zA-Z ]+">
-                        </div>
-                    </fieldset>
+            <div class="tabs-panel" id="advertenties">
+                <div class="row column">
+                    <h4>Actieve advertenties</h4>
+                </div>
+                <div class="noMarginRow row">
+                    <?php pasteStatus($openVeilingen, 2); ?>
                 </div>
 
-                <div class="columns small-6">
-                    <fieldset class="fieldset">
-                        <legend><h5>Jouw contact gegevens</h5></legend>
-
-                        <button id="showContactgegevens" type="button" class="button hollow tiny">Edit</button>
-
-                        <?php echo('<p id="Telefoonnummer"><strong>Telefoonnummer: </strong>' . $gebruiker->getTelefoonnmr() . '</p>'); ?>
-
-                        <input rel="Telefoonnummer" class="field editContactgegevens" id="editTelefoonnummer" type="text" placeholder="Telefoonnmr">
-                    </fieldset>
+                <div class="row column">
+                    <h4>Inactieve advertenties</h4>
+                </div>
+                <div class="noMarginRow row">
+                    <?php pasteStatus($verlopenVeilingen, 3) ?>
                 </div>
             </div>
-            <hr>
-            <button type="button" id="submitChanges" class="button large">Submit Changes</button>
         </div>
-
-        <div class="tabs-panel" id="biedingen">
-            <div class="row column">
-                <h4>Lopende biedingen</h4>
-            </div>
-            <div class="noMarginRow row">
-                <?php pasteStatus($lopendeBiedingen, 1); ?>
-            </div>
-
-            <div class="row column">
-                <h4>Verlopen biedingen</h4>
-            </div>
-            <div class="row noMarginRow">
-                <?php pasteStatus($verlopenBiedingen, 1); ?>
-            </div>
-
-            <div class="row column">
-                <h4>Gewonnen biedingen</h4>
-            </div>
-            <div class="noMarginRow row">
-                <?php pasteStatus($gewonnenBiedingen, 1); ?>
-            </div>
-        </div>
-
-        <div class="tabs-panel" id="advertenties">
-            <div class="row column">
-                <h4>Actieve advertenties</h4>
-            </div>
-            <div class="noMarginRow row">
-                <?php pasteStatus($openVeilingen, 2); ?>
-            </div>
-
-            <div class="row column">
-                <h4>Inactieve advertenties</h4>
-            </div>
-            <div class="noMarginRow row">
-                <?php pasteStatus($verlopenVeilingen, 3)?>
-            </div>
-        </div>
-    </div>
-</main>
-<?php
+    </main>
+    <?php
+}
 include("php/layout/footer.html");
 ?>
 <script>
