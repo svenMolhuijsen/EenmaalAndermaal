@@ -328,8 +328,6 @@ $(document).ready(function () {
             huisnummer: $('#register-no').val()
         };
 
-        console.log(data);
-
         $.ajax({
             url: 'php/api.php?action=registreer',
             data: data,
@@ -345,8 +343,6 @@ $(document).ready(function () {
                     case 1:
                         $registerForm.append("<div class='column callout success'>Registratie voltooid!</div>");
                         break;
-                    default:
-                        console.log(responseCode);
                 }
             }
         });
@@ -368,7 +364,7 @@ $('#resetPassword').click(function(){
         type: 'POST',
         dataType: 'json',
         success: function(result){
-            $resetForm.find('callout').remove();
+            $resetForm.find('.callout').remove();
             $resetForm.append('<div class="column callout ' + result.resultClass + '">'+ result.message + '</div>')
         }
     });
