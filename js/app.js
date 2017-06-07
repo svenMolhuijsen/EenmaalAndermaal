@@ -381,7 +381,7 @@ $("#resetPassword").click(function(){
             return isNaN(value) && isNaN(params)
                 || (Number(value) > Number(params));
         },
-        'Voer een latere datum in.'
+        "Voer een latere datum in."
     );
 
     jQuery.validator.addMethod("lessThanDate",
@@ -394,56 +394,56 @@ $("#resetPassword").click(function(){
             return isNaN(value) && isNaN(params)
                 || (Number(value) < Number(params));
         },
-        'Voer een eerdere datum in.'
+        "Voer een eerdere datum in."
     );
 
     var errorCSS = {
-        'position': 'absolute',
-        'font-size': '70%',
-        'margin-bottom': '0',
-        'bottom': '0',
-        'right': '0'
+        "position": "absolute",
+        "font-size": "70%",
+        "margin-bottom": "0",
+        "bottom": "0",
+        "right": "0"
     };
 
     jQuery.validator.setDefaults({
-        errorClass: 'validationError',
-        errorElement: 'strong',
+        errorClass: "validationError",
+        errorElement: "strong",
         focusCleanup: true,
         focusInvalid: false,
         highlight: function (element) {
-            $(element).addClass('is-invalid-input validationError');
+            $(element).addClass("is-invalid-input validationError");
         },
         unhighlight: function (element) {
-            $(element).removeClass('is-invalid-input validationError');
+            $(element).removeClass("is-invalid-input validationError");
         },
         errorPlacement: function(error, element) {
             error.appendTo(element.prev());
-            error.addClass('hide-for-small show-for-large');
+            error.addClass("hide-for-small show-for-large");
 
             error.css(errorCSS);
-            error.parent().css('position', 'relative');
+            error.parent().css("position", "relative");
         }
     });
 
     var eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-    $registerForm = $('#registerForm');
+    $registerForm = $("#registerForm");
 
     $registerForm.validate({
         rules: {
-            'gebdate': {lessThanDate: eighteenYearsAgo},
-            'repeat-password': {equalTo: "#register-password"}
+            "gebdate": {lessThanDate: eighteenYearsAgo},
+            "repeat-password": {equalTo: "#register-password"}
         },
         messages: {
-            'repeat-password': {equalTo: "Vul hetzelfde wachtwoord in."},
-            'tel': {pattern: "Foutief patroon."},
-            'postcode': {pattern: "Foutief patroon."}
+            "repeat-password": {equalTo: "Vul hetzelfde wachtwoord in."},
+            "tel": {pattern: "Foutief patroon."},
+            "postcode": {pattern: "Foutief patroon."}
         }
     });
 
-    $registerForm.find('input[type="submit"]').on('click', function(){
-       if($registerForm.valid()){
+    $registerForm.find("input[type='submit']").on("click", function(){
+       if ($registerForm.valid()) {
            registreer();
        }
     });
@@ -486,18 +486,18 @@ $("#resetPassword").click(function(){
     function bindClickListenercategoriePagina() {
         //Bind click listener to newly created element
         $(".categoriepagina .hoofdcategorien .accordion-item a").click(function () {
-            var id = $(this).data('category');
+            var id = $(this).data("category");
             var $subcategorien = $(".subcategorien");
 
-            if ($subcategorien.data('hoofdcategorie') == id) {
+            if ($subcategorien.data("hoofdcategorie") == id) {
                 $subcategorien.empty();
                 $("#" + id).empty();
-                $subcategorien.data('hoofdcategorie', null);
+                $subcategorien.data("hoofdcategorie", null);
 
             } else {
                 $subcategorien.empty();
                 $("#" + id).empty();
-                $subcategorien.data('hoofdcategorie', id);
+                $subcategorien.data("hoofdcategorie", id);
                 $subcategorien.append("Categorien laden...");
                 $("#" + id).append("Categorien laden...");
 
@@ -527,9 +527,9 @@ $("#resetPassword").click(function(){
 //  filterpagina
 /////////////////////////////////////////////
     if ($("#filterpagina").length != 0) {
-        var searchterm = getURLParameter('searchterm');
+        var searchterm = getURLParameter("searchterm");
         searchterm != null ? $("#searchterm").val(searchterm) : null;
-        var category = getURLParameter('hoofdcategorie');
+        var category = getURLParameter("hoofdcategorie");
         var target = $("#filterpagina aside .filter .categorien");
         generateParentCategories(category, target);
         currCategory = category;
@@ -540,8 +540,8 @@ $("#resetPassword").click(function(){
             }
         });
 
-        $(".filter .slider").on('changed.zf.slider', function () {
-            $(".pagination").jqPagination('option', 'current_page', 1);
+        $(".filter .slider").on("changed.zf.slider", function () {
+            $(".pagination").jqPagination("option", "current_page", 1);
             zoeken(0, true);
         });
 
@@ -551,13 +551,13 @@ $("#resetPassword").click(function(){
         $("#searchterm").keyup(function () {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(function () {
-                $(".pagination").jqPagination('option', 'current_page', 1);
+                $(".pagination").jqPagination("option", "current_page", 1);
                 zoeken(0, true);
             }, doneTypingInterval);
         });
 
         $("#sortering").change(function () {
-            $(".pagination").jqPagination('option', 'current_page', 1);
+            $(".pagination").jqPagination("option", "current_page", 1);
             zoeken(0, true);
         });
         zoeken(0, true);
