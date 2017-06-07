@@ -42,7 +42,6 @@ include("php/layout/header.php");
   function trending(){
     $.post("/php/api.php?action=trending",function(result){
         var target = ".veilingen .trendingData";
-        console.log(target);
         veiling(target, result);
     });
   }
