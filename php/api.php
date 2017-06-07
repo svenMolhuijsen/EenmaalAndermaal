@@ -562,33 +562,31 @@ function checkVeilingenInCategorie($categorieId)
 }
 
 function pasgegevensaan($gegevens) {
-    $fetchPassword = executeQuery("SELECT wachtwoord FROM gebruikers where gebruikersNaam = ?", [$_SESSION['gebruiker']]);
-
     $gebruiker = new User($_SESSION['gebruiker']);
 
     if (!empty($gegevens['NEWpassword'])) {
-        if (password_verify($gegevens['OLDpassword'], $fetchPassword['data'][0]['wachtwoord'])) {
+        if (password_verify($gegevens['OLDpassword'], $gebruiker->getWachtwoord())) {
             $passwordnew = password_hash($gegevens['NEWpassword'], PASSWORD_BCRYPT);
-            $gebruiker->setWachtwoord($passwordnew);
+            executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [$passwordnew, $gebruiker->getGebruikersnaam()]);
         }
     }
     if (!empty($gegevens['NEWplaats'])) {
-        $gebruiker->setPlaatsnaam($gegevens['NEWplaats']);
+        executeQueryNoFetch("UPDATE gebruikers SET plaatsnaam = ? WHERE gebruikersnaam = ?", [$gegevens['NEWplaats'], $_SESSION['gebruiker']]);
     }
     if (!empty($gegevens['NEWprovincie'])) {
-        $gebruiker->setProvincie($gegevens['NEWprovincie']);
+        executeQueryNoFetch("UPDATE gebruikers SET provincie = ? WHERE gebruikersnaam = ?", [$gegevens['NEWprovincie'], $_SESSION['gebruiker']]);
     }
     if (!empty($gegevens['NEWstraat'])) {
-        $gebruiker->setStraatnaam($gegevens['NEWstraat']);
+        executeQueryNoFetch("UPDATE gebruikers SET straatnaam = ? WHERE gebruikersnaam = ?", [$gegevens['NEWstraat'], $_SESSION['gebruiker']]);
     }
     if (!empty($gegevens['NEWpostcode'])) {
-        $gebruiker->setPostcode($gegevens['NEWpostcode']);
+        executeQueryNoFetch("UPDATE gebruikers SET postcode = ? WHERE gebruikersnaam = ?", [$gegevens['NEWpostcode'], $_SESSION['gebruiker']]);
     }
     if (!empty($gegevens['NEWtelefoonnummer'])) {
-        $gebruiker->setTelefoonnmr($gegevens['NEWtelefoonnummer']);
+        executeQueryNoFetch("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersnaam = ?", [$gegevens['NEWtelefoonnummer'], $_SESSION['gebruiker']]);
     }
     if (!empty($gegevens['NEWadmin'])){
-        $gebruiker->setAdmin($gegevens['NEWadmin']);
+        executeQueryNoFetch("UPDATE gebruikers SET admin = ? WHERE gebruikersnaam = ?", [$gegevens['NEWadmin'], $_SESSION['gebruiker']]);
     }
 }
 

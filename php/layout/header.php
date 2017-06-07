@@ -45,11 +45,16 @@
                     <li>
                         <a href="#"><span class="fi-torso"></a>
                         <ul class="menu">
-                            <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
-                                ?>
-                            <?php $admin = false; if ($admin){?>
+                            <?php
+                            if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
+                                $adminCheck = executeQuery("SELECT TOP 1 admin FROM gebruikers WHERE gebruikersnaam = ?", [$_SESSION['gebruiker']]);
+                                if($adminCheck['code'] == 0){
+                                    $adminCheck = $adminCheck['data'][0];
+                                }
+                                if($adminCheck){
+                            ?>
                                     <li><a href="admin.php">Admin</a></li>
-                            <?php } ?>
+                                <?php } ?>
                             <li><a href="profiel.php">Mijn profiel</a></li>
                             <li><a href="aanmakenveiling.php">Nieuwe veiling</a></li>
                             <li><a href="#" id="logoutButton">Uitloggen</a></li>
