@@ -98,7 +98,7 @@ function login($params)
     } else {
         $result = executeQuery("SELECT TOP 1 gebruikersnaam, wachtwoord FROM gebruikers WHERE gebruikersnaam = ?", [$gebruikersnaam]);
         if ($result['code'] == 0) {
-            if ($wachtwoord == $result['data'][0]["wachtwoord"]) {
+            if (password_verify($wachtwoord, $result['data'][0]["wachtwoord"])) {
                 $_SESSION['gebruiker'] = $gebruikersnaam;
                 $response = ['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd'];
             }

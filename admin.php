@@ -3,10 +3,7 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
-if(!isset($_SESSION['gebruiker'])){
-        include("php/layout/geentoegang.html");
-}
-else {
+if(isset($_SESSION['gebruiker'])){
     if ($adminCheck) {
         ?>
         <main class="row">
@@ -71,11 +68,16 @@ else {
 
 
         <?php
-    } else {
+    }
+    else {
         include("php/layout/geentoegang.html");
     }
-    include("php/layout/footer.html");
 }
+else {
+    include("php/layout/geentoegang.html");
+}
+include("php/layout/footer.html");
+
 ?>
 <script>
 var veilingId;
