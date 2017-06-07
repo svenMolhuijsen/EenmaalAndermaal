@@ -1,3 +1,16 @@
+
+.banner {
+  background: url("../img/banner.jpg");
+  background-size: cover;
+  background-position: center;
+  .row {
+    margin-top: 0
+  }
+;
+  .big-search {
+    margin-bottom: 200px;
+  }
+}
 #indexTriggerText{
     padding-top: 4em;
     padding-bottom: 4em;
@@ -27,4 +40,9 @@ div#blocks{
     .trendingData{
         @import 'components/veiling';
     }
-  }
+
+  position: relative;
+  top: -100px;
+  background: white;
+  padding: 30px;
+}
