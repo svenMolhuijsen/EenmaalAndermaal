@@ -355,18 +355,21 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Password Recovery
 /////////////////////////////////////////////
+$resetForm = $('#resetForm');
 
 $('#resetPassword').click(function(){
     var data = {
         username: $('#reset-username').val()
-    }
+    };
+
     $.ajax({
         url: 'php/api.php?action=resetWachtwoord',
         data: data,
-        method: 'POST',
+        type: 'POST',
         dataType: 'json',
         success: function(result){
-            alert(result);
+            $resetForm.find('callout').remove();
+            $resetForm.append('<div class="column callout ' + result.resultClass + '">'+ result.message + '</div>')
         }
     });
 });
@@ -445,13 +448,13 @@ $('#resetPassword').click(function(){
         }
     });
 
-    $('#registerForm input[type="submit"]').on('click', function(){
+    $registerForm.find('input[type="submit"]').on('click', function(){
        if($registerForm.valid()){
            registreer();
        }
     });
 
-    $('#resetForm').validate();
+    $resetForm.validate();
 
 //////////////////////////////////////////////
 //  Categoriepagina
