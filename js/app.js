@@ -139,7 +139,7 @@ function createPageIndex() {
     var categorie = currCategory;
     var sortering = $("#sortering").find(":selected").val();
     pageIndexCounter++;
-    requestNumber = pageIndexCounter;
+    var requestNumber = pageIndexCounter;
     $.post("/php/api.php?action=getNumRows", {
         category: categorie,
         minprice: minBedrag,
@@ -148,15 +148,14 @@ function createPageIndex() {
         sortering: sortering
     }, function (result) {
         var res = JSON.parse(result);
-        if (requestNumber == pageIndexCounter && res.data["0"]["numRows"] > 0) {
+        if (requestNumber === pageIndexCounter && res.data["0"]["numRows"] > 0) {
             $(".pagination").fadeIn(300);
-            pages = Math.ceil(parseInt(res.data["0"]["numRows"]) / 12);
+            var pages = Math.ceil(parseInt(res.data["0"]["numRows"]) / 12);
             $(".pagination").jqPagination("option", "max_page", pages);
-        } else if (res.data["0"]["numRows"] == 0) {
+        } else if (res.data["0"]["numRows"] === 0) {
             $(".pagination").fadeOut(300);
             $(".pagination").jqPagination("option", "current_page", 1);
             $(".pagination").jqPagination("option", "max_page", 1);
-
         }
     });
 }
@@ -170,7 +169,7 @@ function zoeken(page = 0, newIndex = false) {
     var categorie = currCategory;
     var sortering = $("#sortering").find(":selected").val();
     searchRequestcounter++;
-    requestNumber = searchRequestcounter;
+    var requestNumber = searchRequestcounter;
     $.post("/php/api.php?action=search", {
         category: categorie,
         minprice: minBedrag,
@@ -180,7 +179,7 @@ function zoeken(page = 0, newIndex = false) {
         page: page,
         numrows: 12
     }, function (result) {
-        if (requestNumber == searchRequestcounter) {
+        if (requestNumber === searchRequestcounter) {
             //to make sure only the last query is displayed
             var target = ".veilingen .row";
             veiling(target, result);
@@ -200,7 +199,7 @@ function generateParentCategories(category, target) {
         var res = JSON.parse(result);
 
         // Kijken of het result true is
-        if (res.code == 0) {
+        if (res.code === 0) {
             var parents = res["data"];
             var inverse = 0;
             for (var i = parents.length - 1; i >= 0; i--) {
@@ -211,9 +210,9 @@ function generateParentCategories(category, target) {
                 generateCategorySelect(childtarget, target, parents[i]["superId"], parents[i]["categorieId"]);
 
                 inverse++;
-                if (i == 0) {
+                if (i === 0) {
                     target.append("<div class='" + inverse + "'></div>");
-                    var childtarget = $("." + inverse, target);
+                    childtarget = $("." + inverse, target);
                     generateCategorySelect(childtarget, target, category, null);
                 }
             }
@@ -229,7 +228,7 @@ function generateCategorySelect($childtarget, $target, category, selected) {
         // JSON result omzetten naar var
         var res = JSON.parse(result);
         if (res.code == 0) {
-            $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
+            var $select = $("<select data-superid='" + category + "' class='categorieLijst' name='" + category + "' required></select>");
             $select.append("<option value='" + category + "'selected>Categorie selecteren</option>");
 
             $.each(res.data, function (index, item) {
@@ -259,7 +258,7 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Navbar
 /////////////////////////////////////////////
-    if ($("#navigatie-menu").length != 0) {
+    if ($("#navigatie-menu").length !== 0) {
         var target = $("#navigatie-menu .categorie");
         generateCategorySelect(target, null, null, null);
         $("#navigatie-menu .menu button.submit").click(function () {
@@ -272,12 +271,12 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Big search
 /////////////////////////////////////////////
-    if ($('.big-search').length != 0) {
-        var target = $('.big-search .categorieselect');
+    if ($(".big-search").length !== 0) {
+        var target = $(".big-search .categorieselect");
         generateCategorySelect(target, null, null, null);
-        $('.big-search input.submit').click(function () {
-            var searchterm = $('.big-search input[type="text"]').val();
-            var categorie = $('.big-search .categorieselect select').val();
+        $(".big-search input.submit").click(function () {
+            var searchterm = $(".big-search input[type='text']").val();
+            var categorie = $(".big-search .categorieselect select").val();
             document.location["href"] = "filterpagina.php?searchterm=" + searchterm + "&hoofdcategorie=" + categorie;
         });
     }
