@@ -5,6 +5,7 @@ include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 
+//Scherm de pagina af
 if (!isset($_GET['t'])) {
      include("php/layout/geentoegang.html");
 } else {
@@ -15,6 +16,7 @@ if (!isset($_GET['t'])) {
     <div class="columns row text-center" id="content">
         <h2>U kunt hier uw wachtwoord veranderen</h2>
         <div class="input-group">
+            <!-- Nieuwe wachtwoord -->
             <input type="password" class="input-group-field" placeholder="New password" id="NEWPassword">
             <div class="input-group-button">
                 <input type="submit" class="button" id="veranderWachtwoord">
@@ -30,6 +32,7 @@ if (!isset($_GET['t'])) {
 include("php/layout/footer.html");
 ?>
 <script>
+    //Veranderen van wachtwoord
     $('#veranderWachtwoord').click(function(){
         var data = {
             nieuwWachtwoord: $('#NEWPassword').val(),
@@ -47,7 +50,6 @@ include("php/layout/footer.html");
             }
         });
     });
-
 </script>
 </body>
 </html>

@@ -68,6 +68,7 @@ function pad(n, width, z) {
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
+//Maakt een timer aan
 function createCountdown($target, countDownDate) {
     setInterval(function () {
         var oldPosition = $(document).scrollTop();
@@ -95,6 +96,7 @@ function createCountdown($target, countDownDate) {
     }, 1000);
 }
 
+//Aanmaken van een veiling kaart
 function veiling(target, result) {
     var res = JSON.parse(result);
     $(target).empty();
@@ -111,15 +113,15 @@ function veiling(target, result) {
             $(".veiling").matchHeight({byRow: true});
 
         });
-
-
     } else if (res.code === 1) {
+        //In geval van geen veilingen
         $(target).append("<div class='column veiling'>" +
             "<div class='callout warning'> " +
             "<h5>Niets gevonden</h5> " +
             "<p>Er zijn geen veilingen gevonden</p> " +
             "</div></div></div>");
     } else {
+        //In geval van een databaseprobleem
         $(target).append("<div class='column veiling'>" +
             "<div class='callout error'> " +
             "<h5>Niets gevonden</h5> " +
@@ -128,6 +130,7 @@ function veiling(target, result) {
     }
 }
 
+//Pagination
 var pageIndexCounter = 0;
 function createPageIndex() {
     var minBedrag = $("#sliderOutput1").val();
@@ -158,6 +161,7 @@ function createPageIndex() {
     });
 }
 
+//Zoeken
 var searchRequestcounter = 0;
 function zoeken(page = 0, newIndex = false) {
     var minBedrag = $("#sliderOutput1").val();
@@ -265,7 +269,7 @@ $(document).ready(function () {
         });
     }
 
-    //////////////////////////////////////////////
+//////////////////////////////////////////////
 //  Big search
 /////////////////////////////////////////////
     if ($('.big-search').length != 0) {
@@ -579,7 +583,7 @@ $("#resetPassword").click(function(){
                 $(".pagination").jqPagination("option", "current_page", 1);
                 zoeken(0, true);
             }, doneTypingInterval);
-        });
+      });
 
         $("#sortering").change(function () {
             $(".pagination").jqPagination("option", "current_page", 1);

@@ -348,9 +348,11 @@ OPTION (MAXRECURSION 0)
 
 }
 
+//Pak de subcategoriën van een opgegeven hoofdcategorie
 function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
+        //Geef de hoofdcategoriën als er geen is ingesteld
         $result = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
     } else {
         $result = executeQuery("SELECT * FROM categorie WHERE superId = ? ", [$data['hoofdCategory']]);
@@ -358,7 +360,7 @@ function getSubCategories($data)
     stuurTerug($result);
 }
 
-
+//Voor het terugsturen van data consistent te houden
 function stuurTerug($data)
 {
     echo json_encode($data);
@@ -404,11 +406,14 @@ function categorieAccordion()
     }
 }
 
+//Zet de subcategoriën neer
 function setSubcategorien($hoofdcategorie)
 {
+    //Zoek de subcategoriën
     $hoofdcategorie = substr($hoofdcategorie, 12);
     $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie]);
 
+    //Zet voor elke subcategorie een image neer
     if ($subcategorien['code'] == 0) {
         for ($i = 0; $i < count($subcategorien['data']); $i++) {
             $subcategorie = $subcategorien['data'][$i];
@@ -578,13 +583,16 @@ function uploadFiles($veilingId) {
     }
 }
 
+//Geeft alle landen
 function getLanden()
 {
     return executeQuery("SELECT  * FROM landen", null);
 }
 
+//Geeft terug of er veilingen in een categorie zitten
 function checkVeilingenInCategorie($categorieId)
 {
+    //Zoek alle veilingen
     $veiling = executeQuery("SELECT count(*)  AS aantal FROM veiling WHERE categorieId = ?", [$categorieId]);
 
     if ($veiling['code'] == 0) {
@@ -634,15 +642,21 @@ function pasgegevensaan($gegevens) {
     }
 }
 
+//Maak een nieuwe categorie aan
 function nieuweCategorieToevoegen($categorie)
 {
+    //Wanneer er veilingen in de categorie zitten
     if (checkVeilingenInCategorie($categorie["superId"])) {
+        //Maak een "Overige" subcategorie aan
         executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES('Overige', ?)", [$categorie["superId"]]);
 
+        //Zoek het categorieId van de "Overige"
         $overigCategorieId = executeQuery("SELECT categorieId FROM categorie WHERE superId = ? AND categorieNaam = 'Overige'", [$categorie["superId"]]);
 
+        //Verplaats alle veilingen naar "Overige"
         executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE categorieId = ?", [$overigCategorieId['data'][0]['categorieId'], $categorie["superId"]]);
 
+        //Maak een nieuwe categorie aan
         voegCategorieToe($categorie);
 
         echo $overigCategorieId['data'][0]['categorieId'];
@@ -652,24 +666,35 @@ function nieuweCategorieToevoegen($categorie)
     }
 }
 
+//Maak een categorie aan
 function voegCategorieToe($categorie)
 {
+    //Zet de nieuwe categorie op de juiste plaats
     executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES (?, ?)", [
         $categorie["categorieNaam"],
         $categorie["superId"]
     ]);
 }
 
+//Geef de 6 meest bezochte veilingen
 function trending()
 {
     stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId IN(SELECT TOP 6 h.veilingId FROM history h, veiling v WHERE v.eindDatum > GETDATE() GROUP BY h.veilingId ORDER BY COUNT(h.veilingId) DESC)"));
 }
 
+//Verstuur een email
 function verzendEmail($data){
+    //Veilinginfo
     $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?",[$data["veilingId"]]);
     $veiling = $veiling['data'][0];
+
+    //Bestemming
     $naar = "sinke.carsten95@gmail.com";
+
+    //Onderwerp
     $subject = "Gewonnen veiling";
+
+    //Bericht
     $txt = 'Veiling: '.$veiling["titel"].' is gewonnen door '.$veiling["koperGebruikersnaam"].'
         Veiling gegevens:
         Veiling Id: '.$veiling["veilingId"].'
@@ -682,27 +707,45 @@ function verzendEmail($data){
     mail($naar,$subject,$txt,$headers);
 }
 
+//Sluit veilingen die afgelopen zijn
 function sluitVeilingen(){
+    //Zoek afgelopen veilingen
     $veilingen = executeQuery("SELECT * FROM veiling WHERE eindDatum < GETDATE() AND veilingGestopt = 0");
+
+    //Geef aan wie de winnaar is voor elke afgelopen veiling
     foreach ($veilingen['data'] as $veiling) {
         executeQueryNoFetch("UPDATE veiling SET koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+        //Deel het sluiten mee
         verzendEmail($veiling);
     }
 }
 
+//Beëindig een veiling handmatig
 function beindigVeiling($veiling){
+    //Beëindig de veiling en geef de winnaar aan
     executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
+    //Deel dit mee
     verzendEmail($veiling);
 }
 
+//Verwijder een veiling
 function verwijderVeiling($veiling){
+    //Verwijder alle biedingen op de veiling
     executeQueryNoFetch("DELETE FROM biedingen WHERE veilingId = ?", [$veiling["veilingId"]]);
+
+    //Verwijder alle keren dat de veiling bekeken is
     executeQueryNoFetch("DELETE FROM history WHERE veilingId = ?", [$veiling["veilingId"]]);
+
+    //Verwijder alle foto's van de veiling
     executeQueryNoFetch("DELETE FROM veilingFoto WHERE veilingId = ?", [$veiling["veilingId"]]);
+
+    //Verwijder de veiling zelf
     executeQueryNoFetch("DELETE FROM veiling WHERE veilingId = ?", [$veiling["veilingId"]]);
 }
 
+//Verplaats een veiling
 function verplaatsVeiling($veiling){
+    //Zet een veiling naar een andere categorie
     executeQueryNoFetch("UPDATE veiling SET categorieId = ? WHERE veilingId = ?", [$veiling["categorieId"], $veiling["veilingId"]]);
 }
 
@@ -736,7 +779,9 @@ function registreer($userInfo){
     echo json_encode($responseCode);
 }
 
+//Verstuur een wachtwoord reset email
 function verzendResetEmail($data){
+    //Genereer een tijdelijk token
     $token = executeQuery("SELECT token from password_recovery WHERE id = ?", [$data["ID"]]);
 
     $naar = 'sinke.carsten95@gmail.com';
@@ -750,23 +795,35 @@ function verzendResetEmail($data){
     echo json_encode(["resultClass" => "success", "message" => "Een reset mail is verstuurd."]);
 }
 
+//Opnieuw instellen van een wachtwoord
 function resetWachtwoord($data) {
+    //Zorg dat er maar 1 token actief kan zijn per gebruiker
     $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
     if ($duplicateCheck['code'] == 1) {
+        //Maak een token aan
         $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())", [$data["username"], bin2hex(random_bytes(128))]);
         if ($resetId['code'] == 0) {
+            //Stuur een mail voor de reset
             verzendResetEmail($resetId['data'][0]);
         } elseif ($resetId['code'] == 2) {
+            //Wanneer er geen geldige gebruikersnaam wordt meegegeven
             echo json_encode(["resultClass" => "warning", "message" => "Ongeldige gebruikersnaam."]);
         }
     } elseif ($duplicateCheck['code'] == 0) {
+        //Wanneer er al een token actief is voor de opgegeven gebruiker
         echo json_encode(["resultClass" => "warning", "message" => "U heeft al een reset aangevraagd."]);
     }
 }
 
+//Het veranderen van het wachtwoord
 function veranderWachtwoord($data) {
+    //Pak de username die bij de token hoort
     $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
+
+    //Delete het token
     executeQueryNoFetch("DELETE FROM password_recovery WHERE token = ?", [$data['token']]);
+
+    //Stel het nieuwe wachtwoord in
     executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
 }
 

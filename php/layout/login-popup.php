@@ -71,6 +71,7 @@
                         <select name="land" id="register-country" required>
                             <option selected disabled value="">Kies een land</option>
                             <?php
+                            //Haal alle landen uit de databse
                             $landen = executeQuery("SELECT * FROM landen");
                             if ($landen['code'] == 0) {
                                 foreach ($landen['data'] as $land) {

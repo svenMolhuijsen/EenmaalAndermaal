@@ -8,12 +8,14 @@ include("php/layout/breadcrumbs.php");
 <hr>
 <div class="large-8 row categoriepagina">
     <div class="side-nav-block medium-3 large-3 columns">
+        <!-- Hoofdcategoriën -->
         <ul class="side-nav accordion hoofdcategorien" data-accordion="vdmumf-accordion" data-allow-all-closed="true"
             data-multi-expand="false" role="tablist">
 
         </ul>
     </div>
     <div class="medium-9 large-9 columns">
+        <!-- Subcategoriën -->
         <div class="row data-equalizer align-middle subcategorien hide-for-small-only">
 
         </div>
@@ -21,6 +23,7 @@ include("php/layout/breadcrumbs.php");
 </div>
 <hr>
 <div class="veilingen row">
+    <!-- Trending veilingen -->
     <div class="clearfix">
         <h4 class="float-left" id="trending">Trending</h4>
         <a href="filterpagina.php" class="button hollow float-right">view more ></a>
@@ -31,6 +34,7 @@ include("php/layout/breadcrumbs.php");
 </div>
 <?php include("php/layout/footer.html") ?>
 <script>
+    //Ophalen van de trending veilingen
     function trending(){
         $.post("/php/api.php?action=trending",function(result){
             var target = ".veilingen .trendingData";
@@ -40,8 +44,6 @@ include("php/layout/breadcrumbs.php");
     $(document).ready(function(){
         trending();
     })
-
-
 </script>
 </body>
 </html>

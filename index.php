@@ -7,6 +7,7 @@ include("php/layout/header.php");
 ?>
 <main>
     <div class="banner">
+        <!-- Groet -->
         <div class="row" id="indexTriggerText">
             <h3><span>Eenmaal-Andermaal</span> Koop een uniek geschenk<br>of verkoop je eigen spullen</h3>
         </div>
@@ -26,6 +27,7 @@ include("php/layout/header.php");
     </div>
   <div class="veilingen row">
     <div class="clearfix">
+        <!-- Trending sectie -->
       <h4 class="float-left" id="trending">Trending</h4>
       <a href="filterpagina.php" class="button hollow float-right">view more ></a>
     </div>
@@ -38,17 +40,17 @@ include("php/layout/header.php");
 
 <?php include("php/layout/footer.html"); ?>
 <script>
-  function trending(){
+    //Haalt trending op
+    function trending(){
     $.post("/php/api.php?action=trending",function(result){
         var target = ".veilingen .trendingData";
         veiling(target, result);
     });
-  }
-  $(document).ready(function(){
+    }
+
+    $(document).ready(function(){
     trending();
-  })
-
-
+    })
 </script>
 </body>
 </html>

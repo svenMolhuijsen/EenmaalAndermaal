@@ -3,9 +3,12 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
+
+//Afschermen van de pagina voor mensen die niet ingelogd zijn, of geen admin zijn
 if (isset($_SESSION['gebruiker'])) {
     if ($adminCheck) {
         ?>
+        <!-- Opsplitsing van admin functionaliteiten -->
         <main class="row">
             <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>
                 <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
@@ -14,21 +17,29 @@ if (isset($_SESSION['gebruiker'])) {
             </ul>
 
             <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
+
+                <!-- Overzicht van data -->
                 <div class="tabs-panel" id="overzicht">
                     <div class="row expanded show-for-large">
+                        <!-- PowerBI Rapport over de site -->
                         <iframe style="width:100%; height:600px;"
                                 src="https://app.powerbi.com/view?r=eyJrIjoiMzAxNzVlODktMDEyZC00NWZiLWJiYjUtNDY0ZjBjMzFjMzUyIiwidCI6ImI2N2RjOTdiLTNlZTAtNDAyZi1iNjJkLWFmY2QwMTBlMzA1YiIsImMiOjh9"
                                 frameborder="0" allowFullScreen="true"></iframe>
-                    </div><!--row expanded-->
-                </div><!--overzicht-->
+                    </div>
+                </div>
+
+                <!-- Toevoegen van een categorie -->
                 <div class="tabs-panel categoriemanager" id="categorie">
                     <?php
                     include("php/layout/categorieToevoegen.php");
                     ?>
-                </div><!--categorie-->
+                </div>
+
+                <!-- Veiling control -->
                 <div class="tabs-panel" id="veiling">
                     <div class="column row">
                         <div class="input-group">
+                            <!-- Zoek op veilingId -->
                             <input type="number" class="input-group-field" placeholder="veilingId" id="veilingId">
                             <div class="input-group-button">
                                 <button id="zoekVeiling" class="button">Zoek</button>
@@ -38,6 +49,8 @@ if (isset($_SESSION['gebruiker'])) {
                     <hr>
                     <div class="column row">
                         <div class="float-right" id="knoppen"></div>
+
+                        <!-- Verplaatsen van categorie -->
                         <div class="large reveal" id="verplaatsVeiling" data-reveal>
                             <h4>Selecteer categorie</h4>
                             <div id="categorieTwee"></div>
@@ -46,6 +59,8 @@ if (isset($_SESSION['gebruiker'])) {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div><!--reveal-->
+
+                        <!-- Verwijderen van een veiling -->
                         <div class="large reveal" id="verwijderVeiling" data-reveal>
                             <h4>Weet u zeker dat u de veiling wilt verwijderen?</h4>
                             <button class="button alert" id="verwijder">Verwijder</button>
@@ -60,6 +75,7 @@ if (isset($_SESSION['gebruiker'])) {
                     </div>
                 </div><!--tabs panel veiling-->
 
+                <!-- Handmatig veilingen eindigen -->
                 <div class="tabs-panel" id="sluitVeilingen">
                     <button class="button secondary">Sluit Veilingen</button>
                 </div>
@@ -78,6 +94,7 @@ include("php/layout/footer.html");
 <script>
 var veilingId;
 
+    //Categorie aan database toevoegen
     $('#addCategorieToDatabase').click(function () {
         var categorie = {
             categorieNaam: $('#categorieNaam').val(),
@@ -95,11 +112,14 @@ var veilingId;
         });
     });
 
+    //Zoeken van een veiling
     $("#zoekVeiling").click(function () {
         veilingId = $('#veilingId').val();
+
         var veiling = {
             veilingId: veilingId
         };
+
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=getVeilingInfo',
@@ -107,15 +127,17 @@ var veilingId;
             dataType: 'json',
             success: function(result){
                 veiling = result.data[0];
-                
+
+                //Reset het veld waar de veiling hoort
                 $('#veilingInfo').empty();
                 $('#veilingDatum').empty();
                 $('#knoppen').empty();
+
+                //Zet de nieuwe info neer
                 $('#veilingInfo').append("<div>  <h1>"+veiling.titel+"</h1>"+
                                                 "<h5>"+veiling.verkoperGebruikersnaam+"</h5></div>"+
                                         "<div><img src='http://iproject34.icasites.nl/"+veiling.thumbNail+"' alt='img'></div>"+
                                         "<div><h4>Beschrijving:</h4><p>"+veiling.beschrijving+"</p></div>");
-
                 $('#veilingDatum').append("<div><h4>Veiling eindigd op:</h4><span>"+veiling.eindDatum+"</span></div>");
                 $('#knoppen').append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>"+
                                     (veiling.veilingGestopt == false ? "<button class='button warning' id='beindigd' onclick='beindig()'>Beïndigen</button>": "")+
@@ -124,6 +146,7 @@ var veilingId;
         });
     });
 
+    //Sluit een veiling
     function beindig(){
         var veiling = {
             veilingId: veilingId
@@ -140,6 +163,7 @@ var veilingId;
             $('#beindigd').remove();
     }
 
+    //Verwijder een veiling
     $('#verwijder').click(function(){
         var veiling = {
             veilingId: veilingId
@@ -153,17 +177,21 @@ var veilingId;
                 alert('Veiling verwijderen geslaagd!');
             }
         });
+
+        //Haal de informatie van de veiling weg
         $('#verwijderVeiling').foundation('close');
         $('#veilingInfo').empty();
         $('#veilingDatum').empty();
         $('#knoppen').empty();
     });
 
+    //Verplaats een veiling
     $('#verplaats').click(function(){
         var veiling = {
             veilingId: veilingId,
             categorieId: $('#categorieTwee').children().last().prev().find(":selected").val()
         };
+
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=verplaatsVeiling',
@@ -176,6 +204,7 @@ var veilingId;
         });
     });
 
+    //Sluit alle veilingen
     $('#sluitVeilingen').click(function(){
         $.ajax({
             type: 'POST',
