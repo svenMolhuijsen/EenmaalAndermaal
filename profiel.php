@@ -7,9 +7,9 @@ error_reporting(E_ERROR | E_PARSE);
 
 $gebruiker = new User($_SESSION['gebruiker']);
 
-$verlopenBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND biedingsBedrag NOT IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
-$lopendeBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND b.biedingsBedrag IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
-$gewonnenBiedingen = executeQuery("SELECT * FROM veiling WHERE koperGebruikersnaam = ?", [$gebruiker->getGebruikersnaam()]);
+$verlopenBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND veilingGestopt = 0 AND biedingsBedrag NOT IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
+$lopendeBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND veilingGestopt = 0 AND b.biedingsBedrag IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
+$gewonnenBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND veilingGestopt = 1 AND b.biedingsBedrag IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
 
 $openVeilingen = executeQuery("SELECT *  FROM veiling WHERE verkoperGebruikersnaam = ? AND veilingGestopt = 0", [$gebruiker->getGebruikersnaam()]);
 $verlopenVeilingen = executeQuery("SELECT * from veiling where verkoperGebruikersnaam = ? AND veilingGestopt = 1", [$gebruiker->getGebruikersnaam()]);
@@ -20,7 +20,7 @@ function pasteStatus($typeStatus, $soort) {
             echo('  
                 <div class="column"><hr></div>
                 <div class="columns small-3">
-                    <img width="150" height="150" src="' . $status["thumbNail"] . '" alt="image">
+                    <img class="miniImage" src="http://iproject34.icasites.nl/' . $status["thumbNail"] . '" alt="image">
                 </div>
 
                 <div class="columns small-5">
