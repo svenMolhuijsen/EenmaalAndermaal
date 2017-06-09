@@ -6,6 +6,7 @@ include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 ?>
 <main class="row columns">
+    <!-- Opsplitsing van tabs -->
     <ul class="tabs" id="profieltabs" data-tabs>
         <li class="tabs-title is-active"><a href="#FAQ">FAQ</a></li>
         <li class="tabs-title"><a href="#Contact">Contact</a></li>
@@ -14,6 +15,7 @@ include("php/layout/breadcrumbs.php");
     </ul>
 
     <div class="tabs-content" data-tabs-content="profieltabs" data-active-collapse="true">
+        <!-- FAQ -->
         <div class="tabs-panel" id="FAQ">
             <div class="row">
                 <h4>Frequently Asked Questions: </h4>
@@ -63,6 +65,8 @@ include("php/layout/breadcrumbs.php");
                     </div>
             </div>
         </div>
+
+        <!-- Contactpunt -->
         <div class="tabs-panel" id="Contact">
             <div class="row">
                 <h4>Contact: </h4>
@@ -78,16 +82,17 @@ include("php/layout/breadcrumbs.php");
             </div>
         </div>
 
-    <div class="tabs-panel" id="TermsOfService">
-        <div class="row columns">
-            <h4>Terms of Service: </h4><br>
+        <!-- TOS -->
+        <div class="tabs-panel" id="TermsOfService">
+            <div class="row columns">
+                <h4>Terms of Service: </h4><br>
                 <h6><strong>Inleiding</strong></h6>
                 <p>Welkom bij EenmaalAndermaal. Door gebruik te maken van de services op de websites van EenmaalAndermaal (<a href="http://iproject34.icasites.nl/">EenmaalAndermaal.nl</a> en andere verwante websites waarop deze overeenkomst wordt weergegeven), ga je akkoord met de volgende voorwaarden van EenmaalAndermaal, inclusief de voorwaarden die via een hyperlink beschikbaar zijn, evenals de algemene regels van de websites van dochterondernemingen van EenmaalAndermaal. Als je in de Europese Unie woont of de hoofdzetel van je bedrijf is er gevestigd, heb je een overeenkomst met EenmaalAndermaal Europe S.à r.l. (Société à responsabilité limitée), 22-24 Boulevard Royal, L-2449 Luxembourg, R.C. B 120781, ondernemingsnummer 114463. Als je in de Verenigde Staten woont of de hoofdzetel van je bedrijf is er gevestigd, heb je een overeenkomst met EenmaalAndermaal Inc., 2145 Hamilton Ave, San Jose, CA 95125, USA. Als je in Canada woont of de hoofdzetel van je bedrijf er is gevestigd, heb je vanaf 1 juli 2017 een overeenkomst met EenmaalAndermaal Canada Limited, 500 King Street West, Suite 200, Toronto, ON M5V 1L9, Canada. Als je in het Verenigd Koninkrijk woont of de hoofdzetel van je bedrijf er is gevestigd, heb je vanaf 1 augustus 2017 een overeenkomst met EenmaalAndermaal (UK) Limited, 5 New Street Square, London, EC4A 3TW, United Kingdom. Als je in een ander land woont of de hoofdzetel van je bedrijf is er gevestigd, heb je een overeenkomst met EenmaalAndermaal International AG, Helvetiastrasse 15/17, CH-3005 Bern. Als je vragen hebt, kun je altijd onze Hulp-pagina’s raadplegen. </p>
                 <p>Voordat je lid wordt van EenmaalAndermaal, moet je alle bepalingen en voorwaarden die in deze gebruikersovereenkomst en het privacybeleid staan of waarnaar we verwijzen in deze gebruikersovereenkomst of het privacybeleid, te lezen en te aanvaarden. Wij raden je ten zeerste aan niet alleen deze gebruikersovereenkomst te lezen, maar om ook de informatie die hieraan gelinkt is, te openen en te lezen. Als je niet akkoord gaat met ons beleid of specifieke bepalingen of voorwaarden, kun je onze sites en services niet gebruiken. Door deze gebruikersovereenkomst te aanvaarden, stem je ermee in dat het gebruik van bepaalde EenmaalAndermaal-websites of websites die we beheren, onderworpen kan zijn aan een andere gebruikersovereenkomst en een ander privacybeleid. De overeenkomst die van toepassing is op onze domeinen en subdomeinen is altijd de overeenkomst die wordt weergegeven in de voettekst van een website. </p>
                 <p>Deze overeenkomst is van kracht vanaf 13 augustus 2008 voor bestaande gebruikers, en voor nieuwe gebruikers zodra ze deze aanvaard hebben.</p>
                 <h6><strong>Gebruik van EenmaalAndermaal </strong></h6>
                 <p>Wanneer je gebruikmaakt van EenmaalAndermaal, is het volgende <b>niet toegestaan</b>: </p>
-                
+
                 <ul>
                     <li><p>inhoud of objecten in verkeerde rubrieken of gedeeltes van onze sites en services plaatsen; </p></li>
                     <li><p>de wetten, rechten van derden, of ons beleid, zoals het beleid voor Verboden en beperkte objecten schenden; </p></li>
@@ -111,15 +116,17 @@ include("php/layout/breadcrumbs.php");
                 <p>Indien een bepaling van deze overeenkomst als ongeldig of onafdwingbaar wordt beschouwd, zal dergelijke bepaling niet meer van toepassing zijn, terwijl de resterende bepalingen van kracht blijven. Wij kunnen deze overeenkomst naar eigen goeddunken overdragen mits naleving van de bepalingen aangaande kennisgevingen. Titels zijn alleen ter referentie bedoeld en beperken in geen geval de reikwijdte van het betreffende artikel van deze Gebruikersovereenkomst. Wanneer wij nalaten te handelen naar aanleiding van een schending door jou of anderen, betekent dit niet dat wij ons recht verliezen te handelen naar aanleiding van volgende of gelijkaardige schendingen. Wij kunnen niet garanderen dat wij actie zullen ondernemen tegen alle schendingen van deze overeenkomst. </p>
                 <p>Wij kunnen deze overeenkomst te allen tijde aanpassen door de aangepaste voorwaarden op deze site te plaatsen. Tenzij elders anders bepaald, worden alle aangepaste bepalingen 30 dagen nadat ze aanvankelijk zijn geplaatst automatisch van kracht. Wij houden je ook op de hoogte via ons berichtencentrum. Deze overeenkomst kan op geen enkele andere manier worden aangepast dan hiervoor beschreven, tenzij via een geschreven document dat zowel door jou als door ons is ondertekend. Als je niet akkoord gaat met de wijzigingen in ons beleid of in specifieke bepalingen of voorwaarden, kun je de overeenkomst ten alle tijde beëindigen door je account te sluiten. In deze overeenkomst worden alle afspraken en overeenkomsten tussen jou en ons met betrekking tot het voorwerp van de overeenkomst uiteengezet. De volgende onderdelen blijven ook na de beëindiging van deze overeenkomst gehandhaafd: Kosten en services (kosten die je verschuldigd bent voor het gebruik van onze services), Vrijwaring, Inhoudslicentie, Aansprakelijkheid, Schadeloosstelling en Geschillenbeslechting, en alle andere bepalingen die rederlijkerwijs deze Gebruikersovereenkomst dienen te overleven. </p>
             </div>
-    </div>
+        </div>
 
-    <div class="tabs-panel" id="About">
-        <div class="row columns">
-            <h4>About</h4>
-            <h6><strong> About EenmaalAndermaal</strong></h6>
-            </p>EenmaalAndermaal is een veilingsite waarop gebruikers hun voorwerpen ter verkoop aanbieden en anderen bij opbod die voorwerpen kunnen kopen. Het is opgericht door I-Concepts en ontwikkeld door eerstejaars HAN ICA studenten.</p>
-            <h6><strong>About I-Concepts</strong></h6>
-            <p>EenmaalAndermaal is een website van het bedrijf I-Concepts. I-Concepts is een nieuwe onderneming opgericht door Anton Mijnder. Anton Mijnder is de directeur van I-Concepts. I-Concepts is een bedrijf dat betrouwbaarheid hoog in het vaandel heeft staan. En wil graag concurreren met andere grote veilingsite’s.</p>
+        <!-- Over ons -->
+        <div class="tabs-panel" id="About">
+            <div class="row columns">
+                <h4>About</h4>
+                <h6><strong> About EenmaalAndermaal</strong></h6>
+                </p>EenmaalAndermaal is een veilingsite waarop gebruikers hun voorwerpen ter verkoop aanbieden en anderen bij opbod die voorwerpen kunnen kopen. Het is opgericht door I-Concepts en ontwikkeld door eerstejaars HAN ICA studenten.</p>
+                <h6><strong>About I-Concepts</strong></h6>
+                <p>EenmaalAndermaal is een website van het bedrijf I-Concepts. I-Concepts is een nieuwe onderneming opgericht door Anton Mijnder. Anton Mijnder is de directeur van I-Concepts. I-Concepts is een bedrijf dat betrouwbaarheid hoog in het vaandel heeft staan. En wil graag concurreren met andere grote veilingsite’s.</p>
+            </div>
         </div>
     </div>
 </main>

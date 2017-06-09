@@ -7,7 +7,7 @@ $warning: #e2c30c;
 $alert: #E2222C;
 
 $border-radius: 5px;
-// /LOGO VARIABLES
+//LOGO VARIABLES
 $logo-small: "/img/logo-sm.svg";
 $logo: "/img/logo.svg";
 
@@ -22,4 +22,8 @@ $footer_color_bttm: lightgray;
 
 .row{
     margin-top: 2em;
+}
+
+.validationError {
+    color: $alert;
 }

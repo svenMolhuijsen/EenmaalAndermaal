@@ -1,7 +1,7 @@
 <!doctype html>
 
 <html class="no-js" lang="en">
-<head>
+<head><!-- Header informatie -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,33 +19,39 @@
 </head>
 <body>
 
+<!-- Title-bar -->
 <div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
     <button class="menu-icon" type="button" data-toggle></button>
     <span class="title-bar-title"><a href="/"><img src="img/logo/logo-sm.svg" alt="" class="brand-logo"></a></span>
 </div>
 
+<!-- Navigatie menu -->
 <div class="top-bar" id="navigatie-menu">
+    <!-- Linker menu -->
     <div class="top-bar-left">
         <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
+            <!-- Logo -->
             <li class="hide-for-small-only"><a href="/"><img src="img/logo/logo.svg" alt="" class="brand-logo"></a></li>
+            <!-- Link naar categoriepagina -->
             <li><a href="categoriepagina.php">Bekijk Categorieën</a></li>
         </ul>
     </div>
+    <!-- Rechter menu -->
     <div class="top-bar-right">
         <div class="menu">
-            <div class="categorie">
-
-            </div>
+            <!-- Categorie menu -->
+            <div class="categorie"></div>
+            <!-- Search veld -->
             <div><input type="search" placeholder="Zoekterm"></div>
+            <div><button type="button" class="button submit"><span class="fi-magnifying-glass"></span> Zoeken</button></div>
             <div>
-                <button type="button" class="button submit"><span class="fi-magnifying-glass"></span> Zoeken</button>
-            </div>
-            <div>
+                <!-- Dropdown menu voor pagina's -->
                 <ul class="account dropdown vertical medium-horizontal menu" data-dropdown-menu>
                     <li>
                         <a href="#"><span class="fi-torso"></a>
                         <ul class="menu">
                             <?php
+                            //Pagina's worden afgeschermd en getoond voor de juiste soort gebruikers
                             if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
                                 $adminCheck = executeQuery("SELECT TOP 1 admin FROM gebruikers WHERE gebruikersnaam = ?", [$_SESSION['gebruiker']]);
                                 if ($adminCheck['code'] == 0) {

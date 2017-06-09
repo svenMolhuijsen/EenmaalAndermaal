@@ -21,7 +21,7 @@ if (!isset($_SESSION['gebruiker'])) {
                     <div class="large-6 columns float-left">
                         <!-- Titel -->
                         <h4><strong>Titel</strong></h4>
-                        <input id="titel" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z0-9]+" required/>
+                        <input id="titel" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z0-9-' ]+" required/>
 
                         <!-- Prijs -->
                         <h4><strong>Prijs</strong></h4>
@@ -76,12 +76,12 @@ if (!isset($_SESSION['gebruiker'])) {
                                 <!-- Straatnaam -->
                                 <h5>Straat</h5>
                                 <input id="straat" name="straat" type="text" placeholder="Straat"
-                                       pattern="[A-Za-z- ]+"/>
+                                       pattern="[A-Za-z-' ]+"/>
 
                                 <!-- Plaatsnaam -->
                                 <h5 class="titel">Plaats</h5>
                                 <input id="plaats" name="plaats" type="text" placeholder="Plaats"
-                                       pattern="[A-Za-z- ]+"/>
+                                       pattern="[A-Za-z-' ]+"/>
 
                                 <!-- Land -->
                                 <h5 class="titel">Land</h5>
@@ -106,7 +106,7 @@ if (!isset($_SESSION['gebruiker'])) {
                                 <!-- Provincie -->
                                 <h5 class="titel">Provincie</h5>
                                 <input id="provincie" name="provincie" type="text" placeholder="Provincie"
-                                       pattern="[A-Za-z-]+"/>
+                                       pattern="[A-Za-z-' ]+"/>
 
                                 <!-- Postcode -->
                                 <h5 class="titel">Postcode</h5>
