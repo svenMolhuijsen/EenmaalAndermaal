@@ -104,9 +104,10 @@ if (isset($_SESSION['gebruiker'])) {
     } else {
         include("php/layout/geentoegang.html");
     }
+} else {
+    include("php/layout/geentoegang.html");
 }
 include("php/layout/footer.html");
-
 ?>
 <script>
 var veilingId;
