@@ -104,7 +104,7 @@ if ($veiling->getCode() == 0){
             <?php if (!$veiling->getVeilingGestopt()) { ?>
             <div id="expired">
             <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) { ?>
-                <input name="bedrag" id="bedrag" type="text" placeholder="bedrag">
+                <input name="bedrag" id="bedrag" type="text" maxlength="18" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
 
                 <!-- Bieding errors -->

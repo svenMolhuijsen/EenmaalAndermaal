@@ -21,11 +21,11 @@ if (!isset($_SESSION['gebruiker'])) {
                     <div class="large-6 columns float-left">
                         <!-- Titel -->
                         <h4><strong>Titel</strong></h4>
-                        <input id="titel" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z0-9-' ]+" required/>
+                        <input id="titel" maxlength="255" name="titel" type="text" placeholder="Titel" pattern="[A-Za-z0-9-' ]+" required/>
 
                         <!-- Prijs -->
                         <h4><strong>Prijs</strong></h4>
-                        <input id="prijs" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]+"
+                        <input id="prijs" maxlength="18" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]+"
                                required/>
 
                         <!-- Einddatum -->
@@ -75,12 +75,12 @@ if (!isset($_SESSION['gebruiker'])) {
                             <div class="large-6 columns">
                                 <!-- Straatnaam -->
                                 <h5>Straat</h5>
-                                <input id="straat" name="straat" type="text" placeholder="Straat"
+                                <input id="straat" maxlength="255" name="straat" type="text" placeholder="Straat"
                                        pattern="[A-Za-z-' ]+"/>
 
                                 <!-- Plaatsnaam -->
                                 <h5 class="titel">Plaats</h5>
-                                <input id="plaats" name="plaats" type="text" placeholder="Plaats"
+                                <input id="plaats" name="plaats" maxlength="255" type="text" placeholder="Plaats"
                                        pattern="[A-Za-z-' ]+"/>
 
                                 <!-- Land -->
@@ -100,17 +100,17 @@ if (!isset($_SESSION['gebruiker'])) {
                             <div class="large-6 columns">
                                 <!-- Huisnummer -->
                                 <h5>Huisnummer</h5>
-                                <input id="huisnummer" name="huisnummer" type="text" placeholder="Huisnummer"
+                                <input id="huisnummer" name="huisnummer" type="text"  maxlength="20" placeholder="Huisnummer"
                                        pattern="^[1-9][0-9]*[a-zA-Z]?"/>
 
                                 <!-- Provincie -->
                                 <h5 class="titel">Provincie</h5>
-                                <input id="provincie" name="provincie" type="text" placeholder="Provincie"
+                                <input id="provincie" name="provincie" type="text" maxlength="255" placeholder="Provincie"
                                        pattern="[A-Za-z-' ]+"/>
 
                                 <!-- Postcode -->
                                 <h5 class="titel">Postcode</h5>
-                                <input id="postcode" name="postcode" type="text" placeholder="Postcode"
+                                <input id="postcode" name="postcode" type="text" maxlength="10" placeholder="Postcode"
                                        pattern="^[1-9][0-9]*[a-zA-z- ]*"/>
                             </div>
                         </div>

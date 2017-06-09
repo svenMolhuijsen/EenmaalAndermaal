@@ -9,11 +9,11 @@
         <div id="login">
             <form id="loginForm" class="form small-12 column">
                 <label class="signin-username" for="signin-username">Gebruikersnaam</label>
-                <input class="full-width has-padding has-border signin-username" name="email" id="signin-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" required>
+                <input class="full-width has-padding has-border signin-username" name="email" id="signin-username" type="text" placeholder="xX_JoHn.DoE1337_Xx" maxlength="255" required>
 
                 <!-- Password -->
                 <label class="signin-password" for="signin-password">Password</label>
-                <input class="full-width has-padding has-border signin-password" id="signin-password" name="password" type="password"
+                <input class="full-width has-padding has-border signin-password" id="signin-password" maxlength="255" name="password" type="password"
                        placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
                 <button class="button hollow float-left reset">Wachtwoord vergeten?</button>
@@ -28,13 +28,13 @@
                     <!-- Voornaam -->
                     <div class="small-6 column">
                         <label class="register-first-name" for="register-first-name">Voornaam</label>
-                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z-' ]+">
+                        <input maxlength="255" id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z-' ]+">
                     </div>
 
                     <!-- Achternaam-->
                     <div class="small-6 column">
                         <label class="register-last-name" for="register-last-name">Achternaam</label>
-                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z-' ]+">
+                        <input id="register-last-name" maxlength="255" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z-' ]+">
                     </div>
                 </div>
 
@@ -47,19 +47,19 @@
                     <!-- Straatnaam -->
                     <div class="small-4 column">
                         <label class="register-streetname" for="register-streetname">Straatnaam</label>
-                        <input id="register-streetname" name="straatnaam" type="text" placeholder="Lindenlaan" pattern="[a-zA-Z-' ]+">
+                        <input id="register-streetname" name="straatnaam" maxlength="255" type="text" placeholder="Lindenlaan" pattern="[a-zA-Z-' ]+">
                     </div>
 
                     <!-- Huisnummer -->
                     <div class="small-4 column">
                         <label class="register-no" for="register-no">Huisnummer</label>
-                        <input id="register-no" name="huisnummer" type="text" placeholder="1" pattern="^[1-9][0-9]*[a-zA-Z]?">
+                        <input id="register-no" name="huisnummer" type="text" placeholder="1" maxlength="20" pattern="^[1-9][0-9]*[a-zA-Z]?">
                     </div>
 
                     <!-- Postcode -->
                     <div class="small-4 column">
                         <label class="register-zip" for="register-zip">Postcode</label>
-                        <input id="register-zip" name="postcode" type="text" placeholder="1234 AB" pattern="^[1-9][0-9]*[a-zA-z- ]*">
+                        <input id="register-zip" name="postcode" type="text" placeholder="1234 AB" maxlength="10" pattern="^[1-9][0-9]*[a-zA-z- ]*">
                     </div>
 
                 </div>
@@ -85,7 +85,7 @@
                     <!-- Provincie -->
                     <div class="small-6 column">
                         <label class="register-province" for="register-province">Provincie</label>
-                        <input id="register-province" name="provincie" type="text" placeholder="Noord-Brabant" pattern="[a-zA-Z-]+">
+                        <input id="register-province" name="provincie" type="text" placeholder="Noord-Brabant" maxlength="255" pattern="[a-zA-Z-]+">
                     </div>
                 </div>
 
@@ -94,29 +94,29 @@
                     <!-- Plaatsnaam -->
                     <div class="small-6 column">
                         <label class="register-city" for="register-city">Plaatsnaam</label>
-                        <input id="register-city" name="plaats" type="text" placeholder="Deurne" pattern="[a-zA-Z- ]+">
+                        <input id="register-city" name="plaats" type="text" placeholder="Deurne" maxlength="255" pattern="[a-zA-Z- ]+">
                     </div>
 
                     <!-- Telefoonnummer -->
                     <div class="small-6 column">
                         <label class="register-tel" for="register-tel">Telefoonnr</label>
-                        <input id="register-tel" name="tel" type="text" placeholder="+31012345678" pattern="^\+?[0-9() ]+">
+                        <input id="register-tel" name="tel" type="text" placeholder="+31012345678" maxlength="20" pattern="^\+?[0-9() ]+">
                     </div>
                 </div>
 
                 <!-- Gebruikersnaam -->
                 <label class="register-username" for="register-email">Gebruikersnaam</label>
-                <input id="register-username" type="text" name="gebruikersnaam" placeholder="xX_JoHn.DoE1337_Xx" required>
+                <input id="register-username" maxlength="255" type="text" name="gebruikersnaam" placeholder="xX_JoHn.DoE1337_Xx" required>
 
                 <!-- Wachtwoord-->
                 <label class="password" for="register-password">Wachtwoord</label>
-                <input id="register-password" name="register-password" type="password" placeholder="*******"
+                <input id="register-password" maxlength="255" name="register-password" type="password" placeholder="*******"
                 pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <label id="passwordWarning">Minimaal 1 letter, hoofdletter en cijfer.</label>
 
                 <!-- Wachtwoord herhalen-->
                 <label class="password" for="register-repeat-password">Herhaal wachtwoord</label>
-                <input id="register-repeat-password" name="repeat-password" type="password"
+                <input id="register-repeat-password" maxlength="255" name="repeat-password" type="password"
                 placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
 

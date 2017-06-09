@@ -72,8 +72,8 @@ if (!isset($_SESSION['gebruiker'])) {
                             <p id="wachtwoord"><strong>Wachtwoord: </strong>********</p>
 
                             <div class="field editInlogGegevens">
-                                <input id="oudWachtwoord" type="password" placeholder="Old Password">
-                                <input id="editWachtwoord" type="text" placeholder="New Password">
+                                <input id="oudWachtwoord" type="password"  maxlength="255" placeholder="Old Password">
+                                <input id="editWachtwoord" maxlength="255" type="text" placeholder="New Password">
                             </div>
                         </fieldset>
                     </div>
@@ -103,15 +103,15 @@ if (!isset($_SESSION['gebruiker'])) {
                             ?>
 
                             <div class="field editAdres">
-                                <input rel="Provincie" id="editProvincie" type="text" placeholder="Provincie"
+                                <input rel="Provincie" maxlength="255" id="editProvincie" type="text" placeholder="Provincie"
                                        pattern="[A-Za-z-]+">
-                                <input rel="Plaats" id="editPlaats" type="text" placeholder="Plaats"
+                                <input rel="Plaats" maxlength="255" id="editPlaats" type="text" placeholder="Plaats"
                                        pattern="[A-Za-z- ]+">
-                                <input rel="Straat" id="editStraat" type="text" placeholder="Straat"
+                                <input rel="Straat" maxlength="255" id="editStraat" type="text" placeholder="Straat"
                                        pattern="[A-Za-z- ]+">
-                                <input rel="Huisnummer" id="editHuisnummer" type="text" placeholder="Huisnummer"
+                                <input rel="Huisnummer" maxlength="20" id="editHuisnummer" type="text" placeholder="Huisnummer"
                                        pattern="[0-9a-z]+">
-                                <input rel="Postcode" id="editPostcode" type="text" placeholder="Postcode"
+                                <input rel="Postcode" id="editPostcode" maxlength="10" type="text" placeholder="Postcode"
                                        pattern="[0-9a-zA-Z ]+">
                             </div>
                         </fieldset>
@@ -125,7 +125,7 @@ if (!isset($_SESSION['gebruiker'])) {
 
                             <?php echo('<p id="Telefoonnummer"><strong>Telefoonnummer: </strong>' . $gebruiker->getTelefoonnmr() . '</p>'); ?>
 
-                            <input rel="Telefoonnummer" class="field editContactgegevens" id="editTelefoonnummer"
+                            <input rel="Telefoonnummer" maxlength="20" class="field editContactgegevens" id="editTelefoonnummer"
                                    type="text" placeholder="Telefoonnmr">
                         </fieldset>
                     </div>
