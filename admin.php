@@ -22,7 +22,7 @@ if (isset($_SESSION['gebruiker'])) {
 
                 <!-- Overzicht van data -->
                 <div class="tabs-panel" id="overzicht">
-                    <div class="row expanded show-for-large">
+                    <div class="show-for-large">
                         <!-- PowerBI Rapport over de site -->
                         <iframe style="width:100%; height:600px;"
                                 src="https://app.powerbi.com/view?r=eyJrIjoiMzAxNzVlODktMDEyZC00NWZiLWJiYjUtNDY0ZjBjMzFjMzUyIiwidCI6ImI2N2RjOTdiLTNlZTAtNDAyZi1iNjJkLWFmY2QwMTBlMzA1YiIsImMiOjh9"
