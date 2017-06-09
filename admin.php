@@ -3,7 +3,6 @@ $pagename = "admin panel";
 include("php/core.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
-
 //Afschermen van de pagina voor mensen die niet ingelogd zijn, of geen admin zijn
 if (isset($_SESSION['gebruiker'])) {
     if ($adminCheck) {
@@ -12,7 +11,7 @@ if (isset($_SESSION['gebruiker'])) {
         <main class="row">
             <ul class="tabs" id="admintabs" data-active-collapse="true" data-tabs>
                 <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
-                <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
+                <li class="tabs-title"><a href="#categorietoevoegen">Categorie toevoegen</a></li>
                 <li class="tabs-title"><a href="#veiling">Veiling</a></li>
                 <li class="tabs-title"><a href="#sluitVeilingen">Sluit veilingen</a></li>
                 <li class="tabs-title"><a href="#adminRechten">Wijzig admin</a></li>
@@ -31,7 +30,7 @@ if (isset($_SESSION['gebruiker'])) {
                 </div>
 
                 <!-- Toevoegen van een categorie -->
-                <div class="tabs-panel categoriemanager" id="categorie">
+                <div class="tabs-panel categoriemanager" id="categorietoevoegen">
                     <?php
                     include("php/layout/categorieToevoegen.php");
                     ?>
@@ -106,119 +105,119 @@ if (isset($_SESSION['gebruiker'])) {
     }
 }
 include("php/layout/footer.html");
-
 ?>
 <script>
-var veilingId;
-var gebruikerGezocht;
-
-    function gebruikersGegevens(){
+    var veilingId;
+    var gebruikerGezocht;
+    function gebruikersGegevens() {
         username = '<?php echo($_SESSION["gebruiker"]) ?>';
         console.log(username);
         gebruikerGezocht = $("#username").val();
-
         var gebruiker = {
             gebruikersnaam: $("#username").val()
         };
-
         $.ajax({
             type: "POST",
             url: "php/api.php?action=getGebruikersgegevens",
             data: gebruiker,
             dataType: "JSON",
-            success: function(result){
+            success: function (result) {
                 gebruiker = result.data[0];
                 console.log(gebruiker);
                 $("#gebruikersInfo").empty();
                 $("#adminKnoppen").empty();
-                $("#gebruikersInfo").append("<div>  <h1>"+gebruiker.gebruikersnaam+"</h1>"+
-                                                    "<h5>"+gebruiker.voornaam+" "+gebruiker.achternaam+"</h5></div>"+
-                                            "<div>  <p>"+gebruiker.geboortedatum+"</p></div>");
-                if(gebruiker.gebruikersnaam != username){
-                    if(gebruiker.admin == 1){
+                $("#gebruikersInfo").append("<div>  <h1>" + gebruiker.gebruikersnaam + "</h1>" +
+                    "<h5>" + gebruiker.voornaam + " " + gebruiker.achternaam + "</h5></div>" +
+                    "<div>  <p>" + gebruiker.geboortedatum + "</p></div>");
+                if (gebruiker.gebruikersnaam != username) {
+                    if (gebruiker.admin == 1) {
                         console.log(gebruiker.admin);
                         $("#adminKnoppen").append("<button class='button warning' onclick='admin()'>Verwijder als admin</button>");
-                    } else{
+                    } else {
                         $("#adminKnoppen").append("<button class='button warning' onclick='admin()'>Voeg toe als admin</button>");
                     }
                 }
-                
+
             }
         });
     }
-
     $("#zoekUser").click(function () {
         gebruikersGegevens();
     });
-    function admin(){
+    function admin() {
         var gebruiker = {
             gebruikersnaam: gebruikerGezocht
         };
-
         $.ajax({
             type: "POST",
             url: "php/api.php?action=veranderAdminStatus",
             data: gebruiker,
             dataType: "JSON",
-            complete: function(){
+            complete: function () {
                 gebruikersGegevens();
             }
         });
     }
-
     $("#addCategorieToDatabase").click(function () {
-        var categorie = {
-            categorieNaam: $("#categorieNaam").val(),
-            superId: $(".categorien").children().last().prev().find(":selected").val()
-        };
 
+        var categorie = {
+            categorieNaam: $('#categorieNaam').val(),
+            superId: currCategory
+        };
         $.ajax({
             type: "POST",
             url: "php/api.php?action=addCategorieToDatabase",
             data: categorie,
             dataType: "json",
-            complete: function(){
-                alert("Categorie toevoegen geslaagd!");
+            complete: function (result) {
+                console.log(result);
+                if (result.code == 0) {
+                    alert("Categorie toevoegen geslaagd!");
+                } else if (result.code == 2) {
+                    alert("Categorie toevoegen niet mogelijk, er bestaat al een categorie met dezelfde naam");
+                } else {
+                    alert("Categorie toevoegen niet mogelijk, database fout");
+
+                }
+                generateParentCategories(currCategory, $("#categorietoevoegen .categorien"));
+
             }
         });
     });
-
     //Zoeken van een veiling
     $("#zoekVeiling").click(function () {
+        veilingId = $('#veilingId').val();
+
         veilingId = $("#veilingId").val();
-               
+
         var veiling = {
             veilingId: veilingId
         };
-
         $.ajax({
             type: "POST",
             url: "php/api.php?action=getVeilingInfo",
             data: veiling,
-            dataType: "json",
-            success: function(result){
+            dataType: 'json',
+            success: function (result) {
                 veiling = result.data[0];
-
                 //Reset het veld waar de veiling hoort
                 $("#veilingInfo").empty();
                 $("#veilingDatum").empty();
                 $("#knoppen").empty();
-
                 //Zet de nieuwe info neer
-                $("#veilingInfo").append("<div>  <h1>"+veiling.titel+"</h1>"+
-                                                "<h5>"+veiling.verkoperGebruikersnaam+"</h5></div>"+
-                                        "<div><img src='http://iproject34.icasites.nl/"+veiling.thumbNail+"' alt='img'></div>"+
-                                        "<div><h4>Beschrijving:</h4><p>"+veiling.beschrijving+"</p></div>");
-                $("#veilingDatum").append("<div><h4>Veiling eindigd op:</h4><span id='eindDatum'>"+veiling.eindDatum+"</span></div>");
-                $("#knoppen").append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>"+
-                                    (veiling.veilingGestopt == false ? "<button class='button warning' id='beindigd' onclick='beindig()'>Beïndigen</button>": "")+
-                                    "<button class='button alert' data-open='verwijderVeiling'>Verwijderen</button");
+                $("#veilingInfo").append("<div>  <h1>" + veiling.titel + "</h1>" +
+                    "<h5>" + veiling.verkoperGebruikersnaam + "</h5></div>" +
+                    "<div><img src='http://iproject34.icasites.nl/" + veiling.thumbNail + "' alt='img'></div>" +
+                    "<div><h4>Beschrijving:</h4><p>" + veiling.beschrijving + "</p></div>");
+                $("#veilingDatum").append("<div><h4>Veiling eindigd op:</h4><span id='eindDatum'>" + veiling.eindDatum + "</span></div>");
+                $("#knoppen").append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>" +
+                    (veiling.veilingGestopt == false ? "<button class='button warning' id='beindigd' onclick='beindig()'>Beïndigen</button>" : "") +
+                    "<button class='button alert' data-open='verwijderVeiling'>Verwijderen</button");
             }
         });
     });
-
     //Sluit een veiling
-    function beindig(){
+    function beindig() {
         var veiling = {
             veilingId: veilingId
         };
@@ -234,48 +233,43 @@ var gebruikerGezocht;
             $("#beindigd").remove();
             $("#eindDatum").html("EXPIRED");
     }
-
     //Verwijder een veiling
-    $("#verwijder").click(function(){
+    $('#verwijder').click(function () {
         var veiling = {
             veilingId: veilingId
         };
-         $.ajax({
+        $.ajax({
             type: 'POST',
             url: 'php/api.php?action=verwijderVeiling',
             data: veiling,
             dataType: 'json',
-            complete: function(){
+            complete: function () {
                 alert('Veiling verwijderen geslaagd!');
             }
         });
-
         //Haal de informatie van de veiling weg
         $("#verwijderVeiling").foundation('close');
         $("#veilingInfo").empty();
         $("#veilingDatum").empty();
         $("#knoppen").empty();
     });
-
     //Verplaats een veiling
-    $("#verplaats").click(function(){
+    $('#verplaats').click(function () {
         var veiling = {
             veilingId: veilingId,
             categorieId: $('#categorieTwee').children().last().prev().find(":selected").val()
         };
-
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=verplaatsVeiling',
             data: veiling,
             dataType: 'json',
-            complete: function(){
+            complete: function () {
                 $('#verplaatsVeiling').foundation('close');
                 alert('Veiling verplaatsen geslaagd!');
             }
         });
     });
-
     //Sluit alle veilingen
     $("#sluitVeilingen").click(function(){
         $.ajax({
@@ -284,7 +278,6 @@ var gebruikerGezocht;
             dataType: 'json'
         });
     });
-
 </script>
 </body>
 </html>

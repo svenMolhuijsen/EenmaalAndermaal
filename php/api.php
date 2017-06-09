@@ -590,14 +590,11 @@ function checkVeilingenInCategorie($categorieId)
 
     if ($veiling['code'] == 0) {
         if ($veiling['data'][0]['aantal'] > 0) {
-            print('Er zitten veilingen in deze categorie');
             return true;
         } else {
-            print('Er zitten GEEN veilingen in deze categorie');
             return false;
         }
     }
-    var_dump($veiling);
     return null;
 }
 
@@ -649,8 +646,6 @@ function nieuweCategorieToevoegen($categorie)
         //Maak een nieuwe categorie aan
         voegCategorieToe($categorie);
 
-        echo $overigCategorieId['data'][0]['categorieId'];
-        var_dump($categorie["superId"]);
     } else {
         voegCategorieToe($categorie);
     }
@@ -660,10 +655,10 @@ function nieuweCategorieToevoegen($categorie)
 function voegCategorieToe($categorie)
 {
     //Zet de nieuwe categorie op de juiste plaats
-    executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES (?, ?)", [
+    stuurTerug(executeQueryNoFetch("INSERT INTO categorie(categorieNaam, superId) VALUES (?, ?)", [
         $categorie["categorieNaam"],
         $categorie["superId"]
-    ]);
+    ]));
 }
 
 //Geef de 6 meest bezochte veilingen

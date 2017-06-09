@@ -59,7 +59,7 @@
                                 }
                                 if ($adminCheck) {
                             ?>
-                                    <li><a href="admin.php">Admin</a></li>
+                                    <li><a href="../../admin.php">Admin</a></li>
                                 <?php } ?>
                             <li><a href="profiel.php">Mijn profiel</a></li>
                             <li><a href="aanmakenveiling.php">Nieuwe veiling</a></li>

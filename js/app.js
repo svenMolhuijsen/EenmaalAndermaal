@@ -561,7 +561,6 @@ $("#resetPassword").click(function(){
         var target = $("#filterpagina aside .filter .categorien");
         generateParentCategories(category, target);
         currCategory = category;
-
         $(".pagination").jqPagination({
             paged: function (pages) {
                 zoeken(pages - 1);
@@ -592,7 +591,7 @@ $("#resetPassword").click(function(){
     }
 
     generateParentCategories(null, $("#categorie"));
-    generateParentCategories(null, $("#categorieToevoegen form .categorien"));
+    generateParentCategories(null, $("#categorietoevoegen .categorien"));
     generateParentCategories(null, $("#categorieTwee"));
 
 });
