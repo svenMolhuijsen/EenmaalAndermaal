@@ -46,9 +46,9 @@ if ($veiling->getCode() == 0){
     include("php/layout/header.php");
 
     //zet de veiling in de watchistory van de gebruiker
-    if(isset($_SESSION['gebruiker'])) {
+    if (isset($_SESSION['gebruiker'])) {
         executeQueryNoFetch("INSERT INTO history VALUES(?, ?, GETDATE())", [$veiling->getVeilingId(), $_SESSION['gebruiker']]);
-    } else{
+    } else {
         executeQueryNoFetch("INSERT INTO history VALUES(?, NULL, GETDATE())", [$veiling->getVeilingId()]);
     }
 

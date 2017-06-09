@@ -80,6 +80,12 @@ if (!empty($_GET['action'])) {
         case 'veranderWachtwoord':
             veranderWachtwoord($_POST);
             break;
+        case 'getGebruikersgegevens':
+            gebruikersgegevens($_POST);
+            break;
+        case 'veranderAdminStatus':
+            veranderAdminStatus($_POST);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -821,4 +827,13 @@ function veranderWachtwoord($data) {
     //Stel het nieuwe wachtwoord in
     executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
 }
+
+function gebruikersgegevens($data){
+    stuurTerug(executeQuery("SELECT gebruikersnaam, voornaam, achternaam, geboortedatum, admin FROM gebruikers WHERE gebruikersnaam = ?", [$data["gebruikersnaam"]]));
+}
+
+function veranderAdminStatus($data){
+    executeQueryNoFetch("UPDATE gebruikers SET admin = admin ^ 1 WHERE gebruikersnaam = ?", [$data["gebruikersnaam"]]);
+}
+
 ?>
