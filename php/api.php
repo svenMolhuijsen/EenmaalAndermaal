@@ -106,6 +106,9 @@ function login($params)
                 $_SESSION['gebruiker'] = $gebruikersnaam;
                 $response = ['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd'];
             }
+            else {
+                $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
+            }
         }
         else {
             $response = ['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet'];
@@ -768,7 +771,7 @@ function registreer($userInfo){
 
         //Voer de informatie in
         $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [$userInfo['gebruikersnaam'], $userInfo['wachtwoord'], $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
+            [$userInfo['gebruikersnaam'], password_hash($userInfo['wachtwoord'], PASSWORD_DEFAULT), $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
         if ($registratie['code'] == 2){
             $responseCode = $registratie;
         }
