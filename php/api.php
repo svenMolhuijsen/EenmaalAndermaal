@@ -669,7 +669,7 @@ function voegCategorieToe($categorie)
 //Geef de 6 meest bezochte veilingen
 function trending()
 {
-    stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId IN(SELECT TOP 6 h.veilingId FROM history h, veiling v WHERE v.eindDatum > GETDATE() GROUP BY h.veilingId ORDER BY COUNT(h.veilingId) DESC)"));
+    stuurTerug(executeQuery("SELECT * FROM veiling WHERE veilingId IN(SELECT TOP 6 h.veilingId FROM history h, veiling v WHERE h.veilingId = v.veilingId AND v.eindDatum > GETDATE() AND v.veilingGestopt = 0 GROUP BY h.veilingId ORDER BY COUNT(h.veilingId) DESC)"));
 }
 
 //Verstuur een email

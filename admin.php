@@ -101,10 +101,10 @@ if (isset($_SESSION['gebruiker'])) {
 
 
         <?php
+    } else {
+        include("php/layout/geentoegang.html");
     }
-    include("php/layout/geentoegang.html");
 }
-include("php/layout/geentoegang.html");
 include("php/layout/footer.html");
 
 ?>

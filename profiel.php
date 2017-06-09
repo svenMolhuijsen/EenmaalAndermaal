@@ -7,9 +7,9 @@ error_reporting(E_ERROR | E_PARSE);
 
 $gebruiker = new User($_SESSION['gebruiker']);
 
-$verlopenBiedingen = executeQuery("SELECT * FROM biedingen, veiling WHERE gebruikersnaam = ? AND biedingen.veilingId = veiling.veilingId AND biedingsBedrag NOT IN(SELECT MAX(biedingsBedrag) FROM biedingen WHERE veilingId IN(SELECT DISTINCT veilingId FROM biedingen WHERE gebruikersnaam = ?))", [$gebruiker->getGebruikersnaam()]);
-$lopendeBiedingen = executeQuery("SELECT * from veiling, biedingen where gebruikersnaam = ? and veiling.veilingid = biedingen.veilingid AND veilingId, biedingsBedrag IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen WHERE gebruikersnaam = ? GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
-$gewonnenBiedingen = executeQuery("SELECT * FROM veiling WHERE koperGebruikersnaam = ?", [$gebruiker->getGebruikersnaam()]);
+$verlopenBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND veilingGestopt = 0 AND biedingsBedrag NOT IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
+$lopendeBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND veilingGestopt = 0 AND b.biedingsBedrag IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
+$gewonnenBiedingen = executeQuery("SELECT * from veiling v, biedingen b where gebruikersnaam = ? and v.veilingid = b.veilingid AND veilingGestopt = 1 AND b.biedingsBedrag IN(SELECT MAX(biedingsBedrag) AS 'Hoogste bod' FROM biedingen GROUP BY veilingId)", [$gebruiker->getGebruikersnaam()]);
 
 $openVeilingen = executeQuery("SELECT *  FROM veiling WHERE verkoperGebruikersnaam = ? AND veilingGestopt = 0", [$gebruiker->getGebruikersnaam()]);
 $verlopenVeilingen = executeQuery("SELECT * from veiling where verkoperGebruikersnaam = ? AND veilingGestopt = 1", [$gebruiker->getGebruikersnaam()]);
@@ -18,9 +18,9 @@ function pasteStatus($typeStatus, $soort) {
     if (count($typeStatus['data']) > 0) {
         foreach ($typeStatus['data'] as $status) {
             echo('  
-                <hr>
+                <div class="column"><hr></div>
                 <div class="columns small-3">
-                    <img id="image" src="' . $status["thumbNail"] . '" alt="image">
+                    <img class="miniImage" src="http://iproject34.icasites.nl/' . $status["thumbNail"] . '" alt="image">
                 </div>
 
                 <div class="columns small-5">
@@ -41,8 +41,9 @@ function pasteStatus($typeStatus, $soort) {
             }
             echo('</div>');
         }
+    } else {
+        echo('<div class="column"><hr><p><strong>Niets gevonden</strong></p></div>');
     }
-    echo('<div class="column"><hr><p><strong>Geen biedingen gevonden</strong></p></div>');
 }
 
 if (!isset($_SESSION['gebruiker'])) {

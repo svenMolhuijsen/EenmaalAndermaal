@@ -55,7 +55,7 @@
                             if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
                                 $adminCheck = executeQuery("SELECT TOP 1 admin FROM gebruikers WHERE gebruikersnaam = ?", [$_SESSION['gebruiker']]);
                                 if ($adminCheck['code'] == 0) {
-                                    $adminCheck = $adminCheck['data'][0];
+                                    $adminCheck = $adminCheck['data'][0]['admin'];
                                 }
                                 if ($adminCheck) {
                             ?>
