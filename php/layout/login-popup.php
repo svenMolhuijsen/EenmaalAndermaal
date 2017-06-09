@@ -28,13 +28,13 @@
                     <!-- Voornaam -->
                     <div class="small-6 column">
                         <label class="register-first-name" for="register-first-name">Voornaam</label>
-                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z- ]+">
+                        <input id="register-first-name" name="voornaam" type="text" placeholder="John" pattern="[a-zA-Z-' ]+">
                     </div>
 
                     <!-- Achternaam-->
                     <div class="small-6 column">
                         <label class="register-last-name" for="register-last-name">Achternaam</label>
-                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z- ]+">
+                        <input id="register-last-name" name="achternaam" type="text" placeholder="Doe" pattern="[a-zA-Z-' ]+">
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
                     <!-- Straatnaam -->
                     <div class="small-4 column">
                         <label class="register-streetname" for="register-streetname">Straatnaam</label>
-                        <input id="register-streetname" name="straatnaam" type="text" placeholder="Lindenlaan" pattern="[a-zA-Z- ]+">
+                        <input id="register-streetname" name="straatnaam" type="text" placeholder="Lindenlaan" pattern="[a-zA-Z-' ]+">
                     </div>
 
                     <!-- Huisnummer -->
@@ -100,7 +100,7 @@
                     <!-- Telefoonnummer -->
                     <div class="small-6 column">
                         <label class="register-tel" for="register-tel">Telefoonnr</label>
-                        <input id="register-tel" name="tel" type="text" placeholder="+31012345678" pattern="[\+][0-9()]+">
+                        <input id="register-tel" name="tel" type="text" placeholder="+31012345678" pattern="^\+?[0-9() ]+">
                     </div>
                 </div>
 

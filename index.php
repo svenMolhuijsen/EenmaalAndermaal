@@ -17,7 +17,7 @@ include("php/layout/header.php");
                     <div class="column medium-5 categorieselect" id="blocks">
                     </div>
                     <div class="column medium-2" id="blocks">
-                        <input type="submit" class="button submit" value="submit">
+                        <input type="submit" class="button submit" value="Submit">
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@ include("php/layout/header.php");
     <div class="veilingen row">
         <div class="clearfix">
             <h4 class="float-left" id="trending">Trending</h4>
-            <a href="filterpagina.php" class="button hollow float-right">view more ></a>
+            <a href="filterpagina.php" class="button hollow float-right">View more ></a>
         </div>
         <hr>
         <div class="trendingData small-up-2 medium-up-3 large-up-6 columns-12" data-equalizer>
