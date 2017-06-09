@@ -388,7 +388,7 @@ $("#resetPassword").click(function(){
         success: function(result){
             //Resultaat weergeven
             $resetForm.find(".callout").remove();
-            $resetForm.append("<div class='column callout" + result.resultClass + "'>"+ result.message + "</div>");
+            $resetForm.append("<div class='column callout " + result.resultClass + "'>"+ result.message + "</div>");
         }
     });
 });
