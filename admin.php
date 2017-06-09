@@ -168,7 +168,7 @@ var gebruikerGezocht;
 
     $("#addCategorieToDatabase").click(function () {
         var categorie = {
-            categorieNaam: $('#categorieNaam').val(),
+            categorieNaam: $("#categorieNaam").val(),
             superId: $(".categorien").children().last().prev().find(":selected").val()
         };
 
@@ -185,32 +185,32 @@ var gebruikerGezocht;
 
     //Zoeken van een veiling
     $("#zoekVeiling").click(function () {
-        veilingId = $('#veilingId').val();
+        veilingId = $("#veilingId").val();
                
         var veiling = {
             veilingId: veilingId
         };
 
         $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=getVeilingInfo',
+            type: "POST",
+            url: "php/api.php?action=getVeilingInfo",
             data: veiling,
-            dataType: 'json',
+            dataType: "json",
             success: function(result){
                 veiling = result.data[0];
 
                 //Reset het veld waar de veiling hoort
-                $('#veilingInfo').empty();
-                $('#veilingDatum').empty();
-                $('#knoppen').empty();
+                $("#veilingInfo").empty();
+                $("#veilingDatum").empty();
+                $("#knoppen").empty();
 
                 //Zet de nieuwe info neer
-                $('#veilingInfo').append("<div>  <h1>"+veiling.titel+"</h1>"+
+                $("#veilingInfo").append("<div>  <h1>"+veiling.titel+"</h1>"+
                                                 "<h5>"+veiling.verkoperGebruikersnaam+"</h5></div>"+
                                         "<div><img src='http://iproject34.icasites.nl/"+veiling.thumbNail+"' alt='img'></div>"+
                                         "<div><h4>Beschrijving:</h4><p>"+veiling.beschrijving+"</p></div>");
-                $('#veilingDatum').append("<div><h4>Veiling eindigd op:</h4><span>"+veiling.eindDatum+"</span></div>");
-                $('#knoppen').append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>"+
+                $("#veilingDatum").append("<div><h4>Veiling eindigd op:</h4><span id='eindDatum'>"+veiling.eindDatum+"</span></div>");
+                $("#knoppen").append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>"+
                                     (veiling.veilingGestopt == false ? "<button class='button warning' id='beindigd' onclick='beindig()'>Beïndigen</button>": "")+
                                     "<button class='button alert' data-open='verwijderVeiling'>Verwijderen</button");
             }
@@ -223,19 +223,20 @@ var gebruikerGezocht;
             veilingId: veilingId
         };
         $.ajax({
-                type: 'POST',
-                url: 'php/api.php?action=beindigveiling',
+                type: "POST",
+                url: "php/api.php?action=beindigveiling",
                 data: veiling,
-                dataType: 'json',
+                dataType: "json",
                 complete: function(){
-                    alert('Veiling beïndigen geslaagd!');
+                    alert("Veiling beïndigen geslaagd!");
                 }
             });
-            $('#beindigd').remove();
+            $("#beindigd").remove();
+            $("#eindDatum").html("EXPIRED");
     }
 
     //Verwijder een veiling
-    $('#verwijder').click(function(){
+    $("#verwijder").click(function(){
         var veiling = {
             veilingId: veilingId
         };
@@ -250,14 +251,14 @@ var gebruikerGezocht;
         });
 
         //Haal de informatie van de veiling weg
-        $('#verwijderVeiling').foundation('close');
-        $('#veilingInfo').empty();
-        $('#veilingDatum').empty();
-        $('#knoppen').empty();
+        $("#verwijderVeiling").foundation('close');
+        $("#veilingInfo").empty();
+        $("#veilingDatum").empty();
+        $("#knoppen").empty();
     });
 
     //Verplaats een veiling
-    $('#verplaats').click(function(){
+    $("#verplaats").click(function(){
         var veiling = {
             veilingId: veilingId,
             categorieId: $('#categorieTwee').children().last().prev().find(":selected").val()
@@ -276,7 +277,7 @@ var gebruikerGezocht;
     });
 
     //Sluit alle veilingen
-    $('#sluitVeilingen').click(function(){
+    $("#sluitVeilingen").click(function(){
         $.ajax({
             type: 'POST',
             url: 'php/api.php?action=sluitVeilingen',

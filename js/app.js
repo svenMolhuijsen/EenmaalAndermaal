@@ -78,7 +78,7 @@ function createCountdown($target, countDownDate) {
         var distance = new Date(countDownDate).getTime() - now;
         // If the count down is over, write some text
         if (distance < 0) {
-            clearInterval(x);
+            //clearInterval(0);
             $target.text("VERLOPEN");
             $target.text("");
         } else {
