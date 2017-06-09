@@ -11,6 +11,8 @@ if (isset($_SESSION['gebruiker'])) {
                 <li class="tabs-title is-active"><a href="#overzicht">overzicht</a></li>
                 <li class="tabs-title"><a href="#categorie">Categorie toevoegen</a></li>
                 <li class="tabs-title"><a href="#veiling">Veiling</a></li>
+                <li class="tabs-title"><a href="#sluitVeilingen">Sluit veilingen</a></li>
+                <li class="tabs-title"><a href="#adminRechten">Wijzig admin</a></li>
             </ul>
 
             <div class="tabs-content" data-tabs-content="admintabs" data-active-collapse="true">
@@ -62,8 +64,23 @@ if (isset($_SESSION['gebruiker'])) {
 
                 <div class="tabs-panel" id="sluitVeilingen">
                     <button class="button secondary">Sluit Veilingen</button>
-                </div>
-            </div>
+                </div><!--sluitVeilngen-->
+
+                <div class="tabs-panel" id="adminRechten">
+                    <div class="column row">
+                        <div class="input-group">
+                            <input type="text" class="input-group-field" placeholder="Username" id="username">
+                            <div class="input-group-button">
+                                <button id="zoekUser" class="button">Zoek</button>
+                            </div><!--input group button-->
+                        </div><!--input-group-->
+                    </div><!--column row-->
+                    <div class="column row">
+                        <div class="columns small-8" id="gebruikersInfo"></div>
+                        <div class="columns small-4" id="adminKnoppen"></div>
+                    </div><!--column row-->
+                </div><!--adminRechten-->
+            </div><!--admintabs-->
         </main>
 
 
@@ -77,26 +94,82 @@ include("php/layout/footer.html");
 ?>
 <script>
 var veilingId;
+var gebruikerGezocht;
 
-    $('#addCategorieToDatabase').click(function () {
-        var categorie = {
-            categorieNaam: $('#categorieNaam').val(),
-            superId: $('.categorien').children().last().prev().find(":selected").val()
+    function gebruikersGegevens(){
+        username = '<?php echo($_SESSION["gebruiker"]) ?>';
+        console.log(username);
+        gebruikerGezocht = $("#username").val();
+
+        var gebruiker = {
+            gebruikersnaam: $("#username").val()
         };
 
         $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=addCategorieToDatabase',
-            data: categorie,
-            dataType: 'json',
+            type: "POST",
+            url: "php/api.php?action=getGebruikersgegevens",
+            data: gebruiker,
+            dataType: "JSON",
+            success: function(result){
+                gebruiker = result.data[0];
+                console.log(gebruiker);
+                $("#gebruikersInfo").empty();
+                $("#adminKnoppen").empty();
+                $("#gebruikersInfo").append("<div>  <h1>"+gebruiker.gebruikersnaam+"</h1>"+
+                                                    "<h5>"+gebruiker.voornaam+" "+gebruiker.achternaam+"</h5></div>"+
+                                            "<div>  <p>"+gebruiker.geboortedatum+"</p></div>");
+                if(gebruiker.gebruikersnaam != username){
+                    if(gebruiker.admin == 1){
+                        console.log(gebruiker.admin);
+                        $("#adminKnoppen").append("<button class='button warning' onclick='admin()'>Verwijder als admin</button>");
+                    } else{
+                        $("#adminKnoppen").append("<button class='button warning' onclick='admin()'>Voeg toe als admin</button>");
+                    }
+                }
+                
+            }
+        });
+    }
+
+    $("#zoekUser").click(function () {
+        gebruikersGegevens();
+    });
+    function admin(){
+        var gebruiker = {
+            gebruikersnaam: gebruikerGezocht
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "php/api.php?action=veranderAdminStatus",
+            data: gebruiker,
+            dataType: "JSON",
             complete: function(){
-                alert('Categorie toevoegen geslaagd!');
+                gebruikersGegevens();
+            }
+        });
+    }
+
+    $("#addCategorieToDatabase").click(function () {
+        var categorie = {
+            categorieNaam: $('#categorieNaam').val(),
+            superId: $(".categorien").children().last().prev().find(":selected").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "php/api.php?action=addCategorieToDatabase",
+            data: categorie,
+            dataType: "json",
+            complete: function(){
+                alert("Categorie toevoegen geslaagd!");
             }
         });
     });
 
     $("#zoekVeiling").click(function () {
         veilingId = $('#veilingId').val();
+               
         var veiling = {
             veilingId: veilingId
         };
