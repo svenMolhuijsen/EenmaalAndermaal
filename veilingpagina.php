@@ -4,11 +4,13 @@ include("php/core.php");
 $veilingId = $_GET["veilingId"];
 
 if (!empty($veilingId)){
+
     //laad veiling info
     $veiling = Veiling::existingVeiling($veilingId);
 
 //check om te kijken of er een veiling is gevonden
 if ($veiling->getCode() == 0){
+    //haal de info van de verkoper op
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
 
     //boden laden
@@ -160,7 +162,8 @@ if ($veiling->getCode() == 0){
     </div>
 </div>
 <?php
-}}
+}
+}
 include("php/layout/footer.html");
 ?>
 <script>

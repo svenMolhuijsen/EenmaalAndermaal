@@ -624,9 +624,6 @@ function pasgegevensaan($gegevens, $gebruikersnaam) {
     if (!empty($gegevens['NEWtelefoonnummer'])) {
         executeQueryNoFetch("UPDATE gebruikers SET telefoonnmr = ? WHERE gebruikersnaam = ?", [$gegevens['NEWtelefoonnummer'], $gebruikersnaam]);
     }
-    if (!empty($gegevens['NEWadmin'])) {
-        executeQueryNoFetch("UPDATE gebruikers SET admin = ? WHERE gebruikersnaam = ?", [$gegevens['NEWadmin'], $gebruikersnaam]);
-    }
 }
 
 //Maak een nieuwe categorie aan
