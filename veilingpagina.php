@@ -119,6 +119,7 @@ if ($veiling->getCode() == 0){
                     ?>
                 </label>
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
+                <label class="is-invalid-label veilingError" id="verkoperError">U mag niet op uw eigen veiling bieden.</label>
             <?php } else { ?>
                 <!-- login check -->
                 <p class="callout warning" style="margin: 1% 0;">U bent niet ingelogd, log in om te bieden.</p>
@@ -250,6 +251,7 @@ $(document).ready(function(){
 
     $biedenError = $('#biedenError');
     $bedragError = $('#bedragError');
+    $verkoperError = $('#verkoperError');
 
     //Check het hoogste bod telkens wanneer er een bod wordt gemaakt
     $biedenKnop.on('click', function(){
@@ -294,37 +296,39 @@ $(document).ready(function(){
         //Geef de huidige tijd mee
         var now = new Date($.now());
         var biedingsTijd = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds();
-
         //Alle informatie van het bod
         var bod = { veilingId: veiling["veilingId"], gebruikersnaam: gebruiker,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
-
         //Kijk of de gebruiker niet al het hoogste bod heeft
         if(hoogsteBod.code == 1 || bod['gebruikersnaam'] != hoogsteBod.data[0]["gebruikersnaam"]) {
-            $biedenError.hide();
+            if(bod['gebruikersnaam'] != veiling['verkoperGebruikersnaam']) {
+                $biedenError.hide();
+                $verkoperError.hide();
 
-            //Kijk of het bod hoger is dan de biedrempel
-            if (bod.biedingsBedrag > biedDrempel) {
+                //Kijk of het bod hoger is dan de biedrempel
+                if (bod.biedingsBedrag > biedDrempel) {
 
-                //Bied
-                $.post("php/api.php?action=bieden", bod);
+                    //Bied
+                    $.post("php/api.php?action=bieden", bod);
 
-                //Update het nieuwe hoogste bod
-                hoogsteBod = bod;
-                //Update de bied-drempel
-                biedDrempel = Number(hoogsteBod.biedingsBedrag) + bepaalBiedStap(hoogsteBod.biedingsBedrag);
+                    //Update het nieuwe hoogste bod
+                    hoogsteBod = bod;
+                    //Update de bied-drempel
+                    biedDrempel = Number(hoogsteBod.biedingsBedrag) + bepaalBiedStap(hoogsteBod.biedingsBedrag);
 
-                var dateString = ("0"+(now.getDate().toString())).slice(-2)+'-'+("0"+(now.getMonth()+1)).toString().slice(-2)+'-'+now.getFullYear().toString().substring(2);
-                $biedingen.prepend('<tr><td>'+bod.gebruikersnaam+'</td><td>€'+bod.biedingsBedrag+'</td><td>'+dateString+'</td></tr>');
-                $bedragError.html('U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €' + biedDrempel);
-                $bedragError.hide();
-                $bedrag.removeClass('is-invalid-input');
-            }
-            else {
-                $bedragError.show();
+                    var dateString = ("0" + (now.getDate().toString())).slice(-2) + '-' + ("0" + (now.getMonth() + 1)).toString().slice(-2) + '-' + now.getFullYear().toString().substring(2);
+                    $biedingen.prepend('<tr><td>' + bod.gebruikersnaam + '</td><td>€' + bod.biedingsBedrag + '</td><td>' + dateString + '</td></tr>');
+                    $bedragError.html('U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €' + biedDrempel);
+                    $bedragError.hide();
+                    $bedrag.removeClass('is-invalid-input');
+                } else {
+                    $bedragError.show();
+                    $bedrag.addClass('is-invalid-input');
+                }
+            } else {
+                $verkoperError.show();
                 $bedrag.addClass('is-invalid-input');
             }
-        }
-        else{
+        } else{
             $biedenError.show();
         }
     }
