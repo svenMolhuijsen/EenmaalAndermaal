@@ -29,7 +29,7 @@ main {
       box-shadow: none;
       &:focus {
         box-shadow: none;
-        background-color: lighten($secondary-light, 15%) !important;
+        background-color: lighten($secondary-light, 10%) !important;
         border-bottom: 3px solid $primary !important;
       }
     }
