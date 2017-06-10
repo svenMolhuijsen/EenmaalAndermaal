@@ -35,7 +35,7 @@ function executeQueryNoFetch($query, $data = []){
         $stmt->execute($data);
         return ['status' => 'success', 'query' => $query, 'code' => 0, 'affected' => $stmt->rowCount()];
     } catch (PDOException $e) {
-        return ['status' => 'error', 'code' => 2, 'message' => "Er ging iets fout bij uitvoeren van query: " . $query . " data: " . var_dump($data) . " " . $e->getMessage()];
+        return ['status' => 'error', 'code' => 2, 'message' => "Er ging iets fout bij uitvoeren van query: " . $query . " data: " . json_encode($data) . " " . $e->getMessage()];
     }
 }
 ?>
