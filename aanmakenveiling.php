@@ -25,12 +25,12 @@ if (!isset($_SESSION['gebruiker'])) {
 
                         <!-- Prijs -->
                         <h4><strong>Prijs</strong></h4>
-                        <input id="prijs" maxlength="18" name="startprijs" type="number" placeholder="Prijs" pattern="[0-9]+"
+                        <input id="prijs" maxlength="18" name="startprijs" pattern="^[1-9]+\.\d{2}$" type="text" placeholder="Prijs"
                                required/>
 
                         <!-- Einddatum -->
                         <h4><strong>Einddatum</strong></h4>
-                        <input id="einddatum" name="einddatum" type="date" placeholder="Einddatum" required/>
+                        <input id="einddatum" name="einddatum" type="date" max="31-12-2099" placeholder="Einddatum" required/>
 
                         <!-- Conditie -->
                         <h4><strong>Conditie</strong></h4>
