@@ -78,7 +78,6 @@ function createCountdown($target, countDownDate) {
         // Get todays date and time
         var now = new Date().getTime();
         var then = new Date(countDownDate).getTime();
-        console.log(then, now)
         // Find the distance between now an the count down date
         var distance = then - now;
         // If the count down is over, write some text

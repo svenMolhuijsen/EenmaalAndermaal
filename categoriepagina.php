@@ -22,7 +22,8 @@ include("php/layout/breadcrumbs.php");
     </div>
 </div>
 <hr>
-<div class="veilingen row">
+
+<div class="veilingen categorien row">
     <!-- Trending veilingen -->
     <div class="clearfix">
         <h4 class="float-left" id="trending">Trending</h4>
