@@ -33,7 +33,7 @@
             <!-- Logo -->
             <li class="hide-for-small-only"><a href="/"><img src="img/logo/logo.svg" alt="" class="brand-logo"></a></li>
             <!-- Link naar categoriepagina -->
-            <li><a href="categoriepagina.php">Bekijk Categorieën</a></li>
+            <li class="hide-for-small-only"><a href="categoriepagina.php">Bekijk Categorieën</a></li>
         </ul>
     </div>
     <!-- Rechter menu -->
@@ -49,7 +49,7 @@
                 <ul class="account dropdown vertical medium-horizontal menu" data-dropdown-menu>
                     <li>
                         <a href="#"><span class="fi-torso"></a>
-                        <ul class="menu">
+                        <ul class="menu noBorder">
                             <?php
                             //Pagina's worden afgeschermd en getoond voor de juiste soort gebruikers
                             if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {

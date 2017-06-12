@@ -19,6 +19,9 @@ main {
       display: inline-block;
       float: left;
     }
+    .noBorder {
+      border: 0;
+    }
     input, select, input::-webkit-input-placeholder {
       color: darken($secondary-light, 20%);
       height: $topbar-height !important;
@@ -55,4 +58,14 @@ main {
 
     }
   }
+}
+
+#trending {
+  display: block;
+  margin: auto 0;
+}
+
+#trendingButton {
+  display: block;
+  margin: auto 0;
 }

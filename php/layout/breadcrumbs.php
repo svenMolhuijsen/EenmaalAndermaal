@@ -1,5 +1,5 @@
-<div class="column row">
-    <ul class="titel breadcrumbs">
+<div class="column row hide-for-small-only">
+    <ul class="breadcrumbs">
         <li><a href="/">Home</a></li>
         <li><a href="#"><?php echo($pagename) ?></a></li>
     </ul>

@@ -20,7 +20,7 @@ function pasteStatus($typeStatus, $soort) {
             echo('  
                 <div class="column"><hr></div>
                 <div class="columns small-3">
-                    <img class="miniImage" src="http://iproject34.icasites.nl/' . $status["thumbNail"] . '" alt="image">
+                    <img src="http://iproject34.icasites.nl/' . $status["thumbNail"] . '" alt="image">
                 </div>
 
                 <div class="columns small-5">

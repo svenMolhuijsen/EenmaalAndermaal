@@ -232,6 +232,7 @@ if (!isset($_SESSION['gebruiker'])) {
                             case 'success':
                                 $imageUploader.removeClass('is-invalid-input');
                                 alert(result.message);
+                                window.location.replace("/");
                                 break;
                             case 'error':
                                 alert(result.message);

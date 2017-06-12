@@ -5,7 +5,7 @@ include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 ?>
 
-<hr>
+<hr class="hide-for-small-only">
 <div class="large-8 row categoriepagina">
     <div class="side-nav-block medium-3 large-3 columns">
         <!-- Hoofdcategoriën -->
@@ -21,12 +21,11 @@ include("php/layout/breadcrumbs.php");
         </div>
     </div>
 </div>
-<hr>
 <div class="veilingen row">
     <!-- Trending veilingen -->
     <div class="clearfix">
         <h4 class="float-left" id="trending">Trending</h4>
-        <a href="filterpagina.php" class="button hollow float-right">view more ></a>
+        <a id="trendingButton" href="filterpagina.php" class="button hollow float-right">view more ></a>
     </div>
     <hr>
     <div class="trendingData small-up-2 medium-up-3 large-up-6 columns-12">
