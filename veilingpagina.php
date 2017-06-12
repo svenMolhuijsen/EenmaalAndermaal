@@ -174,6 +174,8 @@ $(document).ready(function(){
     ////////////////////////////////////////
     var eindDatum = "<?php echo($veiling->getEindDatum())?>";
     // Set the date we're counting down to
+    eindDatum = eindDatum.split(".")[0];
+
     var countDownDate = new Date(eindDatum).getTime();
 
     // Update the count down every 1 second

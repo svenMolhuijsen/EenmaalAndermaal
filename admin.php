@@ -172,10 +172,10 @@ include("php/layout/footer.html");
             data: categorie,
             dataType: "json",
             complete: function (result) {
-                console.log(result);
-                if (result.code == 0) {
+                console.log(result.response);
+                if (result.response.code == 0) {
                     alert("Categorie toevoegen geslaagd!");
-                } else if (result.code == 2) {
+                } else if (result.response.code == 2) {
                     alert("Categorie toevoegen niet mogelijk, er bestaat al een categorie met dezelfde naam");
                 } else {
                     alert("Categorie toevoegen niet mogelijk, database fout");

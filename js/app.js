@@ -71,11 +71,14 @@ function pad(n, width, z) {
 //Maakt een timer aan
 function createCountdown($target, countDownDate) {
     setInterval(function () {
+        countDownDate = countDownDate.split(".")[0];
         var oldPosition = $(document).scrollTop();
         // Get todays date and time
         var now = new Date().getTime();
+        var then = new Date(countDownDate).getTime();
+        console.log(then, now)
         // Find the distance between now an the count down date
-        var distance = new Date(countDownDate).getTime() - now;
+        var distance = then - now;
         // If the count down is over, write some text
         if (distance < 0) {
             //clearInterval(0);
