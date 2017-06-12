@@ -59,6 +59,7 @@ if (!isset($_SESSION['gebruiker'])) {
 
         <div class="tabs-content" data-tabs-content="profieltabs" data-active-collapse="true">
             <div class="tabs-panel" id="overzicht">
+                <form id="profielForm">
                 <div class="row small-up-1 large-up-2">
                     <div class="columns small-6">
                         <fieldset class="fieldset">
@@ -72,8 +73,8 @@ if (!isset($_SESSION['gebruiker'])) {
                             <p id="wachtwoord"><strong>Wachtwoord: </strong>********</p>
 
                             <div class="field editInlogGegevens">
-                                <input id="oudWachtwoord" type="password"  maxlength="255" placeholder="Old Password">
-                                <input id="editWachtwoord" maxlength="255" type="text" placeholder="New Password">
+                                <input id="oudWachtwoord" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" maxlength="255" placeholder="Old Password">
+                                <input id="editWachtwoord" maxlength="255" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" type="text" placeholder="New Password">
                             </div>
                         </fieldset>
                     </div>
@@ -95,7 +96,8 @@ if (!isset($_SESSION['gebruiker'])) {
 
                             <button id="showAdres" type="button" class="button tiny hollow">Edit</button>
 
-                            <?php echo('<p id="Provincie"><strong>Provincie: </strong>' . $gebruiker->getProvincie() . '</p>');
+                            <?php
+                            echo('<p id="Provincie"><strong>Provincie: </strong>' . $gebruiker->getProvincie() . '</p>');
                             echo('<p id="Plaats"><strong>Plaats: </strong>' . $gebruiker->getPlaatsnaam() . '</p>');
                             echo('<p id="Straat"><strong>Straat: </strong>' . $gebruiker->getStraatnaam() . '</p>');
                             echo('<p id="Huisnummer"><strong>Huisnummer: </strong>' . $gebruiker->getHuisnummer() . '</p>');
@@ -103,16 +105,11 @@ if (!isset($_SESSION['gebruiker'])) {
                             ?>
 
                             <div class="field editAdres">
-                                <input rel="Provincie" maxlength="255" id="editProvincie" type="text" placeholder="Provincie"
-                                       pattern="[A-Za-z-]+">
-                                <input rel="Plaats" maxlength="255" id="editPlaats" type="text" placeholder="Plaats"
-                                       pattern="[A-Za-z- ]+">
-                                <input rel="Straat" maxlength="255" id="editStraat" type="text" placeholder="Straat"
-                                       pattern="[A-Za-z- ]+">
-                                <input rel="Huisnummer" maxlength="20" id="editHuisnummer" type="text" placeholder="Huisnummer"
-                                       pattern="[0-9a-z]+">
-                                <input rel="Postcode" id="editPostcode" maxlength="10" type="text" placeholder="Postcode"
-                                       pattern="[0-9a-zA-Z ]+">
+                                <input rel="Provincie" maxlength="255" id="editProvincie" type="text" placeholder="Provincie" pattern="[A-Za-z-' ]+">
+                                <input rel="Plaats" maxlength="255" id="editPlaats" type="text" placeholder="Plaats" pattern="[a-zA-Z-' ]+">
+                                <input rel="Straat" maxlength="255" id="editStraat" type="text" placeholder="Straat" pattern="[A-Za-z-' ]+">
+                                <input rel="Huisnummer" maxlength="20" id="editHuisnummer" type="text" placeholder="Huisnummer" pattern="[0-9a-z]+">
+                                <input rel="Postcode" id="editPostcode" maxlength="10" type="text" placeholder="Postcode" pattern="^[1-9][0-9]*[a-zA-Z]?">
                             </div>
                         </fieldset>
                     </div>
@@ -126,12 +123,13 @@ if (!isset($_SESSION['gebruiker'])) {
                             <?php echo('<p id="Telefoonnummer"><strong>Telefoonnummer: </strong>' . $gebruiker->getTelefoonnmr() . '</p>'); ?>
 
                             <input rel="Telefoonnummer" maxlength="20" class="field editContactgegevens" id="editTelefoonnummer"
-                                   type="text" placeholder="Telefoonnmr">
+                                   type="text" placeholder="Telefoonnmr" pattern="^\+?[0-9() ]+">
                         </fieldset>
                     </div>
                 </div>
                 <hr>
-                <button type="button" id="submitChanges" class="button large">Submit Changes</button>
+                <input type="submit" id="submitChanges" value="Sumbit" class="button large">
+                </form>
             </div>
 
             <div class="tabs-panel" id="biedingen">
@@ -179,44 +177,61 @@ if (!isset($_SESSION['gebruiker'])) {
 include("php/layout/footer.html");
 ?>
 <script>
-    $('#showInlogGegevens').click(function () {
-        $('.editInlogGegevens').toggle(300);
-    });
-    $('#showAdres').click(function () {
-        $('.editAdres').toggle(300);
-    });
-    $('#showContactgegevens').click(function () {
-        $('.editContactgegevens').toggle(300);
-    });
-
-    $('#submitChanges').click(function () {
-        var userInfo = {
-            OLDpassword: $('#oudWachtwoord').val(),
-            NEWpassword: $('#editWachtwoord').val(),
-            NEWprovincie: $('#editProvincie').val(),
-            NEWplaats: $('#editPlaats').val(),
-            NEWstraat: $('#editStraat').val(),
-            NEWhuisnummer: $('#editHuisnummer').val(),
-            NEWtelefoonnummer: $('#editTelefoonnummer').val(),
-            NEWpostcode: $('#editPostcode').val(),
+    $(document).ready(function() {
+        var errorCSS = {
+            "font-size": "70%",
+            "margin-bottom": "0",
+            "bottom": "0",
+            "right": "0"
         };
 
-        console.log(userInfo);
-        $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=AanpassenGegevens',
-            data: userInfo,
-            success: function(){
-                alert("Je gegevens zijn succesvol verandert");
-
-                $.each($('#overzicht').find('input'), function(){
-                    if($(this).val() != "") {
-                        $('#overzicht').find('p[id="' + $(this).attr('rel') + '"]').html('<p><strong>'+$(this).attr('rel')+': </strong>' + $(this).val() + '</p>');
-
-                    }
-                });
+        $('#profielForm').validate({
+            submitHandler: function(){submitChanges()},
+            errorPlacement: function(error, element) {
+                error.insertBefore(element);
+                error.addClass("hide-for-small show-for-large");
+                error.css(errorCSS);
             }
         });
+
+        $('#showInlogGegevens').click(function () {
+            $('.editInlogGegevens').toggle(300);
+        });
+        $('#showAdres').click(function () {
+            $('.editAdres').toggle(300);
+        });
+        $('#showContactgegevens').click(function () {
+            $('.editContactgegevens').toggle(300);
+        });
+
+        function submitChanges() {
+            var userInfo = {
+                OLDpassword: $('#oudWachtwoord').val(),
+                NEWpassword: $('#editWachtwoord').val(),
+                NEWprovincie: $('#editProvincie').val(),
+                NEWplaats: $('#editPlaats').val(),
+                NEWstraat: $('#editStraat').val(),
+                NEWhuisnummer: $('#editHuisnummer').val(),
+                NEWtelefoonnummer: $('#editTelefoonnummer').val(),
+                NEWpostcode: $('#editPostcode').val(),
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'php/api.php?action=AanpassenGegevens',
+                data: userInfo,
+                success: function () {
+                    alert("Je gegevens zijn succesvol verandert");
+
+                    $.each($('#overzicht').find('input'), function () {
+                        if ($(this).val() != "") {
+                            $('#overzicht').find('p[id="' + $(this).attr('rel') + '"]').html('<p><strong>' + $(this).attr('rel') + ': </strong>' + $(this).val() + '</p>');
+
+                        }
+                    });
+                }
+            });
+        }
     });
 </script>
 </body>

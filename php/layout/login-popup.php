@@ -85,7 +85,7 @@
                     <!-- Provincie -->
                     <div class="small-6 column">
                         <label class="register-province" for="register-province">Provincie</label>
-                        <input id="register-province" name="provincie" type="text" placeholder="Noord-Brabant" maxlength="255" pattern="[a-zA-Z-]+">
+                        <input id="register-province" name="provincie" type="text" placeholder="Noord-Brabant" maxlength="255" pattern="[a-zA-Z-' ]+">
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
                     <!-- Plaatsnaam -->
                     <div class="small-6 column">
                         <label class="register-city" for="register-city">Plaatsnaam</label>
-                        <input id="register-city" name="plaats" type="text" placeholder="Deurne" maxlength="255" pattern="[a-zA-Z- ]+">
+                        <input id="register-city" name="plaats" type="text" placeholder="Deurne" maxlength="255" pattern="[a-zA-Z-' ]+">
                     </div>
 
                     <!-- Telefoonnummer -->
