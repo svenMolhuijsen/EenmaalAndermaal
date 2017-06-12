@@ -1,64 +1,64 @@
+.home {
+  .banner {
+    background: url("../img/banner.jpg");
+    background-size: cover;
+    background-position: center;
+    .row {
+      margin-top: 0;
+    }
 
-.banner {
-  background: url("../img/banner.jpg");
-  background-size: cover;
-  background-position: center;
-  .row {
-    margin-top: 0;
+    .inner {
+      padding-top: 4em;
+      padding-bottom: 4em;
+
+      .background {
+        padding: 5px;
+        margin-bottom: 200px;
+
+        @include breakpoint(small down) {
+          background: rgba(255, 255, 255, .7);
+          border-radius: 0 15px 15px 0;
+          padding: 10px;
+        }
+        .row {
+          padding: 10px
+        }
+      ;
+      }
+      h3 {
+        font-weight: 300;
+        span {
+          color: $primary;
+          font-weight: 400;
+        }
+      }
+      input, select {
+        margin: 0;
+        border: none;
+      }
+    }
   }
 
-  .inner {
+  #indexSearch {
     padding-top: 4em;
-    padding-bottom: 4em;
 
-    .background {
-      padding: 5px;
-      margin-bottom: 200px;
-
-      @include breakpoint(small down) {
-        background: rgba(255, 255, 255, .7);
-        border-radius: 0 15px 15px 0;
-        padding: 10px;
-      }
-      .row {
-        padding: 10px
-      }
-    ;
-    }
-    h3 {
-      font-weight: 300;
-      span {
-        color: $primary;
-        font-weight: 400;
-      }
-    }
-    input, select {
-      margin: 0;
-      border: none;
-    }
-  }
-}
-
-#indexSearch {
-  padding-top: 4em;
-
-}
-
-div#blocks {
-  padding: 0;
-}
-
-#trending {
-  font-weight: 500;
-}
-
-.veilingen {
-  .trendingData {
-    @import 'components/veiling';
   }
 
-  //position: relative;
+  div#blocks {
+    padding: 0;
+  }
+
+  #trending {
+    font-weight: 500;
+  }
+
+  .veilingen {
+    .trendingData {
+      @import 'components/veiling';
+    }
+
   top: -100px;
   background: white;
   padding: 30px;
+}
 }

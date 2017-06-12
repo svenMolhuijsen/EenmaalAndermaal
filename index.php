@@ -5,7 +5,7 @@ $pagename = "home";
 include("php/core.php");
 include("php/layout/header.php");
 ?>
-<main>
+<main class="home">
     <div class="banner">
         <div class="inner row">
             <div class="background collumn small-8 medium-4 large-6">

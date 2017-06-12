@@ -3,58 +3,65 @@ include("core.php");
 //wanneer api call wordt gedaan
 if (!empty($_GET['action'])) {
     $action = $_GET['action'];
+
+    $data = [];
+
+    foreach ($_POST as $key => $value) {
+        $data[$key] = htmlspecialchars(strip_tags($value));
+    }
+
     switch ($action) {
         // Inloggen
         case 'login':
-            login($_POST);
+            login($data);
             break;
         // Uitloggen
         case 'logout':
             logout();
             break;
         case 'getNumRows':
-            getNumRows($_POST);
+            getNumRows($data);
             break;
 
         case 'getCategories' :
 
             $hoofdCategory = null;
-            $hoofdCategory = trim($_POST['hoofdCategory']);
+            $hoofdCategory = trim($data['hoofdCategory']);
             $params = array(
                 'hoofdCategory' => $hoofdCategory
             );
             getSubCategories($params);
             break;
         case 'search':
-            search($_POST);
+            search($data);
             break;
         case'getParentCategories':
-            $category = trim($_POST['category']);
+            $category = trim($data['category']);
             getParentCategories($category);
             break;
         case 'bieden':
-            bieden($_POST, $_SESSION['gebruiker']);
+            bieden($data, $_SESSION['gebruiker']);
             break;
         case 'biedingCheck':
-            getHoogsteBod($_POST);
+            getHoogsteBod($data);
             break;
         case 'getVeilingInfo':
-            getVeilingInfo($_POST);
+            getVeilingInfo($data);
             break;
         case 'getBiedingInfo':
-            getBiedingInfo($_POST, $_SESSION['gebruiker']);
+            getBiedingInfo($data, $_SESSION['gebruiker']);
             break;
         case 'sluitVeiling':
-            sluitVeiling($_POST);
+            sluitVeiling($data);
             break;
         case 'MaakVeilingAan':
             checkFiles($_FILES);
             break;
         case 'addCategorieToDatabase':
-            nieuweCategorieToevoegen($_POST);
+            nieuweCategorieToevoegen($data);
             break;
         case 'AanpassenGegevens':
-            pasgegevensaan($_POST, $_SESSION['gebruiker']);
+            pasgegevensaan($data, $_SESSION['gebruiker']);
             break;
         case 'trending':
             trending();
@@ -63,28 +70,28 @@ if (!empty($_GET['action'])) {
             sluitVeilingen();
             break;
         case 'beindigveiling':
-            beindigveiling($_POST);
+            beindigveiling($data);
             break;
         case 'verwijderVeiling':
-            verwijderVeiling($_POST);
+            verwijderVeiling($data);
             break;
         case 'verplaatsVeiling':
-            verplaatsVeiling($_POST);
+            verplaatsVeiling($data);
             break;
         case 'registreer':
-            registreer($_POST);
+            registreer($data);
             break;
         case 'resetWachtwoord':
-            resetWachtwoord($_POST);
+            resetWachtwoord($data);
             break;
         case 'veranderWachtwoord':
-            veranderWachtwoord($_POST);
+            veranderWachtwoord($data);
             break;
         case 'getGebruikersgegevens':
-            gebruikersgegevens($_POST);
+            gebruikersgegevens($data);
             break;
         case 'veranderAdminStatus':
-            veranderAdminStatus($_POST);
+            veranderAdminStatus($data);
             break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
@@ -495,7 +502,7 @@ function checkFiles($files)
 
     //Ga door met het aanmaken van de veiling, mits het valideren goed is gegaan
     if ($uploadOk) {
-        $response = aanmakenveiling($_POST, $_SESSION['gebruiker']);
+        $response = aanmakenveiling($data, $_SESSION['gebruiker']);
     } else {
         $response = array('status' => 'userError', 'feedback' => $feedbacks);
     }
