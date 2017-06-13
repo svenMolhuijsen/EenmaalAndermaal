@@ -128,7 +128,7 @@ if (!isset($_SESSION['gebruiker'])) {
                     </div>
                 </div>
                 <hr>
-                <input type="submit" id="submitChanges" value="Sumbit" class="button large">
+                <input type="submit" id="submitChanges" value="Submit" class="button large">
                 </form>
             </div>
 
