@@ -230,8 +230,8 @@ $(document).ready(function(){
         type: 'post',
         dataType: 'json',
         success: function(result) {
-            gebruiker = result.gebruiker;
-            veiling = result.veiling.data[0];
+            gebruiker = result.data.gebruiker;
+            veiling = result.data.veiling.data[0];
         }
     });
 
