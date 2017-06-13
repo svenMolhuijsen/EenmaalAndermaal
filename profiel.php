@@ -74,7 +74,7 @@ if (!isset($_SESSION['gebruiker'])) {
 
                             <div class="field editInlogGegevens">
                                 <input id="oudWachtwoord" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" maxlength="255" placeholder="Old Password">
-                                <input id="editWachtwoord" maxlength="255" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" type="text" placeholder="New Password">
+                                <input id="editWachtwoord" maxlength="255" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" type="password" placeholder="New Password">
                             </div>
                         </fieldset>
                     </div>
@@ -218,7 +218,7 @@ include("php/layout/footer.html");
 
             $.ajax({
                 type: 'POST',
-                url: 'php/securedApi.php?action=AanpassenGegevens',
+                url: 'php/securedApi.php?action=aanpassenGegevens',
                 data: userInfo,
                 success: function () {
                     alert("Je gegevens zijn succesvol verandert");
