@@ -175,7 +175,7 @@ function checkFiles($data, $files)
     if ($uploadOk) {
         $response = aanmakenveiling($data, $_SESSION['gebruiker']);
     } else {
-        $response = array('status' => 'userError', 'feedback' => $feedbacks);
+        $response = array('code' => 1, 'message' => $feedbacks);
     }
 
     echo json_encode($response);
@@ -218,9 +218,9 @@ function aanmakenveiling($veilingInfo, $verkoperGebruikersnaam)
             //Upload de files
             return uploadFiles($veilingId['data'][0]['veilingId'], $_SERVER['DOCUMENT_ROOT']);
         }
-        return array('status' => 'error', 'message' => 'Aangemaakte veiling niet gevonden');
+        return array('code' => 2, 'message' => 'Aangemaakte veiling niet gevonden');
     }
-    return array('status' => 'error', 'message' => 'Er was een error met het aanmaken van de veiling.');
+    return array('code' => 2, 'message' => 'Er was een error met het aanmaken van de veiling.');
 }
 
 //Uploaden van files
@@ -244,11 +244,11 @@ function uploadFiles($veilingId, $root) {
             //Zet de images in de database
             executeQueryNoFetch("INSERT INTO veilingFoto(veilingId, fotoPath) VALUES(?, ?)", [$veilingId, $uploaddir.$prefix.basename($file['name'])]);
         } else {
-            return array('status' => 'error', 'message' => 'Er ging iets fout met het uploaden van de file: '.$file['name']);
+            return array('code' => 2, 'message' => 'Er ging iets fout met het uploaden van de file: '.$file['name']);
         }
     }
 
-    return array('status' => 'success', 'message' => 'Uw veiling is aangemaakt.');
+    return array('code' => 1, 'message' => 'Uw veiling is aangemaakt.');
 }
 
 //Maak een nieuwe categorie aan

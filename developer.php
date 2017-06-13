@@ -88,7 +88,26 @@ include("php/layout/header.php");
                                 "</div>"+
                                 "<div class='row column'>"+
                                     "<h4><strong>Errors:</strong></h4>"+
-                                    "<div><code>Error messages</code></div>"+
+                                    "<table class='hover stack'>"+
+                                        "<thead>"+
+                                            "<tr>"+
+                                                "<th>Code</th>"+
+                                                "<th>Message</th>"+
+                                                "<th>Voorbeeld</th>"+
+                                            "</tr>"+
+                                        "</thead>"+
+                                        "<tbody>"+
+                                            "<tr>"+
+                                                "<td>0</td><td>succes</td>"+
+                                            "</tr>"+
+                                            "<tr>"+
+                                                "<td>1</td><td>User error</td><td>Ongeldige gebruikersnaam, Te grote afbeelding, Verkeerd bestandstype</td>"+
+                                            "</tr>"+
+                                            "<tr>"+
+                                                "<td>2</td><td>Internal error</td><td>Foutieve querie, Bestanden worden niet verplaatst</td>"+
+                                            "</tr>"+
+                                        "</tbody>"+
+                                    "</table>"+
                                 "</div>");
      }
      //////////////////////////////////////

@@ -74,7 +74,7 @@ function login($params)
 
     //Check of de velden gevuld zijn
     if (empty($gebruikersnaam) || empty($wachtwoord)) {
-        json_encode(['status' => 'error', "message" => "Een van de velden is niet ingevuld"]);
+        echo json_encode(['code' => 1, "message" => "Een van de velden is niet ingevuld"]);
         return;
     }
     //Check of de gebruikersnaam en wachtwoord combinatie bij elkaar hoort
@@ -83,13 +83,13 @@ function login($params)
         if (password_verify($wachtwoord, $result['data'][0]["wachtwoord"])) {
             //Stel de sessie in
             $_SESSION['gebruiker'] = $gebruikersnaam;
-            echo json_encode(['status' => 'success', 'code' => 0, 'message' => 'succesvol ingelogd']);
+            echo json_encode(['code' => 0, 'message' => 'succesvol ingelogd']);
             return;
         }
-        echo json_encode(['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet']);
+        echo json_encode(['code' => 1, 'message' => 'logingegevens kloppen niet']);
         return;
     }
-    echo json_encode(['status' => 'error', 'code' => 3, 'message' => 'logingegevens kloppen niet']);
+    echo json_encode(['code' => 1, 'message' => 'logingegevens kloppen niet']);
     return;
 }
 
@@ -101,7 +101,7 @@ function logout() {
     session_destroy();
 
     //Geef het resultaat terug
-    echo json_encode(['loggedOut' => true]);
+    echo json_encode(['code' => 0, 'message' => 'Successvol uitgelogd']);
 }
 
 function getNumRows($data)
@@ -403,7 +403,7 @@ function getVeilingInfo($data)
 
 //Geef de info van een bod
 function getBiedingInfo($data, $gebruikersnaam){
-    echo json_encode(["gebruiker" => $gebruikersnaam, "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]);
+    echo json_encode(['code' => 0, 'data' => ["gebruiker" => $gebruikersnaam, "veiling" => executeQuery("SELECT * FROM veiling WHERE veilingId = ?", [$data["veilingId"]])]]);
 }
 
 //Geeft alle landen
@@ -441,7 +441,7 @@ function registreer($userInfo){
 
     if ($gebruikersnaamCheck['code'] == 0) {
 
-        echo json_encode(0);
+        echo json_encode(['code' => 0]);
         return;
     } elseif ($gebruikersnaamCheck['code'] == 1) {
 
@@ -460,11 +460,11 @@ function registreer($userInfo){
 
         if ($registratie['code'] == 2){
 
-            echo json_encode(2);
+            echo json_encode(['code' => 2]);
             return;
         }
 
-        echo json_encode(1);
+        echo json_encode(['code' => 1]);
         return;
     }
 }
@@ -482,7 +482,7 @@ function verzendResetEmail($data){
     $headers .= 'FROM: info@eenmaalandermaal.nl';
     mail($naar,$subject,$txt,$headers);
 
-    echo json_encode(["resultClass" => "success", "message" => "Een reset mail is verstuurd."]);
+    echo json_encode(['code' => 0, 'data' => "success", "message" => "Een reset mail is verstuurd."]);
 }
 
 //Opnieuw instellen van een wachtwoord
@@ -498,12 +498,12 @@ function resetWachtwoord($data) {
             return;
         } elseif ($resetId['code'] == 2) {
             //Wanneer er geen geldige gebruikersnaam wordt meegegeven
-            echo json_encode(["resultClass" => "warning", "message" => "Ongeldige gebruikersnaam."]);
+            echo json_encode(['code' => 1, "data" => "warning", "message" => "Ongeldige gebruikersnaam."]);
             return;
         }
     } elseif ($duplicateCheck['code'] == 0) {
         //Wanneer er al een token actief is voor de opgegeven gebruiker
-        echo json_encode(["resultClass" => "warning", "message" => "U heeft al een reset aangevraagd."]);
+        echo json_encode(['code' => 1, "data" => "warning", "message" => "U heeft al een reset aangevraagd."]);
         return;
     }
     echo json_encode($duplicateCheck);
