@@ -60,10 +60,11 @@
                                 if ($adminCheck) {
                             ?>
                                     <li><a href="../../admin.php">Admin</a></li>
+                                <?php } else {?>
+                                    <li><a href="aanmakenveiling.php">Nieuwe veiling</a></li>
                                 <?php } ?>
-                            <li><a href="profiel.php">Mijn profiel</a></li>
-                            <li><a href="aanmakenveiling.php">Nieuwe veiling</a></li>
-                            <li><a href="#" id="logoutButton">Uitloggen</a></li>
+                                    <li><a href="profiel.php">Mijn profiel</a></li>
+                            <li><a href="#" class="logoutButton">Uitloggen</a></li>
                             <?php } else { ?>
                             <li><a href="#" class="login_button">Log in</a></li>
                             <li><a href="#" class="signup_button">Aanmelden</a></li>

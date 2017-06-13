@@ -218,7 +218,7 @@ include("php/layout/footer.html");
 
             $.ajax({
                 type: 'POST',
-                url: 'php/api.php?action=AanpassenGegevens',
+                url: 'php/securedApi.php?action=AanpassenGegevens',
                 data: userInfo,
                 success: function () {
                     alert("Je gegevens zijn succesvol verandert");
