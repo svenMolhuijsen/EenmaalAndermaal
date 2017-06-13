@@ -225,7 +225,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
                 type: "POST",
-                url: "php/securedApi.php?action=beindigveiling",
+                url: "php/securedApi.php?action=beeindigVeiling",
                 data: veiling,
                 dataType: "json",
                 complete: function(){

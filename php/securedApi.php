@@ -38,8 +38,8 @@ if (!empty($_GET['action'])) {
                 case 'sluitVeilingen':
                     sluitVeilingen();
                     break;
-                case 'beindigVeiling':
-                    beindigVeiling($data);
+                case 'beeindigVeiling':
+                    beeindigVeiling($data);
                     break;
                 case 'verwijderVeiling':
                     verwijderVeiling($data);
@@ -106,7 +106,7 @@ function sluitVeilingen(){
 }
 
 //Beëindig een veiling handmatig
-function beindigVeiling($veiling){
+function beeindigVeiling($veiling){
     //Beëindig de veiling en geef de winnaar aan
     executeQueryNoFetch("UPDATE veiling SET eindDatum = GETDATE(), koperGebruikersnaam = (SELECT TOP 1 gebruikersnaam FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), verkoopPrijs = (SELECT TOP 1 biedingsBedrag FROM biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC), veilingGestopt = 1 WHERE veilingId = ?", [$veiling["veilingId"],$veiling["veilingId"],$veiling["veilingId"]]);
     //Deel dit mee
@@ -338,4 +338,21 @@ function verplaatsVeiling($veiling){
 function gebruikersgegevens($data){
     echo json_encode(executeQuery("SELECT gebruikersnaam, voornaam, achternaam, geboortedatum, admin FROM gebruikers WHERE gebruikersnaam = ?", [$data["gebruikersnaam"]]));
 }
+
+//Het veranderen van het wachtwoord
+function veranderWachtwoord($data) {
+    //Pak de username die bij de token hoort
+    $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
+
+    //Delete het token
+    executeQueryNoFetch("DELETE FROM password_recovery WHERE token = ?", [$data['token']]);
+
+    //Stel het nieuwe wachtwoord in
+    executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
+}
+
+function veranderAdminStatus($data){
+    executeQueryNoFetch("UPDATE gebruikers SET admin = admin ^ 1 WHERE gebruikersnaam = ?", [$data["gebruikersnaam"]]);
+}
+
 ?>
