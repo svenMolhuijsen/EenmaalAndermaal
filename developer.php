@@ -58,7 +58,7 @@ include("php/layout/header.php");
             tabelContent += "<tr><td>"+parameters[i].parameter+"</td><td>"+parameters[i].default+"</td><td>"+parameters[i].description+"</td></tr>";
          }
 
-        $("#reference").append(  "<div class='row expanded column'>"+
+        $("#reference").append(  "<div class='row column'>"+
                                     "<h2>"+veilingInfo.titel+"</h2>"+
                                     "<h6 class='subheader'>"+veilingInfo.beschrijving+"</h6>"+
                                 "</div>"+
@@ -80,6 +80,15 @@ include("php/layout/header.php");
                                             tabelContent+
                                         "</tbody>"+
                                     "</table>"+
+                                "</div>"+
+                                
+                                "<div class='row column'>"+
+                                    "<h4><strong>Response:</strong></h4>"+
+                                    "<div><code>Response messages</code></div>"+
+                                "</div>"+
+                                "<div class='row column'>"+
+                                    "<h4><strong>Errors:</strong></h4>"+
+                                    "<div><code>Error messages</code></div>"+
                                 "</div>");
      }
      //////////////////////////////////////
