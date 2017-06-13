@@ -230,20 +230,16 @@ else {
                     contentType: false,
                     success: function (result) {
                         //Geef het resultaat weer
-                        switch (result.status) {
-                            case 'success':
+                        switch (result.code) {
+                            case 0:
                                 $imageUploader.removeClass('is-invalid-input');
-                                alert(result.message);
                                 location.reload();
                                 break;
-                            case 'error':
-                                alert(result.message);
-                                break;
-                            case 'userError':
+                            case 1:
                                 $imageUploader.addClass('is-invalid-input');
-                                alert(result.feedback);
                                 break;
                         }
+                        alert(result.message);
                     },
                     error: function (result) {
                         console.log('error');

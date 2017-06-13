@@ -289,12 +289,11 @@ $(document).ready(function () {
 /////////////////////////////////////////////
     //Inloggen
     $("#login input[type='submit']").on("click", function () {
-        var url = "/php/api.php?action=login";
 
         var wachtwoord = $("#login #signin-password").val();
         var gebruikersnaam = $("#login #signin-username").val();
 
-        $.post(url, {gebruikersnaam: gebruikersnaam, wachtwoord: wachtwoord}, function (result) {
+        $.post("/php/api.php?action=login", {gebruikersnaam: gebruikersnaam, wachtwoord: wachtwoord}, function (result) {
             // JSON result omzetten naar var
             var res = JSON.parse(result);
             // Kijken of het result true is
@@ -357,11 +356,11 @@ $(document).ready(function () {
             data: data,
             type: "post",
             dataType: "json",
-            success: function(responseCode){
+            success: function(response){
                 $registerForm.find(".callout").remove();
 
                 //Geef het resultaat weer
-                switch(responseCode){
+                switch(response.code){
                     case 0:
                         $registerForm.append("<div class='column callout warning'>Gebruikersnaam is al in bezet.</div>");
                         break;
@@ -394,7 +393,7 @@ $("#resetPassword").click(function(){
         success: function(result){
             //Resultaat weergeven
             $resetForm.find(".callout").remove();
-            $resetForm.append("<div class='column callout " + result.resultClass + "'>"+ result.message + "</div>");
+            $resetForm.append("<div class='column callout " + result.data + "'>"+ result.message + "</div>");
         }
     });
 });
