@@ -315,7 +315,7 @@ $(document).ready(function () {
     });
 
     //Uitloggen
-    $('#logoutButton').on("click", function(){
+    $('.logoutButton').on("click", function(){
         $.ajax({
             dataType: "json",
             url: "php/api.php?action=logout",
@@ -363,11 +363,13 @@ $(document).ready(function () {
                 //Geef het resultaat weer
                 switch(responseCode){
                     case 0:
-                        $registerForm.append("<div class='column callout alert'>Gebruikersnaam is al in bezet.</div>");
+                        $registerForm.append("<div class='column callout warning'>Gebruikersnaam is al in bezet.</div>");
                         break;
                     case 1:
                         $registerForm.append("<div class='column callout success'>Registratie voltooid!</div>");
                         break;
+                    case 2:
+                        $registerForm.append("<div class='column callout alert'>Error.</div>");
                 }
             }
         });

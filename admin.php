@@ -120,7 +120,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
             type: "POST",
-            url: "php/api.php?action=getGebruikersgegevens",
+            url: "php/securedApi.php?action=getGebruikersgegevens",
             data: gebruiker,
             dataType: "JSON",
             success: function (result) {
@@ -152,7 +152,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
             type: "POST",
-            url: "php/api.php?action=veranderAdminStatus",
+            url: "php/securedApi.php?action=veranderAdminStatus",
             data: gebruiker,
             dataType: "JSON",
             complete: function () {
@@ -168,7 +168,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
             type: "POST",
-            url: "php/api.php?action=addCategorieToDatabase",
+            url: "php/securedApi.php?action=addCategorieToDatabase",
             data: categorie,
             dataType: "json",
             complete: function (result) {
@@ -225,7 +225,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
                 type: "POST",
-                url: "php/api.php?action=beindigveiling",
+                url: "php/securedApi.php?action=beindigveiling",
                 data: veiling,
                 dataType: "json",
                 complete: function(){
@@ -242,7 +242,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
             type: 'POST',
-            url: 'php/api.php?action=verwijderVeiling',
+            url: 'php/securedApi.php?action=verwijderVeiling',
             data: veiling,
             dataType: 'json',
             complete: function () {
@@ -263,7 +263,7 @@ include("php/layout/footer.html");
         };
         $.ajax({
             type: 'POST',
-            url: 'php/api.php?action=verplaatsVeiling',
+            url: 'php/securedApi.php?action=verplaatsVeiling',
             data: veiling,
             dataType: 'json',
             complete: function () {
@@ -276,7 +276,7 @@ include("php/layout/footer.html");
     $("#sluitVeilingen").click(function(){
         $.ajax({
             type: 'POST',
-            url: 'php/api.php?action=sluitVeilingen',
+            url: 'php/securedApi.php?action=sluitVeilingen',
             dataType: 'json'
         });
     });

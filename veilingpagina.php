@@ -103,7 +103,10 @@ if ($veiling->getCode() == 0){
 
             <?php if (!$veiling->getVeilingGestopt()) { ?>
             <div id="expired">
-            <?php if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) { ?>
+            <?php
+            if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
+                if(!$adminCheck){
+            ?>
                 <input name="bedrag" id="bedrag" type="text" maxlength="18" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
 
@@ -120,9 +123,15 @@ if ($veiling->getCode() == 0){
                 </label>
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
                 <label class="is-invalid-label veilingError" id="verkoperError">U mag niet op uw eigen veiling bieden.</label>
-            <?php } else { ?>
+            <?php } else{ ?>
+                <p class="callout warning biedVerbod">U mag niet bieden als administrator.</p>
+                <input name="logoutButton" value="Logout" type="submit" class="button biedKnop logoutButton">
+            <?php
+                }
+            } else {
+            ?>
                 <!-- login check -->
-                <p class="callout warning" style="margin: 1% 0;">U bent niet ingelogd, log in om te bieden.</p>
+                <p class="callout warning biedVerbod">U bent niet ingelogd, log in om te bieden.</p>
                 <input name="loginKnop" value="Login" type="submit" id="loginKnop" class="login_button button biedKnop">
             <?php } ?>
             </div>
@@ -203,29 +212,8 @@ $(document).ready(function(){
             clearInterval(x);
             document.getElementById("timer").innerHTML = "VERLOPEN";
             document.getElementById("expired").innerHTML = "";
-            sentEmail();
         }
     }, 1000);
-
-    function sentEmail(){
-        var response;
-        var veilingid = "<?php $veiling->getVeilingId();?>";
-        var url = "php/api.php?action=sluitVeiling";
-        var data = {veilingId: veilingId};
-
-        $.ajax({
-            url: url,
-            data: data,
-            type:"POST",
-            dataType:'JSON',
-            async:false,
-            success: function(result){
-                response = $.parseJSON(result);
-            }
-        });
-        return response;
-    }
-
 
     //////////////////////////////////////////////
     //Bieden related
@@ -311,7 +299,7 @@ $(document).ready(function(){
                 if (bod.biedingsBedrag > biedDrempel) {
 
                     //Bied
-                    $.post("php/api.php?action=bieden", bod);
+                    $.post("php/securedApi.php?action=bieden", bod);
 
                     //Update het nieuwe hoogste bod
                     hoogsteBod = bod;

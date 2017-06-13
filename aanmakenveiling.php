@@ -8,7 +8,9 @@ include("php/layout/breadcrumbs.php");
 //Blokeer de gebruiker als hij niet ingelogd is.
 if (!isset($_SESSION['gebruiker'])) {
     include("php/layout/geentoegang.html");
-} else {
+}
+else {
+    if(!$adminCheck){
     ?>
     <main>
         <div class="aanmakenveiling">
@@ -25,7 +27,7 @@ if (!isset($_SESSION['gebruiker'])) {
 
                         <!-- Prijs -->
                         <h4><strong>Prijs</strong></h4>
-                        <input id="prijs" maxlength="18" name="startprijs" pattern="^[1-9]+\.\d{2}$" type="text" placeholder="Prijs"
+                        <input id="prijs" maxlength="18" name="startprijs" pattern="^[1-9]\d*\.?\d{0,2}$" type="text" placeholder="Prijs"
                                required/>
 
                         <!-- Einddatum -->
@@ -122,7 +124,7 @@ if (!isset($_SESSION['gebruiker'])) {
             </form>
         </div>
     </main>
-<?php } include('php/layout/footer.html'); ?>
+<?php }else{include("php/layout/geentoegang.html");}} include('php/layout/footer.html'); ?>
     <script>
         $(document).ready(function () {
             //Nu in het juiste formaat
@@ -220,7 +222,7 @@ if (!isset($_SESSION['gebruiker'])) {
 
                 $.ajax({
                     type: 'POST',
-                    url: 'php/api.php?action=MaakVeilingAan',
+                    url: 'php/securedApi.php?action=MaakVeilingAan',
                     data: data,
                     cache: false,
                     dataType: 'json',
@@ -232,7 +234,7 @@ if (!isset($_SESSION['gebruiker'])) {
                             case 'success':
                                 $imageUploader.removeClass('is-invalid-input');
                                 alert(result.message);
-                                window.location.replace("/");
+                                location.reload();
                                 break;
                             case 'error':
                                 alert(result.message);
