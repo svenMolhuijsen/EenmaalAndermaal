@@ -13,14 +13,14 @@ if (!empty($_GET['action'])) {
     $loginStatus = loginStatus($_SESSION['gebruiker']);
 
     if(isset($loginStatus)) {
-        if($action == 'AanpassenGegevens'){
+        if ($action == 'aanpassenGegevens') {
             pasgegevensaan($data, $_SESSION['gebruiker']);
             $loginStatus = 0;
         }
 
         if ($loginStatus === 1) {
             switch ($action) {
-                case 'MaakVeilingAan':
+                case 'maakVeilingAan':
                     checkFiles($data, $_FILES);
                     break;
                 case 'bieden':
@@ -38,7 +38,7 @@ if (!empty($_GET['action'])) {
                 case 'sluitVeilingen':
                     sluitVeilingen();
                     break;
-                case 'beindigveiling':
+                case 'beindigVeiling':
                     beindigVeiling($data);
                     break;
                 case 'verwijderVeiling':
