@@ -213,26 +213,26 @@ include("php/layout/footer.html");
                     "<div><h4>Beschrijving:</h4><p>" + veiling.beschrijving + "</p></div>");
                 $("#veilingDatum").append("<div><h4>Veiling eindigd op:</h4><span id='eindDatum'>" + veiling.eindDatum + "</span></div>");
                 $("#knoppen").append("<button class='button secondary' data-open='verplaatsVeiling'>Verplaatsen</button>" +
-                    (veiling.veilingGestopt == false ? "<button class='button warning' id='beindigd' onclick='beindig()'>Beïndigen</button>" : "") +
+                    (veiling.veilingGestopt == false ? "<button class='button warning' id='beeindigd' onclick='beeindig()'>Beëindigen</button>" : "") +
                     "<button class='button alert' data-open='verwijderVeiling'>Verwijderen</button");
             }
         });
     });
     //Sluit een veiling
-    function beindig() {
+    function beeindig() {
         var veiling = {
             veilingId: veilingId
         };
         $.ajax({
                 type: "POST",
-                url: "php/securedApi.php?action=beindigveiling",
+                url: "php/securedApi.php?action=beeindigVeiling",
                 data: veiling,
                 dataType: "json",
                 complete: function(){
                     alert("Veiling beïndigen geslaagd!");
                 }
             });
-            $("#beindigd").remove();
+            $("#beeindigd").remove();
             $("#eindDatum").html("EXPIRED");
     }
     //Verwijder een veiling

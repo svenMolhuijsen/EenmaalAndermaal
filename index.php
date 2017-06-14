@@ -26,7 +26,7 @@ include("php/layout/header.php");
     <div class="veilingen row">
         <div class="clearfix">
             <h4 class="float-left" id="trending">Trending</h4>
-            <a id="trendingButton" href="filterpagina.php" class="button hollow float-right">View more ></a>
+            <a id="trendingButton" href="categoriepagina.php" class="button hollow float-right">View more ></a>
         </div>
         <hr>
         <div class="trendingData small-up-2 medium-up-3 large-up-6 columns-12" data-equalizer>

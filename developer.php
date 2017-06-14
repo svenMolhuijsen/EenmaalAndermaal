@@ -88,7 +88,26 @@ include("php/layout/header.php");
                                 "</div>"+
                                 "<div class='row column'>"+
                                     "<h4><strong>Errors:</strong></h4>"+
-                                    "<div><code>Error messages</code></div>"+
+                                    "<table class='hover stack'>"+
+                                        "<thead>"+
+                                            "<tr>"+
+                                                "<th>Code</th>"+
+                                                "<th>Message</th>"+
+                                                "<th>Voorbeeld</th>"+
+                                            "</tr>"+
+                                        "</thead>"+
+                                        "<tbody>"+
+                                            "<tr>"+
+                                                "<td>0</td><td>succes</td>"+
+                                            "</tr>"+
+                                            "<tr>"+
+                                                "<td>1</td><td>User error</td><td>Ongeldige gebruikersnaam, Te grote afbeelding, Verkeerd bestandstype</td>"+
+                                            "</tr>"+
+                                            "<tr>"+
+                                                "<td>2</td><td>Internal error</td><td>Foutieve querie, Bestanden worden niet verplaatst</td>"+
+                                            "</tr>"+
+                                        "</tbody>"+
+                                    "</table>"+
                                 "</div>");
      }
      //////////////////////////////////////
@@ -100,12 +119,20 @@ include("php/layout/header.php");
         changeContent(veilingInfo, parameters);        
      });
      $("#veilingAanmaken").click(function(){
-        var veilingInfo = {titel:"Create New Veiling",beschrijving:"This endpoint creates a new veiling.",request:"http://iproject34.icasites.nl/api.php?action=?"};
+         var veilingInfo = {
+             titel: "Create New Veiling",
+             beschrijving: "This endpoint creates a new veiling.",
+             request: "http://iproject34.icasites.nl/securedApi.php?action=maakVeilingAan"
+         };
         var parameters = [{parameter:"?",default:"?",description:"?"}];
         changeContent(veilingInfo, parameters);        
      });
      $("#veilingSluiten").click(function(){
-        var veilingInfo = {titel:"End Veilingen",beschrijving:"This endpoint closes all veilingen where the date has expired.",request:"http://iproject34.icasites.nl/api.php?action=sluitVeilingen"};
+         var veilingInfo = {
+             titel: "End Veilingen",
+             beschrijving: "This endpoint closes all veilingen where the date has expired.",
+             request: "http://iproject34.icasites.nl/securedApi.php?action=sluitVeilingen"
+         };
         var parameters = [{parameter:"No parameter"}];
         changeContent(veilingInfo, parameters);        
      });
@@ -118,7 +145,11 @@ include("php/layout/header.php");
      ///           Gebruiker            ///
      //////////////////////////////////////
      $("#gebruikersGegevens").click(function(){
-        var veilingInfo = {titel:"Get Gebruikers Info",beschrijving:"This endpoint retrieves all user info.",request:"http://iproject34.icasites.nl/api.php?action=gebruikersGegevens"};
+         var veilingInfo = {
+             titel: "Get Gebruikers Info",
+             beschrijving: "This endpoint retrieves all user info.",
+             request: "http://iproject34.icasites.nl/securedApi.php?action=getGebruikersgegevens"
+         };
         var parameters = [{parameter:"?",default:"?",description:"?"}];
         changeContent(veilingInfo, parameters);        
      });
@@ -128,12 +159,20 @@ include("php/layout/header.php");
         changeContent(veilingInfo, parameters);        
     });
     $("#gegevensAanpassen").click(function(){
-        var veilingInfo = {titel:"Aanpassen gegevens",beschrijving:"This endpoint changes the user information.",request:"http://iproject34.icasites.nl/api.php?action=?"};
+        var veilingInfo = {
+            titel: "Aanpassen gegevens",
+            beschrijving: "This endpoint changes the user information.",
+            request: "http://iproject34.icasites.nl/securedApi.php?action=aanpassenGegevens"
+        };
         var parameters = [{parameter:"gebruikersnaam",default:"No Default",description:"gebruikersnaam is de inlognaam van de gebruiker"}];
         changeContent(veilingInfo, parameters);        
     });
     $("#wachtwoordVeranderen").click(function(){
-        var veilingInfo = {titel:"Verander Wachtwoord",beschrijving:"This endpoint changes your password",request:"http://iproject34.icasites.nl/api.php?action=?"};
+        var veilingInfo = {
+            titel: "Verander Wachtwoord",
+            beschrijving: "This endpoint changes your password",
+            request: "http://iproject34.icasites.nl/api.php?action=veranderWachtwoord"
+        };
         var parameters = [{parameter:"?",default:"?",description:"?"}];
         changeContent(veilingInfo, parameters);        
     });
@@ -141,22 +180,38 @@ include("php/layout/header.php");
      ///             Admin              ///
      //////////////////////////////////////
     $("#veilingVerplaatsen").click(function(){
-        var veilingInfo = {titel:"Veiling Verplaatsen",beschrijving:"This endpoint changes the categorie of a veiling.",request:"http://iproject34.icasites.nl/api.php?action=?"};
+        var veilingInfo = {
+            titel: "Veiling Verplaatsen",
+            beschrijving: "This endpoint changes the categorie of a veiling.",
+            request: "http://iproject34.icasites.nl/api.php?action=verplaatsVeiling"
+        };
         var parameters = [{parameter:"veilingId",default:"No Default",description:"Veiling Id is the Id of the veiling"},{parameter:"categorieId",default:"No Default",description:"categorieId is the Id of a categorie"}];
         changeContent(veilingInfo, parameters);        
     });
     $("#veilingVerwijderen").click(function(){
-        var veilingInfo = {titel:"Veiling Verwijderen",beschrijving:"This endpoint removes a veiling.",request:"http://iproject34.icasites.nl/api.php?action=getVeilingInfo"};
+        var veilingInfo = {
+            titel: "Veiling Verwijderen",
+            beschrijving: "This endpoint removes a veiling.",
+            request: "http://iproject34.icasites.nl/securedApi.php?action=verwijderVeiling"
+        };
         var parameters = [{parameter:"veilingId",default:"No Default",description:"Veiling Id is the Id of the veiling"}];
         changeContent(veilingInfo, parameters);        
     });
     $("#veilingBeeindigen").click(function(){
-        var veilingInfo = {titel:"Veiling beëindigen",beschrijving:"This endpoint ends a veiling.",request:"http://iproject34.icasites.nl/api.php?action=veilingBeeindigen"};
+        var veilingInfo = {
+            titel: "Veiling beëindigen",
+            beschrijving: "This endpoint ends a veiling.",
+            request: "http://iproject34.icasites.nl/securedApi.php?action=beindigVeiling"
+        };
         var parameters = [{parameter:"veilingId",default:"No Default",description:"Veiling Id is the Id of the veiling"}];
         changeContent(veilingInfo, parameters);        
     });
     $("#adminStatus").click(function(){
-        var veilingInfo = {titel:"Verander Admin Status",beschrijving:"This endpoint changes admin rights",request:"http://iproject34.icasites.nl/api.php?action=?"};
+        var veilingInfo = {
+            titel: "Verander Admin Status",
+            beschrijving: "This endpoint changes admin rights",
+            request: "http://iproject34.icasites.nl/securedApi.php?action=veranderAdminStatus"
+        };
         var parameters = [{parameter:"gebruikersnaam",default:"No Default",description:"gebruikersnaam is de inlognaam van de gebruiker"}];
         changeContent(veilingInfo, parameters);        
     });

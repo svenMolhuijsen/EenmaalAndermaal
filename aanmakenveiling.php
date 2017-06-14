@@ -222,7 +222,7 @@ else {
 
                 $.ajax({
                     type: 'POST',
-                    url: 'php/securedApi.php?action=MaakVeilingAan',
+                    url: 'php/securedApi.php?action=maakVeilingAan',
                     data: data,
                     cache: false,
                     dataType: 'json',
