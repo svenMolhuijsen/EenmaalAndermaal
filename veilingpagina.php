@@ -295,7 +295,7 @@ $(document).ready(function(){
                 $verkoperError.hide();
 
                 //Kijk of het bod hoger is dan de biedrempel
-                if (bod.biedingsBedrag > biedDrempel) {
+                if (bod.biedingsBedrag >= biedDrempel) {
 
                     //Bied
                     $.post("php/securedApi.php?action=bieden", bod);

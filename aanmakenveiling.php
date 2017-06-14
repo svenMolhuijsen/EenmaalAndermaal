@@ -91,7 +91,7 @@ else {
                                     <option value="" disabled selected>Kies een land</option>
                                     <?php
                                     //Haal de landen uit de database als optie
-                                    $landen = executeQuery("SELECT land FROM landen");
+                                    $landen = executeQuery("SELECT land FROM landen ORDER BY land");
                                     for ($i = 0; $i < count($landen['data']); $i++) {
                                         $land = $landen['data'][$i];
                                         echo('<option value= ' . $land["land"] . '>' . $land["land"] . '</option>');
