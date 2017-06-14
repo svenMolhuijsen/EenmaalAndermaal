@@ -484,6 +484,7 @@ function verzendResetEmail($data){
 //Opnieuw instellen van een wachtwoord
 function resetWachtwoord($data) {
     //Zorg dat er maar 1 token actief kan zijn per gebruiker
+    executeQueryNoFetch("DELETE FROM password_recovery WHERE expire_Date < GETDATE()", []);
     $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
     if ($duplicateCheck['code'] == 1) {
         //Maak een token aan
