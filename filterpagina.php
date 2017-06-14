@@ -1,5 +1,5 @@
 <?php
-$pagename = "filterpagina";
+$pagename = "Filters";
 
 //Hoofdcategorie van de eerste set subcategoriën
 $hoofdcategorie = (isset($_GET["hoofdcategorie"]));

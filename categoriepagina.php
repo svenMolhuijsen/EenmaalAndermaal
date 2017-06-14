@@ -1,5 +1,5 @@
 <?php
-$pagename = "categorie";
+$pagename = "Categorieën";
 include("php/api.php");
 include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");

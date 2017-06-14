@@ -40,7 +40,7 @@ if ($veiling->getCode() == 0){
     }
 
     //pagina naam voor de titel
-    $pagename = 'veilingPagina - '.$veiling->getTitel();
+    $pagename = 'Veiling - '.$veiling->getTitel();
 
     //header
     include("php/layout/header.php");
