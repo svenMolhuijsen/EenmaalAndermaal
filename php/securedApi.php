@@ -152,8 +152,8 @@ function checkFiles($data, $files)
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
 
         //Check het tegen een aantal filetypes
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "gif"
+        if (strtolower($imageFileType) != "jpg" && strtolower($imageFileType) != "png" && strtolower($imageFileType) != "jpeg"
+            && strtolower($imageFileType) != "gif"
         ) {
             array_push($feedback, $file['name'] . ": Alleen JPG, JPEG, PNG & GIF bestanden zijn toegestaan");
             $uploadOk = false;
