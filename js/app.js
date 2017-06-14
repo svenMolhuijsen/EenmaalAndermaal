@@ -320,7 +320,7 @@ $(document).ready(function () {
             url: "php/api.php?action=logout",
             success: function(data){
                 //Ga naar home
-                if(data.loggedOut) {
+                if(data.code == 0) {
                     window.location.replace("/");
                 }
                 else{
@@ -362,7 +362,7 @@ $(document).ready(function () {
                 //Geef het resultaat weer
                 switch(response.code){
                     case 0:
-                        $registerForm.append("<div class='column callout warning'>Gebruikersnaam is al in bezet.</div>");
+                        $registerForm.append("<div class='column callout warning'>Gebruikersnaam is al in gebruik.</div>");
                         break;
                     case 1:
                         $registerForm.append("<div class='column callout success'>Registratie voltooid!</div>");

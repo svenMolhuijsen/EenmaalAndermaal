@@ -16,8 +16,8 @@
                 <input class="full-width has-padding has-border signin-password" id="signin-password" maxlength="255" name="password" type="password"
                        placeholder="*******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                 <br>
-                <button class="button hollow float-left reset">Wachtwoord vergeten?</button>
                 <input class="button float-right" type="submit" value="Login">
+                <button class="button hollow float-left reset">Wachtwoord vergeten?</button>
             </form>
         </div>
 

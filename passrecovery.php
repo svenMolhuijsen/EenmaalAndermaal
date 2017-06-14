@@ -15,13 +15,15 @@ if (!isset($_GET['t'])) {
 <main>
     <div class="columns row text-center" id="content">
         <h2>U kunt hier uw wachtwoord veranderen</h2>
+        <form id="passResetForm">
         <div class="input-group">
             <!-- Nieuwe wachtwoord -->
-            <input type="password" class="input-group-field" placeholder="New password" id="NEWPassword">
+            <input type="password" class="input-group-field" placeholder="New password" id="NEWPassword" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
             <div class="input-group-button">
                 <input type="submit" class="button" id="veranderWachtwoord">
             </div>
         </div>
+        </form>
     </div>
 </main>
 <?php
@@ -32,8 +34,12 @@ if (!isset($_GET['t'])) {
 include("php/layout/footer.html");
 ?>
 <script>
+    $('#passResetForm').validate({
+        submitHandler: function(){submitReset()}
+    });
+
     //Veranderen van wachtwoord
-    $('#veranderWachtwoord').click(function(){
+    function submitReset(){
         var data = {
             nieuwWachtwoord: $('#NEWPassword').val(),
             token: "<?php echo($_GET['t'])?>"
@@ -49,7 +55,7 @@ include("php/layout/footer.html");
                 $('#content').append("<h4>Wachtwoord is gewijzigd!</h4>");
             }
         });
-    });
+    }
 </script>
 </body>
 </html>

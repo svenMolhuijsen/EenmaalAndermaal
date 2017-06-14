@@ -191,12 +191,34 @@ function aanmakenveiling($veilingInfo, $verkoperGebruikersnaam)
     $veilingInfo['koperGebruikersnaam'] = null;
     $veilingInfo['betalingswijze'] = 'IDEAL';
     $veilingInfo['verzendwijze'] = 'POSTNL';
+
+    //Haal de info van de verkoper op
+    $gebruiker = executeQuery("SELECT TOP 01 * FROM gebruikers WHERE gebruikersnaam = ?", [$verkoperGebruikersnaam])['data'][0];
+
+    //Default waardes voor verkooplocatie
+    if(empty($veilingInfo['postcode'])){
+        $veilingInfo['postcode'] = $gebruiker['postcode'];
+    }
+    if(empty($veilingInfo['provincie'])){
+        $veilingInfo['provincie'] = $gebruiker['provincie'];
+    }
+    if(empty($veilingInfo['plaatsnaam'])){
+        $veilingInfo['plaatsnaam'] = $gebruiker['plaatsnaam'];
+    }
+    if(empty($veilingInfo['straatnaam'])){
+        $veilingInfo['straatnaam'] = $gebruiker['straatnaam'];
+    }
+    if(empty($veilingInfo['huisnummer'])) {
+        $veilingInfo['huisnummer'] = $gebruiker['huisnummer'];
+    }
+
     //Maak nulls van lege velden
     foreach ($veilingInfo as $key => $value) {
         if (empty($veilingInfo[$key])) {
             $veilingInfo[$key] = null;
         }
     }
+
     $veilingInfo['thumbNail'] = "";
     $veilingInfo['veilingGestopt'] = false;
 
@@ -220,6 +242,7 @@ function aanmakenveiling($veilingInfo, $verkoperGebruikersnaam)
         }
         return array('code' => 2, 'message' => 'Aangemaakte veiling niet gevonden');
     }
+    var_dump($veiling);
     return array('code' => 2, 'message' => 'Er was een error met het aanmaken van de veiling.');
 }
 
@@ -248,7 +271,7 @@ function uploadFiles($veilingId, $root) {
         }
     }
 
-    return array('code' => 1, 'message' => 'Uw veiling is aangemaakt.');
+    return array('code' => 0, 'message' => 'Uw veiling is aangemaakt.');
 }
 
 //Maak een nieuwe categorie aan

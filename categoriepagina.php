@@ -5,7 +5,6 @@ include("php/layout/header.php");
 include("php/layout/breadcrumbs.php");
 ?>
 
-<hr class="hide-for-small-only">
 <div class="large-8 row categoriepagina">
     <div class="side-nav-block medium-3 large-3 columns">
         <!-- Hoofdcategoriën -->
