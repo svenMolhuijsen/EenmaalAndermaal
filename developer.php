@@ -64,7 +64,7 @@ include("php/layout/header.php");
                                 "</div>"+
                                 "<div class='row column'>"+
                                     "<h4>HTTP REQUEST</h4>"+
-                                    "<code>GET "+veilingInfo.request+"</code>"+
+                                    "<code>POST "+veilingInfo.request+"</code>"+
                                 "</div>"+
 
                                 "<div class='row column'>"+
