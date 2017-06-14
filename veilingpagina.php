@@ -107,9 +107,8 @@ if ($veiling->getCode() == 0){
             if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
                 if(!$adminCheck){
             ?>
-                <input name="bedrag" id="bedrag" type="text" maxlength="18" placeholder="bedrag">
+                <input name="bedrag" id="bedrag" type="text" maxLength="10" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
-
                 <!-- Bieding errors -->
                 <label class="is-invalid-label veilingError" id="bedragError">
                     U Kunt niet lager bieden dan het hoogste bod, biedt minstens: €
