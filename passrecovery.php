@@ -34,28 +34,44 @@ if (!isset($_GET['t'])) {
 include("php/layout/footer.html");
 ?>
 <script>
+$(document).ready(function() {
+    var errorCSS = {
+        "margin-bottom": "0",
+        "bottom": "0",
+        "right": "0"
+    };
+
     $('#passResetForm').validate({
-        submitHandler: function(){submitReset()}
+        submitHandler: function () {
+            submitReset()
+        },
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent());
+            error.addClass("hide-for-small show-for-large");
+
+            error.css(errorCSS);
+        }
+    })
+});
+
+//Veranderen van wachtwoord
+function submitReset() {
+    var data = {
+        nieuwWachtwoord: $('#NEWPassword').val(),
+        token: "<?php echo($_GET['t'])?>"
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: 'php/api.php?action=veranderWachtwoord',
+        data: data,
+        dateType: 'json',
+        complete: function () {
+            $('#content').empty();
+            $('#content').append("<h4>Wachtwoord is gewijzigd!</h4>");
+        }
     });
-
-    //Veranderen van wachtwoord
-    function submitReset(){
-        var data = {
-            nieuwWachtwoord: $('#NEWPassword').val(),
-            token: "<?php echo($_GET['t'])?>"
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=veranderWachtwoord',
-            data: data,
-            dateType: 'json',
-            complete: function(){
-                $('#content').empty();
-                $('#content').append("<h4>Wachtwoord is gewijzigd!</h4>");
-            }
-        });
-    }
+}
 </script>
 </body>
 </html>

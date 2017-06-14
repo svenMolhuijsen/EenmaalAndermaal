@@ -362,18 +362,6 @@ function gebruikersgegevens($data){
     echo json_encode(executeQuery("SELECT gebruikersnaam, voornaam, achternaam, geboortedatum, admin FROM gebruikers WHERE gebruikersnaam = ?", [$data["gebruikersnaam"]]));
 }
 
-//Het veranderen van het wachtwoord
-function veranderWachtwoord($data) {
-    //Pak de username die bij de token hoort
-    $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
-
-    //Delete het token
-    executeQueryNoFetch("DELETE FROM password_recovery WHERE token = ?", [$data['token']]);
-
-    //Stel het nieuwe wachtwoord in
-    executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
-}
-
 function veranderAdminStatus($data){
     executeQueryNoFetch("UPDATE gebruikers SET admin = admin ^ 1 WHERE gebruikersnaam = ?", [$data["gebruikersnaam"]]);
 }
