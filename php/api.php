@@ -55,6 +55,9 @@ if (!empty($_GET['action'])) {
         case 'resetWachtwoord':
             resetWachtwoord($data);
             break;
+        case 'veranderWachtwoord':
+            veranderWachtwoord($data);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -321,9 +324,9 @@ function getSubCategories($data)
 {
     if ($data['hoofdCategory'] == null) {
         //Geef de hoofdcategoriën als er geen is ingesteld
-        $result = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
+        $result = executeQuery("SELECT * FROM categorie WHERE superId IS NULL ORDER BY categorieNaam");
     } else {
-        $result = executeQuery("SELECT * FROM categorie WHERE superId = ? ", [$data['hoofdCategory']]);
+        $result = executeQuery("SELECT * FROM categorie WHERE superId = ? ORDER BY categorieNaam", [$data['hoofdCategory']]);
     }
     echo json_encode($result);
 }
@@ -338,7 +341,7 @@ function categorieAccordion()
     ');
 
     //Zoek de hoofdcategorien
-    $hoofdcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NULL");
+    $hoofdcategorien = executeQuery("SELECT * FROM categorie WHERE superId IS NULL ORDER BY categorieNaam");
 
     //Check of ze gevonden zijn
     if ($hoofdcategorien['code'] == 0) {
@@ -352,7 +355,7 @@ function categorieAccordion()
             echo('<div class="accordion-content show-for-small-only" data-tab-content>');
 
             //Zoek de subcategoriën van de hoofdcategorie
-            $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie['categorieId']]);
+            $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ? ORDER BY categorieNaam", [$hoofdcategorie['categorieId']]);
 
             if ($subcategorien['code'] == 0) {
                 for ($j = 0; $j < count($subcategorien['data']); $j++) {
@@ -373,7 +376,7 @@ function setSubcategorien($hoofdcategorie)
 {
     //Zoek de subcategoriën
     $hoofdcategorie = substr($hoofdcategorie, 12);
-    $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ?", [$hoofdcategorie]);
+    $subcategorien = executeQuery("SELECT * FROM categorie WHERE superId = ? ORDER BY categorieNaam", [$hoofdcategorie]);
 
     //Zet voor elke subcategorie een image neer
     if ($subcategorien['code'] == 0) {
@@ -452,11 +455,10 @@ function registreer($userInfo){
         }
 
         //Voer de informatie in
-        $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [$userInfo['gebruikersnaam'], password_hash($userInfo['wachtwoord'], PASSWORD_DEFAULT), $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
+        $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, admin, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [$userInfo['gebruikersnaam'], password_hash($userInfo['wachtwoord'], PASSWORD_DEFAULT), $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], 0, $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
 
         if ($registratie['code'] == 2){
-
             echo json_encode(['code' => 2]);
             return;
         }
@@ -485,6 +487,7 @@ function verzendResetEmail($data){
 //Opnieuw instellen van een wachtwoord
 function resetWachtwoord($data) {
     //Zorg dat er maar 1 token actief kan zijn per gebruiker
+    executeQueryNoFetch("DELETE FROM password_recovery WHERE expire_Date < GETDATE()", []);
     $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
     if ($duplicateCheck['code'] == 1) {
         //Maak een token aan
@@ -504,6 +507,18 @@ function resetWachtwoord($data) {
         return;
     }
     echo json_encode($duplicateCheck);
+}
+
+//Het veranderen van het wachtwoord
+function veranderWachtwoord($data) {
+    //Pak de username die bij de token hoort
+    $username = executeQuery("SELECT username FROM password_recovery WHERE token = ?", [$data["token"]]);
+
+    //Delete het token
+    executeQueryNoFetch("DELETE FROM password_recovery WHERE token = ?", [$data['token']]);
+
+    //Stel het nieuwe wachtwoord in
+    executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
 }
 
 ?>

@@ -109,7 +109,7 @@ if (!isset($_SESSION['gebruiker'])) {
                                 <input rel="Plaats" maxlength="255" id="editPlaats" type="text" placeholder="Plaats" pattern="[a-zA-Z-' ]+">
                                 <input rel="Straat" maxlength="255" id="editStraat" type="text" placeholder="Straat" pattern="[A-Za-z-' ]+">
                                 <input rel="Huisnummer" maxlength="20" id="editHuisnummer" type="text" placeholder="Huisnummer" pattern="[0-9a-z]+">
-                                <input rel="Postcode" id="editPostcode" maxlength="10" type="text" placeholder="Postcode" pattern="^[1-9][0-9]*[a-zA-Z]?">
+                                <input rel="Postcode" id="editPostcode" maxlength="10" type="text" placeholder="Postcode" pattern="^[1-9][0-9]*[a-zA-z- ]*"">
                             </div>
                         </fieldset>
                     </div>

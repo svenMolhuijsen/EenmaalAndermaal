@@ -15,13 +15,15 @@ if (!isset($_GET['t'])) {
 <main>
     <div class="columns row text-center" id="content">
         <h2>U kunt hier uw wachtwoord veranderen</h2>
+        <form id="passResetForm">
         <div class="input-group">
             <!-- Nieuwe wachtwoord -->
-            <input type="password" class="input-group-field" placeholder="New password" id="NEWPassword">
+            <input type="password" class="input-group-field" placeholder="New password" id="NEWPassword" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
             <div class="input-group-button">
                 <input type="submit" class="button" id="veranderWachtwoord">
             </div>
         </div>
+        </form>
     </div>
 </main>
 <?php
@@ -32,24 +34,44 @@ if (!isset($_GET['t'])) {
 include("php/layout/footer.html");
 ?>
 <script>
-    //Veranderen van wachtwoord
-    $('#veranderWachtwoord').click(function(){
-        var data = {
-            nieuwWachtwoord: $('#NEWPassword').val(),
-            token: "<?php echo($_GET['t'])?>"
-        };
+$(document).ready(function() {
+    var errorCSS = {
+        "margin-bottom": "0",
+        "bottom": "0",
+        "right": "0"
+    };
 
-        $.ajax({
-            type: 'POST',
-            url: 'php/api.php?action=veranderWachtwoord',
-            data: data,
-            dateType: 'json',
-            complete: function(){
-                $('#content').empty();
-                $('#content').append("<h4>Wachtwoord is gewijzigd!</h4>");
-            }
-        });
+    $('#passResetForm').validate({
+        submitHandler: function () {
+            submitReset()
+        },
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent());
+            error.addClass("hide-for-small show-for-large");
+
+            error.css(errorCSS);
+        }
+    })
+});
+
+//Veranderen van wachtwoord
+function submitReset() {
+    var data = {
+        nieuwWachtwoord: $('#NEWPassword').val(),
+        token: "<?php echo($_GET['t'])?>"
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: 'php/api.php?action=veranderWachtwoord',
+        data: data,
+        dateType: 'json',
+        complete: function () {
+            $('#content').empty();
+            $('#content').append("<h4>Wachtwoord is gewijzigd!</h4>");
+        }
     });
+}
 </script>
 </body>
 </html>
