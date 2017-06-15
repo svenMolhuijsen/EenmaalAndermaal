@@ -242,7 +242,6 @@ function aanmakenveiling($veilingInfo, $verkoperGebruikersnaam)
         }
         return array('code' => 2, 'message' => 'Aangemaakte veiling niet gevonden');
     }
-    var_dump($veiling);
     return array('code' => 2, 'message' => 'Er was een error met het aanmaken van de veiling.');
 }
 

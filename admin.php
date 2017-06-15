@@ -113,7 +113,6 @@ include("php/layout/footer.html");
     var gebruikerGezocht;
     function gebruikersGegevens() {
         username = '<?php echo($_SESSION["gebruiker"]) ?>';
-        console.log(username);
         gebruikerGezocht = $("#username").val();
         var gebruiker = {
             gebruikersnaam: $("#username").val()
@@ -125,7 +124,6 @@ include("php/layout/footer.html");
             dataType: "JSON",
             success: function (result) {
                 gebruiker = result.data[0];
-                console.log(gebruiker);
                 $("#gebruikersInfo").empty();
                 $("#adminKnoppen").empty();
                 $("#gebruikersInfo").append("<div>  <h1>" + gebruiker.gebruikersnaam + "</h1>" +
@@ -133,7 +131,6 @@ include("php/layout/footer.html");
                     "<div>  <p>" + gebruiker.geboortedatum + "</p></div>");
                 if (gebruiker.gebruikersnaam != username) {
                     if (gebruiker.admin == 1) {
-                        console.log(gebruiker.admin);
                         $("#adminKnoppen").append("<button class='button warning' onclick='admin()'>Verwijder als admin</button>");
                     } else {
                         $("#adminKnoppen").append("<button class='button warning' onclick='admin()'>Voeg toe als admin</button>");
@@ -172,7 +169,6 @@ include("php/layout/footer.html");
             data: categorie,
             dataType: "json",
             complete: function (result) {
-                console.log(result.response);
                 if (result.response.code == 0) {
                     alert("Categorie toevoegen geslaagd!");
                 } else if (result.response.code == 2) {
