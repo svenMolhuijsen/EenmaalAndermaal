@@ -5,7 +5,7 @@
         if (strpos($pagename, "Veiling") !== false) {
             $categorie = executeQuery("SELECT * FROM categorie WHERE categorieId = ?", [$veiling->getCategorieId()])['data'][0];
             echo('<li><a href="filterpagina.php?hoofdcategorie='.$categorie["categorieId"].'">'.$categorie["categorieNaam"].'</a></li>');
-        } elseif(strpos($pagename, "Filters") !== false) {
+        } elseif (strpos($pagename, "Filters") !== false) {
             $categorie = executeQuery("SELECT * FROM categorie WHERE categorieId = ?", [$_GET['hoofdcategorie']])['data'][0];
             echo('<li><a href="categoriePagina.php">'.executeQuery("SELECT categorieNaam FROM categorie WHERE categorieId = ?", [$categorie["superId"]])["data"][0]["categorieNaam"].'</a></li>');
             echo('<li><a href="categoriePagina.php">'.$categorie['categorieNaam'].'</a></li>');

@@ -314,16 +314,15 @@ $(document).ready(function () {
     });
 
     //Uitloggen
-    $('.logoutButton').on("click", function(){
+    $(".logoutButton").on("click", function(){
         $.ajax({
             dataType: "json",
             url: "php/api.php?action=logout",
             success: function(data){
                 //Ga naar home
-                if(data.code == 0) {
+                if (data.code == 0) {
                     window.location.replace("/");
-                }
-                else{
+                } else {
                     alert("Logout failed!");
                 }
             }
@@ -486,6 +485,47 @@ $("#resetPassword").click(function(){
 //////////////////////////////////////////////
 //  Categoriepagina
 /////////////////////////////////////////////
+    function bindClickListenercategoriePagina() {
+            //Bind click listener to newly created element
+            $(".categoriepagina .hoofdcategorien .accordion-item a").click(function () {
+                var id = $(this).data("category");
+                var $subcategorien = $(".subcategorien");
+
+                if ($subcategorien.data("hoofdcategorie") == id) {
+                    $subcategorien.empty();
+                    $("#" + id).empty();
+                    $subcategorien.data("hoofdcategorie", null);
+
+                } else {
+                    $subcategorien.empty();
+                    $("#" + id).empty();
+                    $subcategorien.data("hoofdcategorie", id);
+                    $subcategorien.append("Categorien laden...");
+                    $("#" + id).append("Categorien laden...");
+
+                    $.post("/php/api.php?action=getCategories", {hoofdCategory: id}, function (result) {
+                        // JSON result omzetten naar var
+                        var res = JSON.parse(result);
+                        // Kijken of het result true is
+                        if (res.code == 0) {
+                            $subcategorien.empty();
+                            $("#" + id).empty();
+                            $.each(res.data, function (index, value) {
+                                $("#" + id).append("<li><a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class =''><img src='http://placehold.it/30x30'/> " + value.categorieNaam + "</a></li>").hide().fadeIn(500);
+                            });
+                            $.each(res.data, function (index, value) {
+                                $subcategorien.append("<a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class ='column medium-3 large-3 matchHeight'><img src='http://placehold.it/200x200'/><div> " + value.categorieNaam + "</div></a>");
+                            });
+                        }
+                        $(function () {
+                            $(".matchHeight").matchHeight({byRow: true});
+                        });
+                    });
+                }
+            });
+        }
+
+
     if ($(".categoriepagina").length != 0) {
         $hoofdcategorie = $(".categoriepagina .hoofdcategorien");
 
@@ -511,48 +551,8 @@ $("#resetPassword").click(function(){
                 //fout afvangen
                 $hoofdcategorie.append("<li>sub categorien laden...</li>");
             }
-            Foundation.reInit('accordion');
+            Foundation.reInit("accordion");
             bindClickListenercategoriePagina();
-        });
-    }
-
-    function bindClickListenercategoriePagina() {
-        //Bind click listener to newly created element
-        $(".categoriepagina .hoofdcategorien .accordion-item a").click(function () {
-            var id = $(this).data("category");
-            var $subcategorien = $(".subcategorien");
-
-            if ($subcategorien.data("hoofdcategorie") == id) {
-                $subcategorien.empty();
-                $("#" + id).empty();
-                $subcategorien.data("hoofdcategorie", null);
-
-            } else {
-                $subcategorien.empty();
-                $("#" + id).empty();
-                $subcategorien.data("hoofdcategorie", id);
-                $subcategorien.append("Categorien laden...");
-                $("#" + id).append("Categorien laden...");
-
-                $.post("/php/api.php?action=getCategories", {hoofdCategory: id}, function (result) {
-                    // JSON result omzetten naar var
-                    var res = JSON.parse(result);
-                    // Kijken of het result true is
-                    if (res.code == 0) {
-                        $subcategorien.empty();
-                        $("#" + id).empty();
-                        $.each(res.data, function (index, value) {
-                            $("#" + id).append("<li><a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class =''><img src='http://placehold.it/30x30'/> " + value.categorieNaam + "</a></li>").hide().fadeIn(500);
-                        });
-                        $.each(res.data, function (index, value) {
-                            $subcategorien.append("<a href='filterpagina.php?hoofdcategorie=" + value.categorieId + "' class ='column medium-3 large-3 matchHeight'><img src='http://placehold.it/200x200'/><div> " + value.categorieNaam + "</div></a>");
-                        });
-                    }
-                    $(function () {
-                        $(".matchHeight").matchHeight({byRow: true});
-                    });
-                });
-            }
         });
     }
 
