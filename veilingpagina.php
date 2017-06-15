@@ -21,8 +21,6 @@ if ($veiling->getCode() == 0) {
 
     if ($images['code'] == 0) {
         $images = $images["data"];
-    } else {
-        var_dump($images);
     }
 
     //bepaald de tussensprong tussen 2 biedingen

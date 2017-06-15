@@ -84,11 +84,6 @@ function bieden($bieding, $gebruikersnaam)
         "INSERT INTO biedingen(veilingId, gebruikersnaam, biedingsTijd, biedingsBedrag) VALUES(?, ?, ?, ?)",
         [$bieding["veilingId"], $gebruikersnaam, $bieding["biedingsTijd"], $bieding["biedingsBedrag"]]
     );
-
-    //Geef een error terug
-    if ($bieding['code'] == 2) {
-        var_dump($bieding);
-    }
 }
 
 

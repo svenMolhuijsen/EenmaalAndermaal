@@ -243,10 +243,6 @@ include('php/layout/footer.html'); ?>
                                 break;
                         }
                         alert(result.message);
-                    },
-                    error: function (result) {
-                        console.log('error');
-                        console.log(result);
                     }
                 });
             }
