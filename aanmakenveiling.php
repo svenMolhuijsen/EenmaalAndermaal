@@ -8,9 +8,8 @@ include("php/layout/breadcrumbs.php");
 //Blokeer de gebruiker als hij niet ingelogd is.
 if (!isset($_SESSION['gebruiker'])) {
     include("php/layout/geentoegang.html");
-}
-else {
-    if(!$adminCheck){
+} else {
+    if (!$adminCheck) {
     ?>
     <main>
         <div class="aanmakenveiling">
@@ -124,7 +123,11 @@ else {
             </form>
         </div>
     </main>
-<?php }else{include("php/layout/geentoegang.html");}} include('php/layout/footer.html'); ?>
+<?php } else {
+            include("php/layout/geentoegang.html");
+        }
+    } 
+include('php/layout/footer.html'); ?>
     <script>
         $(document).ready(function () {
             //Nu in het juiste formaat

@@ -71,7 +71,7 @@ function pad(n, width, z) {
 //Maakt een timer aan
 function createCountdown($target, countDownDate) {
     setInterval(function () {
-        countDownDate = countDownDate.replace('-', '/');
+        countDownDate = countDownDate.replace("-", "/");
 
         countDownDate = countDownDate.split(".")[0];
         var oldPosition = $(document).scrollTop();
@@ -549,7 +549,7 @@ $("#resetPassword").click(function(){
                         });
                     }
                     $(function () {
-                        $('.matchHeight').matchHeight({byRow: true});
+                        $(".matchHeight").matchHeight({byRow: true});
                     });
                 });
             }

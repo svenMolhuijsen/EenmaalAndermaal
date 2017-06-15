@@ -446,9 +446,9 @@ function registreer($userInfo){
     } elseif ($gebruikersnaamCheck['code'] == 1) {
 
         //Zet lege strings om naar nulls
-        foreach ($userInfo as $key => $value){
+        foreach ($userInfo as $key => $value) {
 
-            if (empty($userInfo[$key])){
+            if (empty($userInfo[$key])) {
 
                 $value = null;
             }
@@ -458,7 +458,7 @@ function registreer($userInfo){
         $registratie = executeQueryNoFetch('INSERT INTO gebruikers(gebruikersnaam, wachtwoord, voornaam, achternaam, geboortedatum, telefoonnmr, admin, land, provincie, postcode, plaatsnaam, straatnaam, huisnummer) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [$userInfo['gebruikersnaam'], password_hash($userInfo['wachtwoord'], PASSWORD_DEFAULT), $userInfo['voornaam'], $userInfo['achternaam'], $userInfo['gebdatum'], $userInfo['telnmr'], 0, $userInfo['land'], $userInfo['provincie'], $userInfo['postcode'], $userInfo['plaatsnaam'], $userInfo['straatnaam'], $userInfo['huisnummer']]);
 
-        if ($registratie['code'] == 2){
+        if ($registratie['code'] == 2) {
             echo json_encode(['code' => 2]);
             return;
         }

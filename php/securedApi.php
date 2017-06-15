@@ -12,7 +12,7 @@ if (!empty($_GET['action'])) {
 
     $loginStatus = loginStatus($_SESSION['gebruiker']);
 
-    if(isset($loginStatus)) {
+    if (isset($loginStatus)) {
         if ($action == 'aanpassenGegevens') {
             pasgegevensaan($data, $_SESSION['gebruiker']);
             $loginStatus = 0;
@@ -62,10 +62,10 @@ if (!empty($_GET['action'])) {
 }
 
 function loginStatus($gebruikersnaam){
-    if(isset($gebruikersnaam)) {
+    if (isset($gebruikersnaam)) {
         $gebruiker = executeQuery("SELECT * FROM gebruikers WHERE gebruikersnaam = ?", [$gebruikersnaam]);
 
-        if($gebruiker['data'][0]['admin'] == 1){
+        if ($gebruiker['data'][0]['admin'] == 1) {
             //Ingelogd als admin
             return 2;
         }
@@ -196,19 +196,19 @@ function aanmakenveiling($veilingInfo, $verkoperGebruikersnaam)
     $gebruiker = executeQuery("SELECT TOP 01 * FROM gebruikers WHERE gebruikersnaam = ?", [$verkoperGebruikersnaam])['data'][0];
 
     //Default waardes voor verkooplocatie
-    if(empty($veilingInfo['postcode'])){
+    if (empty($veilingInfo['postcode'])) {
         $veilingInfo['postcode'] = $gebruiker['postcode'];
     }
-    if(empty($veilingInfo['provincie'])){
+    if (empty($veilingInfo['provincie'])) {
         $veilingInfo['provincie'] = $gebruiker['provincie'];
     }
-    if(empty($veilingInfo['plaatsnaam'])){
+    if (empty($veilingInfo['plaatsnaam'])) {
         $veilingInfo['plaatsnaam'] = $gebruiker['plaatsnaam'];
     }
-    if(empty($veilingInfo['straatnaam'])){
+    if (empty($veilingInfo['straatnaam'])) {
         $veilingInfo['straatnaam'] = $gebruiker['straatnaam'];
     }
-    if(empty($veilingInfo['huisnummer'])) {
+    if (empty($veilingInfo['huisnummer'])) {
         $veilingInfo['huisnummer'] = $gebruiker['huisnummer'];
     }
 
@@ -260,7 +260,7 @@ function uploadFiles($veilingId, $root) {
         //Upload de file
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
             //Zet de thumbnail in de database
-            if ($key == 'thumbnail' && $key !== 0){
+            if ($key == 'thumbnail' && $key !== 0) {
                 executeQueryNoFetch("UPDATE veiling SET thumbNail = ? WHERE veilingId = ?", [$uploaddir.$prefix.basename($file['name']), $veilingId]);
                 continue;
             }

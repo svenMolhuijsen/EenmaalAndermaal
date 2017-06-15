@@ -3,13 +3,13 @@ include("php/core.php");
 
 $veilingId = $_GET["veilingId"];
 
-if (!empty($veilingId)){
+if (!empty($veilingId)) {
 
     //laad veiling info
     $veiling = Veiling::existingVeiling($veilingId);
 
 //check om te kijken of er een veiling is gevonden
-if ($veiling->getCode() == 0){
+if ($veiling->getCode() == 0) {
     //haal de info van de verkoper op
     $verkoper = new User($veiling->getVerkoperGebruikersnaam());
 
@@ -105,7 +105,7 @@ if ($veiling->getCode() == 0){
             <div id="expired">
             <?php
             if (isset($_SESSION['gebruiker']) && !empty($_SESSION['gebruiker'])) {
-                if(!$adminCheck){
+                if (!$adminCheck) {
             ?>
                 <input name="bedrag" id="bedrag" type="text" maxLength="10" placeholder="bedrag">
                 <input name="biedenKnop" id="biedenKnop" value="Bieden" type="submit" class="button biedKnop">
@@ -122,7 +122,7 @@ if ($veiling->getCode() == 0){
                 </label>
                 <label class="is-invalid-label veilingError" id="biedenError">U heeft al het hoogste bod.</label>
                 <label class="is-invalid-label veilingError" id="verkoperError">U mag niet op uw eigen veiling bieden.</label>
-            <?php } else{ ?>
+            <?php } else { ?>
                 <p class="callout warning biedVerbod">U mag niet bieden als administrator.</p>
                 <input name="logoutButton" value="Logout" type="submit" class="button biedKnop logoutButton">
             <?php
@@ -158,7 +158,7 @@ if ($veiling->getCode() == 0){
 </div>
 <?php
 //Voor wanneer de veiling niet laad of bestaat
-} else{
+} else {
     $pagename = "veilingpagina";
     include('php/layout/header.php');
 ?>
@@ -276,10 +276,10 @@ $(document).ready(function(){
     function biedAttempt(hoogsteBod){
         //Stel de bied-drempel in
         var biedDrempel;
-        if(hoogsteBod.code == 0) {
+        if (hoogsteBod.code == 0) {
             biedDrempel = Number(hoogsteBod.data[0].biedingsBedrag) + bepaalBiedStap(hoogsteBod.data[0].biedingsBedrag);
         }
-        else if(hoogsteBod.code == 1){
+        else if (hoogsteBod.code == 1) {
             biedDrempel = Number(veiling["startPrijs"]) + bepaalBiedStap(veiling["startPrijs"]);
         }
 
@@ -289,8 +289,8 @@ $(document).ready(function(){
         //Alle informatie van het bod
         var bod = { veilingId: veiling["veilingId"], gebruikersnaam: gebruiker,  biedingsTijd: biedingsTijd, biedingsBedrag: Math.round($bedrag.val()*100)/100 };
         //Kijk of de gebruiker niet al het hoogste bod heeft
-        if(hoogsteBod.code == 1 || bod['gebruikersnaam'] != hoogsteBod.data[0]["gebruikersnaam"]) {
-            if(bod['gebruikersnaam'] != veiling['verkoperGebruikersnaam']) {
+        if (hoogsteBod.code == 1 || bod['gebruikersnaam'] != hoogsteBod.data[0]["gebruikersnaam"]) {
+            if (bod['gebruikersnaam'] != veiling['verkoperGebruikersnaam']) {
                 $biedenError.hide();
                 $verkoperError.hide();
 
@@ -324,10 +324,10 @@ $(document).ready(function(){
     }
 
     //Bepaal de stappen tussen 2 boden.
-    function bepaalBiedStap(hoogsteBedrag){
-        if(hoogsteBedrag > 50){
-            if(hoogsteBedrag > 500){
-                if(hoogsteBedrag > 1000){
+    function bepaalBiedStap(hoogsteBedrag) {
+        if (hoogsteBedrag > 50) {
+            if (hoogsteBedrag > 500) {
+                if (hoogsteBedrag > 1000) {
                     return 50;
                 }
                 return 5;
