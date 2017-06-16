@@ -331,7 +331,7 @@ $(document).ready(function () {
 
     //Registreren
     function registreer(){
-        $registerForm = $("#registerForm");
+        var $registerForm = $("#registerForm");
 
         //Persoongegevens
         var data = {
@@ -376,7 +376,7 @@ $(document).ready(function () {
 //////////////////////////////////////////////
 //  Password Recovery
 /////////////////////////////////////////////
-$resetForm = $("#resetForm");
+var $resetForm = $("#resetForm");
 
 //Wachtwoord reset
 $("#resetPassword").click(function(){
@@ -462,7 +462,7 @@ $("#resetPassword").click(function(){
     var eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-    $registerForm = $("#registerForm");
+    var $registerForm = $("#registerForm");
 
     //Valideren van de registratie en de regels
     $registerForm.validate({
@@ -527,7 +527,7 @@ $("#resetPassword").click(function(){
 
 
     if ($(".categoriepagina").length != 0) {
-        $hoofdcategorie = $(".categoriepagina .hoofdcategorien");
+       var $hoofdcategorie = $(".categoriepagina .hoofdcategorien");
 
         $.post("/php/api.php?action=getCategories", {hoofdCategory: null}, function (result) {
             // JSON result omzetten naar var
