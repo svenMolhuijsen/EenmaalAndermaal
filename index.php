@@ -8,7 +8,7 @@ include("php/layout/header.php");
 <main class="home">
     <div class="banner">
         <div class="inner row">
-            <div class="background collumn small-8 medium-4 large-6">
+            <div class="background column small-8 medium-4 large-6">
                 <h3><span>Eenmaal-Andermaal</span> Koop een uniek geschenk<br>of verkoop je eigen spullen</h3>
                 <div class="big-search row">
                     <div class="column medium-5" id="blocks">

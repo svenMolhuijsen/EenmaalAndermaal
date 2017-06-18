@@ -20,8 +20,8 @@
 <body>
 
 <!-- Title-bar -->
-<div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="medium">
-    <button class="menu-icon" type="button" data-toggle></button>
+<div class="title-bar" data-responsive-toggle="navigatie-menu" data-hide-for="large">
+    <button class="menu-icon" type="button" data-toggle="offCanvasLeft"></button>
     <span class="title-bar-title"><a href="/"><img src="img/logo/logo-sm.svg" alt="" class="brand-logo"></a></span>
 </div>
 
@@ -31,7 +31,7 @@
     <div class="top-bar-left">
         <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
             <!-- Logo -->
-            <li class="hide-for-small-only"><a href="/"><img src="img/logo/logo.svg" alt="" class="brand-logo"></a></li>
+            <li class="hide-for-small-only"><a href="/"><img src="img/logo/logo.svg" alt="logo" class="brand-logo"></a></li>
             <!-- Link naar categoriepagina -->
             <li class="hide-for-small-only"><a href="categoriepagina.php">Bekijk Categorieën</a></li>
         </ul>
@@ -72,6 +72,44 @@
                         </ul>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="off-canvas-wrapper">
+    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+        <div class="off-canvas position-left" id="offCanvasLeft" data-off-canvas>
+            <div class="row column">
+                <img src="img/logo/logo.svg" alt="logo" class="brand-logo">
+            </div>
+            <div class="row column">
+                <h4>Pagina's</h4>
+                <ul class="menu vertical">
+                    <li><a href="categoriepagina.php">Bekijk Categoriën</a></li>
+                </ul>
+            </div>
+            <div class="row column">
+                <h4>Gegevens</h4>
+                <ul class="menu vertical">
+                <?php
+                    if (isset($_SESSION["gebruiker"]) && !empty($_SESSION["gebruiker"])) {
+                        $adminCheck = executeQuery("SELECT admin FROM gebruikers WHERE gebruikersnaam = ?", [$_SESSION["gebruiker"]]);
+                        if ($adminCheck["code"] == 0) {
+                            $adminCheck = $adminCheck["data"][0]["admin"];
+                        }
+                        if ($adminCheck) {
+                            echo("<li><a href='admin.php'>Admin</a></li>");
+                        } else {
+                            echo("  <li><a href='aanmakenVeiling.php'>Nieuwe Veiling</a></li>
+                                    <li><a href='profiel.php'>Mijn profiel</a></li>");
+                        }
+                    } else {
+                        echo("  <li><a class='login_button button'>Log In</a></li>
+                                <li><a class='signup_button button hollow'>Aanmelden</a></li>");
+                    }
+                ?>                    
+                </ul> 
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@
         padding: 5px;
         margin-bottom: 200px;
 
-        @include breakpoint(small down) {
+        @include breakpoint(medium down) {
           background: rgba(255, 255, 255, .7);
           border-radius: 0 15px 15px 0;
           padding: 10px;
