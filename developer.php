@@ -150,7 +150,7 @@ include("php/layout/header.php");
              beschrijving: "This endpoint retrieves all user info.",
              request: "http://iproject34.icasites.nl/securedApi.php?action=getGebruikersgegevens"
          };
-        var parameters = [{parameter:"?",default:"?",description:"?"}];
+        var parameters = [{parameter:"gebruikersnaam",default:"No Default",description:"Gebruikersnaam van de ingelogde gebruiker"}];
         changeContent(veilingInfo, parameters);        
      });
     $("#wachtwoordReset").click(function(){
@@ -164,7 +164,7 @@ include("php/layout/header.php");
             beschrijving: "This endpoint changes the user information.",
             request: "http://iproject34.icasites.nl/securedApi.php?action=aanpassenGegevens"
         };
-        var parameters = [{parameter:"gebruikersnaam",default:"No Default",description:"gebruikersnaam is de inlognaam van de gebruiker"}];
+        var parameters = [{parameter:"gebruikersnaam",default:"No Default",description:"gebruikersnaam is de inlognaam van de gebruiker"},{parameter:"OLDPassword",default:"NULL",description:"Oude Wachtwoord van gebruiker"},{parameter:"NEWPassword",default:"NULL",description:"Nieuwe wachtwoord van gebruiker"},{parameter:"NEWPlaats",default:"NULL",description:"Nieuwe woonplaats gebruiker"},{parameter:"NEWProvincie",default:"NULL",description:"Nieuwe Provinvie van de gebruiker"},{parameter:"NEWstraat",default:"NULL",description:"Nieuwe straat van de gebruiker"},{parameter:"NEWpostcode",default:"NULL",description:"Nieuwe postcode van de gebruiker"},{parameter:"NEWtelefoonnummer",default:"NULL",description:"Nieuwe telefoonnummer van de Gebruiker"}];
         changeContent(veilingInfo, parameters);        
     });
     $("#wachtwoordVeranderen").click(function(){
@@ -173,7 +173,7 @@ include("php/layout/header.php");
             beschrijving: "This endpoint changes your password",
             request: "http://iproject34.icasites.nl/api.php?action=veranderWachtwoord"
         };
-        var parameters = [{parameter:"?",default:"?",description:"?"}];
+        var parameters = [{parameter:"token",default:"No Default",description:"Gegenereerde token die zich in de password_reset tabel bevind en niet verlopen is."}];
         changeContent(veilingInfo, parameters);        
     });
      //////////////////////////////////////
@@ -183,7 +183,7 @@ include("php/layout/header.php");
         var veilingInfo = {
             titel: "Veiling Verplaatsen",
             beschrijving: "This endpoint changes the categorie of a veiling.",
-            request: "http://iproject34.icasites.nl/api.php?action=verplaatsVeiling"
+            request: "http://iproject34.icasites.nl/securedApi.php?action=verplaatsVeiling"
         };
         var parameters = [{parameter:"veilingId",default:"No Default",description:"Veiling Id is the Id of the veiling"},{parameter:"categorieId",default:"No Default",description:"categorieId is the Id of a categorie"}];
         changeContent(veilingInfo, parameters);        
@@ -201,7 +201,7 @@ include("php/layout/header.php");
         var veilingInfo = {
             titel: "Veiling beëindigen",
             beschrijving: "This endpoint ends a veiling.",
-            request: "http://iproject34.icasites.nl/securedApi.php?action=beindigVeiling"
+            request: "http://iproject34.icasites.nl/securedApi.php?action=beeindigVeiling"
         };
         var parameters = [{parameter:"veilingId",default:"No Default",description:"Veiling Id is the Id of the veiling"}];
         changeContent(veilingInfo, parameters);        
