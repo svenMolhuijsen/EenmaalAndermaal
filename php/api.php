@@ -472,13 +472,13 @@ function registreer($userInfo){
 }
 
 //Verstuur een wachtwoord reset email
-function verzendResetEmail($data){
+function verzendResetEmail($data, $username){
     //Genereer een tijdelijk token
     $token = executeQuery("SELECT token from password_recovery WHERE id = ?", [$data["ID"]]);
 
     $naar = 'sinke.carsten95@gmail.com';
     $subject = 'Reset password';
-    $txt = '<html><body><p>Click <a href="http://iproject34.icasites.nl/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
+    $txt = '<html><body><h1>'.$username["username"].' heeft een wachtwoord reset aangevraagd.</h1><p>Click <a href="http://iproject34.icasites.nl/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     $headers .= 'FROM: info@eenmaalandermaal.nl';
@@ -490,14 +490,14 @@ function verzendResetEmail($data){
 //Opnieuw instellen van een wachtwoord
 function resetWachtwoord($data) {
     //Zorg dat er maar 1 token actief kan zijn per gebruiker
-    executeQueryNoFetch("DELETE FROM password_recovery WHERE expire_Date < GETDATE()", []);
+    executeQueryNoFetch("DELETE FROM password_recovery WHERE expire_Date < GETDATE()");
     $duplicateCheck = executeQuery("SELECT username FROM password_recovery WHERE username = ?", [$data['username']]);
     if ($duplicateCheck['code'] == 1) {
         //Maak een token aan
         $resetId = executeQuery("INSERT INTO password_recovery(username, token, expire_Date, created_Date) OUTPUT Inserted.ID VALUES(?,?,DATEADD(HOUR,4,GETDATE()),GETDATE())", [$data["username"], bin2hex(random_bytes(128))]);
         if ($resetId['code'] == 0) {
             //Stuur een mail voor de reset
-            verzendResetEmail($resetId['data'][0]);
+            verzendResetEmail($resetId['data'][0], $data);
             return;
         } elseif ($resetId['code'] == 2) {
             //Wanneer er geen geldige gebruikersnaam wordt meegegeven
