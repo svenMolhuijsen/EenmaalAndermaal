@@ -58,6 +58,9 @@ if (!empty($_GET['action'])) {
         case 'veranderWachtwoord':
             veranderWachtwoord($data);
             break;
+        case 'getBiedingen':
+            getBiedingen($data);
+            break;
         default:
             header('HTTP/1.0 404 NOT FOUND');
             break;
@@ -519,6 +522,10 @@ function veranderWachtwoord($data) {
 
     //Stel het nieuwe wachtwoord in
     executeQueryNoFetch("UPDATE gebruikers SET wachtwoord = ? WHERE gebruikersnaam = ?", [password_hash($data["nieuwWachtwoord"], PASSWORD_DEFAULT), $username['data'][0]['username']]);
+}
+
+function getBiedingen($data)  {
+    echo json_encode(executeQuery("SELECT * from biedingen WHERE veilingId = ? ORDER BY biedingsBedrag DESC", [$data["veilingId"]]));
 }
 
 ?>

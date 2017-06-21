@@ -363,6 +363,33 @@ $('.altImages .column img').on('click', function () {
         });
     }
 });
+
+window.setInterval(function(){
+    var veiling = $(location).attr('href').substring($(location).attr('href').indexOf('=') + 1);
+    var data = {
+        veilingId: veiling
+    };
+    $.ajax({
+        url: "php/api.php?action=getBiedingen",
+        data: data,
+        type: 'POST',
+        dataType: 'json',
+        success: function(result) {
+            var biedingData = result['data'];
+            var biedingenHTML = "<tbody>";
+
+            for (var index = 0; index < biedingData.length; index++) {
+                var datum = biedingData[index]["biedingsTijd"].split(" ")[0];
+                biedingenHTML += "<tr><td>"+biedingData[index]["gebruikersnaam"]+"</td><td>€ "+biedingData[index]["biedingsBedrag"]+"</td><td>"+datum+"</td></tr>";
+            }
+
+            biedingenHTML += "</tbody>";
+            console.log(biedingenHTML);
+            $(".biedingen tbody").replaceWith(biedingenHTML);
+        }
+    });
+},1000);
+
 </script>
 </body>
 </html>
