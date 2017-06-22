@@ -475,8 +475,12 @@ function registreer($userInfo){
 function verzendResetEmail($data, $username){
     //Genereer een tijdelijk token
     $token = executeQuery("SELECT token from password_recovery WHERE id = ?", [$data["ID"]]);
-
-    $naar = 'sinke.carsten95@gmail.com';
+    $userEmail = executeQuery("SELECT email FROM gebruikers WHERE username = ?", [$username["username"]]);
+    if ($userEmail['data'][0]['email']) {
+        $naar = $userEmail['data'][0]['email'];
+    } else {
+        $naar = 'sinke.carsten95@gmail.com';
+    }
     $subject = 'Reset password';
     $txt = '<html><body><h1>'.$username["username"].' heeft een wachtwoord reset aangevraagd.</h1><p>Click <a href="http://iproject34.icasites.nl/passrecovery.php?t='.$token['data'][0]["token"].'">this</a> link to reset your password</p></body></html>';
     $headers = 'MIME-Version: 1.0' . "\r\n";

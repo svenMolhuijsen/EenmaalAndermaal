@@ -114,23 +114,65 @@ function verzendEmail($data){
     $veiling = executeQuery("SELECT * FROM veiling WHERE veilingId = ?",[$data["veilingId"]]);
     $veiling = $veiling['data'][0];
 
-    //Bestemming
-    $naar = "sinke.carsten95@gmail.com";
+    if ($veiling["koperGebruikersnaam"]) {
+       $gebruikerInfo = executeQuery("SELECT email FROM gebruikers WHERE username = ?", [$veiling["koperGebruikersnaam"]]);
+       $gebruikerEmail = $gebruikerInfo['data'][0]["email"];
 
-    //Onderwerp
-    $subject = "Gewonnen veiling";
+       if ($gebruikerEmail) {
+           $naar = $gebruikerEmail;          
+       } else {
+           $naar = "sinke.carsten95@gmail.com"
+       }
 
-    //Bericht
-    $txt = 'Veiling: '.$veiling["titel"].' is gewonnen door '.$veiling["koperGebruikersnaam"].'
-        Veiling gegevens:
-        Veiling Id: '.$veiling["veilingId"].'
-        Titel: '.$veiling["titel"].'</td>
-        Verkoper: '.$veiling["verkoperGebruikersnaam"].'
-        Koper: '.$veiling["koperGebruikersnaam"].'
-        Verkoop prijs: '.$veiling["verkoopPrijs"].'';
+        //Onderwerp
+        $subject = "Gewonnen veiling";
+           
+        //Bericht
+        $txt = ' Veiling: '.$veiling["titel"].' is gewonnen door '.$veiling["koperGebruikersnaam"].'
+                Veiling gegevens:
+                Veiling Id: '.$veiling["veilingId"].'
+                Titel: '.$veiling["titel"].'</td>
+                Verkoper: '.$veiling["verkoperGebruikersnaam"].'
+                Koper: '.$veiling["koperGebruikersnaam"].'
+                Verkoop prijs: '.$veiling["verkoopPrijs"].'';
 
-    $headers = "From: info@EenmaalAndermaal.nl";
-    mail($naar,$subject,$txt,$headers);
+        $headers = "From: info@EenmaalAndermaal.nl";
+        
+        mail($naar,$subject,$txt,$headers);
+
+        //Mail naar verkoper
+        $verkoperInfo = executeQuery("SELECT email FROM gebruikers WHERE username = ?", [$data["verkoperGebruikersnaam"]]);
+        $verkoperEmail = $verkoperInfo["data"][0]["email"];
+
+        if($verkoperEmail){
+            $naar = $verkoperEmail;
+        } else {
+            $naar = "sinke.carsten95@gmail.com"
+        }
+
+        mail($naar,$subject,$txt,$headers);
+
+    } else {
+        $verkoperInfo = executeQuery("SELECT email FROM gebruikers WHERE username = ?", [$data["verkoperGebruikersnaam"]]);
+        $verkoperEmail = $verkoperInfo["data"][0]["email"];
+
+        if($verkoperEmail){
+            $naar = $verkoperEmail;
+        } else {
+            $naar = "sinke.carsten95@gmail.com"
+        }
+
+        $subject = "Veiling is niet verkocht"
+
+        $txt = "Veiling: ".$veiling["titel"]."is niet verkocht
+                Veiling gegevens:
+                VeilingId: ".$veiling["veilingId"]."
+                Titel: ".$veiling["titel"]."
+                Verkoper: ".$veiling["verkoperGebruikersnaam"]."";
+        $headers = "From info@eenmaalAndermaal.nl"
+
+        mail($naar,$subject,$txt,$headers);
+    }
 }
 
 //registreren van veiling
