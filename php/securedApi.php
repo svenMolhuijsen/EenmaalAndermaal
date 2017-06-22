@@ -144,7 +144,7 @@ function verzendEmail($data){
         $verkoperInfo = executeQuery("SELECT email FROM gebruikers WHERE username = ?", [$data["verkoperGebruikersnaam"]]);
         $verkoperEmail = $verkoperInfo["data"][0]["email"];
 
-        if($verkoperEmail){
+        if ($verkoperEmail) {
             $naar = $verkoperEmail;
         } else {
             $naar = "sinke.carsten95@gmail.com"
