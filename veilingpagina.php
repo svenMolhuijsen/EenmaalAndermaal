@@ -385,7 +385,6 @@ window.setInterval(function(){
                 }
 
                 biedingenHTML += "</tbody>";
-                console.log(biedingenHTML);
                 $(".biedingen tbody").replaceWith(biedingenHTML);
             }
             
