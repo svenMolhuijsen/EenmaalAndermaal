@@ -37,17 +37,13 @@ include("php/layout/header.php");
 
 <?php include("php/layout/footer.html"); ?>
 <script>
-    function trending() {
+    //Ophalen van de trending veilingen elke 5 sec
+    window.setInterval(function(){
         $.post("/php/api.php?action=trending", function (result) {
             var target = ".veilingen .trendingData";
             veiling(target, result);
         });
-    }
-    $(document).ready(function () {
-        trending();
-    })
-
-
+    },5000);
 </script>
 </body>
 </html>

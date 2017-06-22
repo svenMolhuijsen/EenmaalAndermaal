@@ -31,16 +31,13 @@ include("php/layout/breadcrumbs.php");
 </div>
 <?php include("php/layout/footer.html") ?>
 <script>
-    //Ophalen van de trending veilingen
-    function trending(){
-        $.post("/php/api.php?action=trending",function(result){
+    //Ophalen van de trending veilingen elke 5 sec
+    window.setInterval(function(){
+        $.post("/php/api.php?action=trending", function (result) {
             var target = ".veilingen .trendingData";
             veiling(target, result);
         });
-    }
-    $(document).ready(function(){
-        trending();
-    })
+    },5000);
 </script>
 </body>
 </html>
