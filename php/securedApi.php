@@ -121,7 +121,7 @@ function verzendEmail($data){
        if ($gebruikerEmail) {
            $naar = $gebruikerEmail;          
        } else {
-           $naar = "sinke.carsten95@gmail.com"
+           $naar = "sinke.carsten95@gmail.com";
        }
 
         //Onderwerp
@@ -147,7 +147,7 @@ function verzendEmail($data){
         if ($verkoperEmail) {
             $naar = $verkoperEmail;
         } else {
-            $naar = "sinke.carsten95@gmail.com"
+            $naar = "sinke.carsten95@gmail.com";
         }
 
         mail($naar,$subject,$txt,$headers);
@@ -159,17 +159,17 @@ function verzendEmail($data){
         if ($verkoperEmail) {
             $naar = $verkoperEmail;
         } else {
-            $naar = "sinke.carsten95@gmail.com"
+            $naar = "sinke.carsten95@gmail.com";
         }
 
-        $subject = "Veiling is niet verkocht"
+        $subject = "Veiling is niet verkocht";
 
         $txt = "Veiling: ".$veiling["titel"]."is niet verkocht
                 Veiling gegevens:
                 VeilingId: ".$veiling["veilingId"]."
                 Titel: ".$veiling["titel"]."
                 Verkoper: ".$veiling["verkoperGebruikersnaam"]."";
-        $headers = "From info@eenmaalAndermaal.nl"
+        $headers = "From info@eenmaalAndermaal.nl";
 
         mail($naar,$subject,$txt,$headers);
     }

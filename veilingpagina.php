@@ -375,17 +375,20 @@ window.setInterval(function(){
         type: 'POST',
         dataType: 'json',
         success: function(result) {
-            var biedingData = result['data'];
-            var biedingenHTML = "<tbody>";
+            if (result['code'] == 0) {
+                var biedingData = result['data'];
+                var biedingenHTML = "<tbody>";
 
-            for (var index = 0; index < biedingData.length; index++) {
-                var datum = biedingData[index]["biedingsTijd"].split(" ")[0];
-                biedingenHTML += "<tr><td>"+biedingData[index]["gebruikersnaam"]+"</td><td>€ "+biedingData[index]["biedingsBedrag"]+"</td><td>"+datum+"</td></tr>";
+                for (var index = 0; index < biedingData.length; index++) {
+                    var datum = biedingData[index]["biedingsTijd"].split(" ")[0];
+                    biedingenHTML += "<tr><td>"+biedingData[index]["gebruikersnaam"]+"</td><td>€ "+biedingData[index]["biedingsBedrag"]+"</td><td>"+datum+"</td></tr>";
+                }
+
+                biedingenHTML += "</tbody>";
+                console.log(biedingenHTML);
+                $(".biedingen tbody").replaceWith(biedingenHTML);
             }
-
-            biedingenHTML += "</tbody>";
-            console.log(biedingenHTML);
-            $(".biedingen tbody").replaceWith(biedingenHTML);
+            
         }
     });
 },1000);
