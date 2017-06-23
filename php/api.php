@@ -415,22 +415,6 @@ function getLanden()
     return executeQuery("SELECT  * FROM landen", null);
 }
 
-//Geeft terug of er veilingen in een categorie zitten
-function checkVeilingenInCategorie($categorieId)
-{
-    //Zoek alle veilingen
-    $veiling = executeQuery("SELECT count(*)  AS aantal FROM veiling WHERE categorieId = ?", [$categorieId]);
-
-    if ($veiling['code'] == 0) {
-        if ($veiling['data'][0]['aantal'] > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    return null;
-}
-
 //Geef de 6 meest bezochte veilingen
 function trending()
 {

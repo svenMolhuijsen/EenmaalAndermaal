@@ -310,6 +310,22 @@ function uploadFiles($veilingId, $root) {
     return array('code' => 0, 'message' => 'Uw veiling is aangemaakt.');
 }
 
+//Geeft terug of er veilingen in een categorie zitten
+function checkVeilingenInCategorie($categorieId)
+{
+    //Zoek alle veilingen
+    $veiling = executeQuery("SELECT count(*)  AS aantal FROM veiling WHERE categorieId = ?", [$categorieId]);
+
+    if ($veiling['code'] == 0) {
+        if ($veiling['data'][0]['aantal'] > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return null;
+}
+
 //Maak een nieuwe categorie aan
 function nieuweCategorieToevoegen($categorie)
 {
